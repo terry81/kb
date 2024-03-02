@@ -22,8 +22,8 @@ title: Knowledge Basement
 email: tollodim@ 
 description: >- # this means to ignore newlines until "baseurl:"
   Linux, Java, Open Source related how-to articles
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://knowledgebasement.com" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/kb/" # the subpath of your site, e.g. /blog
+url: "https://terry81.github.io/"
 twitter_username: web_security1
 
 # Build settings
