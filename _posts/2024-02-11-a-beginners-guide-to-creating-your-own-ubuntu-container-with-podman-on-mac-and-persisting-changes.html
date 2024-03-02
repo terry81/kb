@@ -1,0 +1,46 @@
+---
+layout: post
+title: A Beginner's Guide to Creating Your Own Ubuntu Container with Podman on Mac
+  and Persisting Changes
+date: 2024-02-11 16:37:54.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+tags:
+- mac
+meta:
+  _edit_last: '1'
+permalink: "/a-beginners-guide-to-creating-your-own-ubuntu-container-with-podman-on-mac-and-persisting-changes/"
+---
+<h2>Introduction</h2>
+<p>Containers have revolutionized the way we develop, package, and deploy applications. They provide a consistent and reproducible environment, making it easier to manage dependencies and ensure that applications run the same way, regardless of where they are deployed. One of the tools that have made this possible is Podman, a daemonless container engine for developing, managing, and running OCI Containers on your Linux System. This blog post will guide you through the process of creating your own Ubuntu container with Podman on a Mac and persisting changes.</p>
+<h2>What is Podman?</h2>
+<p>Podman is an open-source project that provides a command-line interface for managing containers and images. It is designed to be a drop-in replacement for Docker, but without the need for a daemon to run in the background. This makes it more lightweight and secure, as it doesn't require root privileges to run containers.</p>
+<h2>Installing Podman on Mac</h2>
+<p>Before we can start creating our Ubuntu container, we need to install Podman on our Mac. Unfortunately, Podman doesn't natively support MacOS, but we can use a virtual machine (VM) to run it. Here's how:</p>
+<ol>
+<li>Install Homebrew: Homebrew is a package manager for MacOS. Open Terminal and run the following command: <code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></li>
+<li>Install Podman: Once Homebrew is installed, you can install Podman by running: <code>brew install podman</code></li>
+<li>Create a VM: After installing Podman, you need to create a VM to run it. Use the following command: <code>podman machine init</code></li>
+<li>Start the VM: Now, start the VM with the command: <code>podman machine start</code></li>
+</ol>
+<h2>Creating an Ubuntu Container</h2>
+<p>With Podman installed and running, we can now create our Ubuntu container. Here's how:</p>
+<ol>
+<li>Pull the Ubuntu image: The first step is to pull the Ubuntu image from the Docker Hub. Run the following command: <code>podman pull ubuntu</code></li>
+<li>Run the Ubuntu container: After pulling the image, you can run it with the command: <code>podman run -it ubuntu bash</code></li>
+</ol>
+<p>This command will start an interactive session in the Ubuntu container. You can now run any command inside the container, just like you would on a regular Ubuntu system.</p>
+<h2>Persisting Changes</h2>
+<p>One of the challenges with containers is that they are ephemeral, meaning any changes you make inside the container are lost when it is stopped. However, Podman provides a way to persist changes using volumes.</p>
+<ol>
+<li>Create a volume: To create a volume, use the following command: <code>podman volume create myvolume</code></li>
+<li>Attach the volume to the container: When running your container, you can attach the volume using the <code>-v</code> option: <code>podman run -it -v myvolume:/data ubuntu bash</code></li>
+</ol>
+<p>This command will mount the volume <code>myvolume</code> to the <code>/data</code> directory inside the container. Any changes you make to the <code>/data</code> directory will be persisted across container restarts.</p>
+<h2>Conclusion</h2>
+<p>Podman is a powerful tool for managing containers, and it's not as daunting as it might seem at first. With this guide, you should now be able to create your own Ubuntu container on a Mac, and persist changes using volumes. Happy containerizing!</p>

@@ -1,0 +1,164 @@
+---
+layout: post
+title: 'Building an Example Site with Javelin: Full Guide'
+date: 2024-02-15 05:43:48.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/building-an-example-site-with-javelin/"
+---
+<p>Javelin is a powerful static site generator that allows you to create fast, modern, and highly customizable websites with ease. With its intuitive syntax, flexible templating system, and extensive plugin ecosystem, Javelin empowers developers to build beautiful and feature-rich websites quickly and efficiently. In this comprehensive guide, we'll walk you through the process of creating an example site with Javelin, covering everything from installation to deployment and beyond.</p>
+<h2>Introduction to Javelin</h2>
+<p>Javelin is a static site generator built with simplicity and performance in mind. It uses Markdown for content authoring and provides a powerful templating system based on Handlebars.js for building dynamic and reusable layouts. Javelin's modular architecture and plugin system make it easy to extend and customize, allowing developers to tailor their websites to meet specific requirements.</p>
+<p>Key features of Javelin include:</p>
+<ul>
+<li><strong>Markdown Support</strong>: Write content in Markdown format, allowing for easy authoring and formatting.</li>
+<li><strong>Handlebars Templating</strong>: Use Handlebars.js templates to create dynamic layouts and reusable components.</li>
+<li><strong>Live Reload</strong>: Preview changes in real-time with Javelin's built-in live reload feature.</li>
+<li><strong>Asset Pipeline</strong>: Manage assets such as CSS, JavaScript, and images with Javelin's asset pipeline.</li>
+<li><strong>Extensible Plugin System</strong>: Extend Javelin's functionality with plugins for additional features and integrations.</li>
+</ul>
+<p>Now, let's dive into the process of building an example site with Javelin.</p>
+<h2>Setting Up Your Environment</h2>
+<p>Before we can start building our example site with Javelin, we need to set up our development environment. Here's what you'll need:</p>
+<ul>
+<li><strong>Node.js and npm</strong>: Javelin is built with Node.js, so make sure you have Node.js and npm installed on your system.</li>
+<li><strong>Text Editor or IDE</strong>: Choose a text editor or integrated development environment (IDE) for writing code. Popular options include Visual Studio Code, Sublime Text, and Atom.</li>
+<li><strong>Terminal</strong>: You'll need a terminal or command prompt to run commands and interact with Javelin.</li>
+</ul>
+<p>Once you have the necessary tools installed, you're ready to create your example site with Javelin.</p>
+<h2>Creating a New Javelin Project</h2>
+<p>To create a new Javelin project, use the Javelin CLI (Command Line Interface) to initialize a new project directory. Open your terminal and run the following command:</p>
+<pre><code class="language-bash">npx javelin-cli init my-example-site</code></pre>
+<p>This command will create a new directory named <code>my-example-site</code> and initialize a new Javelin project inside it. Follow the prompts to configure your project settings, such as the site name, author name, and default layout.</p>
+<h2>Writing Content with Markdown</h2>
+<p>With your Javelin project initialized, you can start writing content for your example site using Markdown. Create a new Markdown file inside the <code>content</code> directory to represent each page of your site. For example, you might create a <code>home.md</code> file for the homepage and additional files for other pages such as <code>about.md</code>, <code>blog.md</code>, and <code>contact.md</code>.</p>
+<p>Here's an example of a basic Markdown file for the homepage:</p>
+<pre><code class="language-markdown">---
+title: Home
+---
+
+# Welcome to My Example Site!
+
+This is the homepage of my example site. Feel free to explore and learn more about what we have to offer.</code></pre>
+<p>Javelin uses front matter (YAML or JSON metadata at the top of each Markdown file) to define metadata such as the page title, layout, and any custom variables or options.</p>
+<h2>Creating Layouts with Handlebars</h2>
+<p>Next, let's create a layout template using Handlebars.js to define the structure and styling of our example site. Layouts are reusable templates that define the overall structure of a web page, including common elements such as headers, footers, and navigation menus.</p>
+<p>Create a new file named <code>default.hbs</code> inside the <code>layouts</code> directory to serve as the default layout template for your example site. Here's a simple example of a default layout template:</p>
+<pre><code class="language-handlebars">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;{{title}}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;header&gt;
+        &lt;h1&gt;{{title}}&lt;/h1&gt;
+        &lt;nav&gt;
+            &lt;ul&gt;
+                &lt;li&gt;&lt;a href="/"&gt;Home&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="/about"&gt;About&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="/blog"&gt;Blog&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href="/contact"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/nav&gt;
+    &lt;/header&gt;
+    &lt;main&gt;
+        {{{body}}}
+    &lt;/main&gt;
+    &lt;footer&gt;
+        &amp;copy; {{year}} {{author}}
+    &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>In this layout template, we use Handlebars expressions <code>{{title}}</code>, <code>{{body}}</code>, <code>{{year}}</code>, and <code>{{author}}</code> to dynamically insert content and metadata into the HTML structure. The <code>{{{body}}}</code> expression is a Handlebars "triple-stash" that renders the actual content of each page.</p>
+<h2>Styling with CSS</h2>
+<p>With our content and layout in place, let's add some styling to our example site using CSS. Create a new CSS file named <code>styles.css</code> inside the <code>assets/css</code> directory to define the styles for your site.</p>
+<p>Here's a basic example of a CSS file to style our example site:</p>
+<pre><code class="language-css">/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 1rem;
+}
+
+main {
+    padding: 2rem;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+}</code></pre>
+<p>Feel free to customize the styles according to your preferences and design requirements.</p>
+<h2>Building and Previewing Your Site</h2>
+<p>Now that we have our content, layout, and styling in place, let's build our example site with Javelin and preview it in the browser. Open your terminal and navigate to your project directory, then run the following command:</p>
+<pre><code class="language-bash">npx javelin-cli build</code></pre>
+<p>This command will compile your Markdown content, apply your layout templates, and generate a static HTML site in the <code>dist</code> directory.</p>
+<p>To preview your site locally, you can use Javelin's built-in development server. Run the following command in your terminal:</p>
+<pre><code class="language-bash">
+npx javelin-cli serve</code></pre>
+<p>This command will start a local web server and open your site in your default web browser. You can now navigate to <code>http://localhost:3000</code> to view your example site.</p>
+<h2>Customizing and Extending Your Site</h2>
+<p>Now that you have a basic example site up and running with Javelin, the possibilities for customization and extension are endless. Here are a few ideas to further customize and extend your example site:</p>
+<ul>
+<li><strong>Add Additional Pages</strong>: Create additional Markdown files for different sections or pages of your site.</li>
+<li><strong>Integrate Plugins</strong>: Explore Javelin's plugin ecosystem to add features such as syntax highlighting, SEO optimization, or analytics tracking.</li>
+<li><strong>Customize Layouts</strong>: Experiment with different layout templates and styles to give your site a unique look and feel.</li>
+<li><strong>Optimize Performance</strong>: Optimize your site for performance by minifying CSS and JavaScript, optimizing images, and leveraging caching techniques.</li>
+</ul>
+<h2>Deploying Your Site</h2>
+<p>Once you're satisfied with your example site, it's time to deploy it to a web server so that others can access it. There are many ways to deploy a static site like the one we've created with Javelin, including:</p>
+<ul>
+<li><strong>Manual Deployment</strong>: Upload the contents of the <code>dist</code> directory to a web server using FTP or a file manager.</li>
+<li><strong>CI/CD Pipeline</strong>: Set up a continuous integration and continuous deployment (CI/CD) pipeline to automate the deployment process.</li>
+<li><strong>Static Site Hosting</strong>: Use a static site hosting service such as Netlify, Vercel, or GitHub Pages to deploy your site with ease.</li>
+</ul>
+<p>Choose the deployment method that best suits your needs and preferences, and share your example site with the world!</p>
+<h2>Exporting Your Site as Jar</h2>
+<p>To export your example Javelin site as a JAR (Java Archive) file, you can use Javelin's built-in functionality to package your static site into a self-contained executable JAR file. This allows you to distribute your site as a single file that can be run on any system with Java installed. Here's how you can do it:</p>
+<ol>
+<li><strong>Build Your Javelin Site</strong>: First, ensure that you have built your Javelin site using the <code>javelin-cli build</code> command. This command generates the static HTML files for your site in the <code>dist</code> directory.</li>
+<li><strong>Create a Manifest File</strong>: In order to package your site as a JAR file, you need to create a manifest file (<code>manifest.txt</code>) that specifies the main class to be executed when the JAR file is run. Create a file named <code>manifest.txt</code> in your project directory with the following content:
+<pre><code>Main-Class: com.example.Main</code></pre>
+<p>Replace <code>com.example.Main</code> with the fully qualified name of the main class for your Javelin site. This class should contain the <code>main</code> method that initializes and runs your Javelin site.</li>
+<li><strong>Package Your Site as a JAR File</strong>: Once you have created the manifest file, you can use the <code>jar</code> command provided by the Java Development Kit (JDK) to package your site into a JAR file. Open a terminal or command prompt, navigate to your project directory, and run the following command:
+<pre><code class="language-bash">jar cfm my-site.jar manifest.txt -C dist .</code></pre>
+<p>This command creates a JAR file named <code>my-site.jar</code> using the manifest file <code>manifest.txt</code> and includes all the files and directories in the <code>dist</code> directory.</li>
+<li><strong>Test Your JAR File</strong>: Once the JAR file is created, you can test it by running it with the <code>java</code> command. Navigate to the directory containing the JAR file in your terminal or command prompt, and run the following command:
+<pre><code class="language-bash">java -jar my-site.jar</code></pre>
+<p>This command will execute the JAR file, launching your Javelin site in a local web server. You can then access your site by navigating to <code>http://localhost:3000</code> in your web browser.</li>
+<li><strong>Distribute Your JAR File</strong>: Finally, once you have tested your JAR file and verified that your site is working correctly, you can distribute the JAR file to others. They can run your site on their own systems by simply executing the JAR file with the <code>java -jar</code> command.</li>
+</ol>
+<p>By following these steps, you can export your example Javelin site as a JAR file and distribute it as a self-contained executable, making it easy for others to run your site locally without having to set up a web server or install additional dependencies.</p>
+<h2>Conclusion</h2>
+<p>In this comprehensive guide, we've covered everything you need to know to create an example site with Javelin. From setting up your development environment to writing content, creating layouts, styling with CSS, and deploying your site, you now have the knowledge and tools to build beautiful and functional websites with Javelin.</p>
+<p>Whether you're building a personal blog, portfolio, documentation site, or e-commerce store, Javelin provides the flexibility and power you need to bring your vision to life. With its intuitive syntax, powerful templating system, and extensive plugin ecosystem, Javelin empowers you to create modern and highly customizable websites quickly and efficiently.</p>
+<p>So why wait? Start building your next project with Javelin today and unleash your creativity on the web!</p>

@@ -1,0 +1,94 @@
+---
+layout: post
+title: What are the Benefits of the Diamond Operator in Java
+date: 2023-03-19 14:30:43.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/what-are-the-benefits-of-the-diamond-operator-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>The diamond operator in Java, also known as the empty angle bracket (&lt;&gt;) syntax, was introduced in Java 7 and provides several benefits:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Improved readability: The diamond operator can improve the readability of code by reducing the clutter of explicit type arguments. For example, instead of writing <code>List&lt;String&gt; myList = new ArrayList&lt;String&gt;();</code>, we can use the diamond operator and write <code>List&lt;String&gt; myList = new ArrayList&lt;&gt;();</code>. This makes the code less verbose and easier to read.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Type safety: The diamond operator helps ensure type safety by inferring the type of the generic parameter from the left-hand side of the assignment. This eliminates the need to repeat the type argument and reduces the chance of errors that can occur when type arguments are mismatched.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Reduced code duplication: The diamond operator can help reduce code duplication by allowing us to create objects without repeating the type parameter. This can be especially helpful when creating complex objects that have many type parameters.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Future-proofing: The diamond operator can help future-proof code by making it easier to update the type of a variable. If we need to change the type of the variable in the future, we can do so without having to update all the type arguments throughout the code.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Overall, the diamond operator in Java provides a cleaner, safer, and more efficient way to work with generic types, improving the readability and maintainability of code.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here are some additional examples of how the diamond operator can be used in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Creating a HashMap with diamond operator:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>// Without diamond operator
+Map&lt;String, List&lt;Integer>> myMap = new HashMap&lt;String, List&lt;Integer>>();
+
+// With diamond operator
+Map&lt;String, List&lt;Integer>> myMap = new HashMap&lt;>();
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:list {"ordered":true,"start":2} --></p>
+<ol start="2"><!-- wp:list-item --></p>
+<li>Creating an ArrayList with diamond operator:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>// Without diamond operator
+List&lt;String> myList = new ArrayList&lt;String>();
+
+// With diamond operator
+List&lt;String> myList = new ArrayList&lt;>();
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:list {"ordered":true,"start":3} --></p>
+<ol start="3"><!-- wp:list-item --></p>
+<li>Creating a TreeSet with diamond operator:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>// Without diamond operator
+Set&lt;Integer> mySet = new TreeSet&lt;Integer>();
+
+// With diamond operator
+Set&lt;Integer> mySet = new TreeSet&lt;>();
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:list {"ordered":true,"start":4} --></p>
+<ol start="4"><!-- wp:list-item --></p>
+<li>Creating a Stream with diamond operator:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>// Without diamond operator
+Stream&lt;String> myStream = Stream.&lt;String>builder().add("foo").add("bar").build();
+
+// With diamond operator
+Stream&lt;String> myStream = Stream.builder().add("foo").add("bar").build();
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>As you can see, using the diamond operator can make the code cleaner and more concise, without losing any of the type safety or functionality of the original code.</p>
+<p><!-- /wp:paragraph --></p>

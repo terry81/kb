@@ -1,0 +1,66 @@
+---
+layout: post
+title: Difference between Mockito's when/thenReturn and doReturn/when
+date: 2023-03-03 08:30:51.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- JUnit
+- Mockito
+meta:
+  _edit_last: '1'
+permalink: "/difference-between-mockitos-when-thenreturn-and-doreturn-when/"
+---
+<p><!-- wp:paragraph --></p>
+<p>A common dilemma while writing unit tests in Java is whether to use Mockito's when/thenReturn or doReturn/when stubbings.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Both when/thenReturn and doReturn/when are used in Mockito, a popular Java testing framework, to mock behavior of methods in an object. However, they are used in slightly different scenarios.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>when/thenReturn is used to mock the return value of a method when it is called. Here's an example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>List mockList = mock(List.class);
+when(mockList.size()).thenReturn(3);</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the above code, we are creating a mock object of the List class and then using when/thenReturn to mock the behavior of the size() method. When mockList.size() is called, it will return 3.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>doReturn/when is used to mock the behavior of a method when it is called, without actually invoking the method. Here's an example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>List mockList = mock(List.class);
+doReturn(3).when(mockList).size();</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the above code, we are again creating a mock object of the List class, but this time we are using doReturn/when to mock the behavior of the size() method. When mockList.size() is called, it will not actually invoke the method, but instead return 3.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The difference between the two methods is that when/thenReturn actually invokes the method and returns a mocked value, whereas doReturn/when does not invoke the method and only returns a mocked value.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In general, you should use when/thenReturn to mock the return value of a method, and doReturn/when to mock the behavior of a method.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Furthermore, there are typical cases where doReturn/when is used and other cases where when/thenReturn is preferred.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>doReturn/when is typically used when mocking void methods or when you need to stub a method that throws an exception. For example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>List mockList = mock(List.class);
+doThrow(new RuntimeException()).when(mockList).clear();</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the above code, we are using doThrow/when to stub the behavior of the clear() method, which is a void method that throws an exception when called.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>On the other hand, when/thenReturn is typically used when mocking methods that return a value as in the first example.</p>
+<p><!-- /wp:paragraph --></p>

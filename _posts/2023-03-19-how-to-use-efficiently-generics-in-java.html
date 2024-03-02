@@ -1,0 +1,109 @@
+---
+layout: post
+title: How to Use Efficiently Generics in Java
+date: 2023-03-19 14:35:41.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/how-to-use-efficiently-generics-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In Java, generics provide a way to specify a type parameter for a class, method, or interface. A type parameter is a placeholder for a type that is specified at runtime, allowing code to be written that works with a variety of different types.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Generics in Java offer several benefits:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Type safety: By using generics, the Java compiler can detect and prevent type errors at compile time, rather than at runtime. This makes code more robust and less prone to errors.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Reusability: Generics enable the creation of generic classes and methods that can work with a variety of types, making code more modular and reusable.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Abstraction: Generics can be used to abstract over types, allowing developers to write code that is more generic and less dependent on specific types.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Performance: Generics can improve performance by reducing the need for casting, which can be expensive in terms of memory and computation.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here is an example of using generics in Java to create a simple generic class:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public class Box&lt;T> {
+    private T item;
+
+    public void setItem(T item) {
+        this.item = item;
+    }
+
+    public T getItem() {
+        return item;
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the type parameter T is used to specify the type of the item that is stored in the box. This allows the Box class to be used with any type, making it a generic class.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Generics are widely used in Java collections and APIs, where they provide a powerful and flexible way to work with different types of data.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here are some additional examples of using generics in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Generics with Java collections:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>List&lt;String> myList = new ArrayList&lt;>();
+myList.add("foo");
+myList.add("bar");
+String item = myList.get(0);
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we use the generic type List&lt;String&gt; to create an ArrayList that can only contain strings. We then add two string items to the list and retrieve the first item using the get() method. The use of generics in this example ensures that we only add and retrieve strings from the list.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true,"start":2} --></p>
+<ol start="2"><!-- wp:list-item --></p>
+<li>Generics with Java methods:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public static &lt;T> T myMethod(T arg) {
+    // do something with arg
+    return arg;
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we use the generic type parameter T to create a generic method that can accept and return any type. The type of the argument and the return type are both determined at runtime, based on the type of the argument that is passed to the method.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true,"start":3} --></p>
+<ol start="3"><!-- wp:list-item --></p>
+<li>Generics with Java interfaces:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public interface MyInterface&lt;T> {
+    void doSomething(T arg);
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we use the generic type parameter T to create a generic interface that can be implemented with any type. The doSomething() method can accept any type of argument, and the type of the argument is determined by the type parameter T.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Overall, generics in Java provide a powerful and flexible way to work with different types of data, allowing developers to write more generic and reusable code. They are used extensively in Java collections and APIs, as well as in custom classes, methods, and interfaces.</p>
+<p><!-- /wp:paragraph --></p>

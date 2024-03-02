@@ -1,0 +1,111 @@
+---
+layout: post
+title: How to Create a Simple Mockito Unit Test
+date: 2019-05-06 20:05:35.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- JUnit
+- Mockito
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231977;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:180;}i:1;a:1:{s:2:"id";i:190;}i:2;a:1:{s:2:"id";i:352;}i:3;a:1:{s:2:"id";i:14;}i:4;a:1:{s:2:"id";i:91;}i:5;a:1:{s:2:"id";i:233;}}}}
+  _wpas_done_all: '1'
+  _edit_last: '1'
+permalink: "/simple-mockito-unit-test/"
+---
+<p><!-- wp:paragraph --></p>
+<p><a href="https://site.mockito.org/">Mockito</a> is a popular Java framework which comes to great help in Unit testing. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In Unit testing it's important to get to a state where you can concentrate on testing a specific functionality or behaviour. Mockito can help you with this by mocking or simulating specific methods which you may need. It's important to be to be able to do so because such a method could be relying on an external dependency (such as a database) and you don't really want to worry about it - for example, to ensure that a database is up and running, has consistent data, etc...</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Setting it up</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Maven is used for the example setup. In the pom.xml of your project add the following dependency:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>		&lt;dependency>
+			&lt;groupId>org.mockito&lt;/groupId>
+			&lt;artifactId>mockito-core&lt;/artifactId>
+			&lt;version>2.27.0&lt;/version>
+		&lt;/dependency></code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>If you have troubles with Maven check <a href="http://knowledgebasement.com/build-a-java-project-with-maven/">how to build a Java project with Maven</a>.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Creating an example class</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>To demonstrate how Mockito works we'll need a non-final class, i.e. one that  Mockito can extend in a way that we'll instruct it. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In real life this class and its methods would be doing something complex such as getting results from a database. When the database is not available, an exception will be thrown.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>For brevity, we'll write just the exception part and assume that in our development environment, where the JUnit test will be run, there is no database.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>public class MyReturner {
+	public String returnSomething() throws Exception {
+		// in real life, here will be returned the result from a database query
+		throw new Exception("Can't find the database.");
+	}
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:heading --></p>
+<h2>Creating the Unit test</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>To avoid getting the exception when there is no database, we'll mock the method returnSomething() to return a specific result on which we can always rely and build our tests on top of it.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Furthermore,  we'll write two tests - one which passes because we have mocked the method and one which does not because it gets the exception.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>import org.junit.Test;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+
+public class MockitoTest {
+
+	private static final String DB_RESULT = "some complex results";
+
+	@Test
+	public void testThatPasses() throws Exception {
+		MyReturner mockedReturner = mock(MyReturner.class);
+		when(mockedReturner.returnSomething()).thenReturn(DB_RESULT);
+		assertEquals(mockedReturner.returnSomething(), DB_RESULT);
+	}
+
+	@Test
+	public void testThatDoesNotPass() throws Exception {
+		MyReturner realReturner = new MyReturner();
+		assertEquals(realReturner.returnSomething(), DB_RESULT);
+	}
+
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>In our passing test, we have created a mock of the MyReturner class along with a condition what to be returned when the method returnSomething is called. This is accomplished with when / thenReturn.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>On the other hand, the unmocked test (testThatDoesNotPass()) fails because the assertTrue comparison fails. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Of course, the above tests are just for demonstration. In real life the tests are expected to do much more than just to assert the result from a method. On the contrary, this is just the fundament of the test.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>This is how easy it is to write a simple Unit test with Mockito by mocking the behaviour of an object and eliminating external, unpredictable dependencies which are not directly related to the testing.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><!-- /wp:paragraph --></p>

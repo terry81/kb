@@ -1,0 +1,67 @@
+---
+layout: post
+title: What is a Port Mapping (Forwarding) in Docker
+date: 2023-04-11 13:22:08.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+- Virtualization
+tags: []
+meta: {}
+permalink: "/what-is-a-port-mapping-forwarding-in-docker/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In Docker, port mapping (also known as port forwarding) is the process of associating a port on the host system with a port on a Docker container, allowing network traffic to be directed to and from the container through the host system's network interface.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Docker containers run in isolated environments with their own network stack, including their own IP address and network ports. By default, containers can communicate with each other and with the host system, but they are isolated from the external network. Port mapping allows you to expose specific container ports to the host system, making them accessible from the external network or other hosts on the host system's network.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Port mapping is typically used to publish containerized applications or services to the outside world, allowing them to be accessed via standard network protocols such as HTTP, HTTPS, SSH, etc. It provides a way to expose container ports and make them accessible from the host system or external network, while maintaining the isolation of the container's network stack.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Port mapping is done using the <code>-p</code> or <code>--publish</code> option when running Docker containers. The syntax is as follows:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker run -p [host_port]:[container_port] my_container
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>For example, to map port 8080 on the host system to port 80 on a container, you would use the following command:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker run -p 8080:80 my_container
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This maps port 8080 on the host system to port 80 on the container, allowing incoming network traffic on port 8080 of the host system to be directed to port 80 of the container.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Port mapping provides flexibility in exposing containerized services to the external network, allowing you to define how the container's ports are accessed and making Docker containers accessible over the network, just like regular services running on the host system.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's another example of port mapping in Docker:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Let's say you have a containerized database server running a MySQL container, and you want to expose it on a specific port on the host system so that other applications or clients can connect to it. The MySQL container listens on port 3306 by default, but you want to expose it on port 3308 on the host system.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>You can use the <code>-p</code> or <code>--publish</code> option to map the desired host port to the container port when starting the MySQL container. For example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker run -p 3308:3306 -d --name my_mysql_container mysql
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This command maps port 3308 on the host system to port 3306 on the MySQL container, and starts the container in detached mode (<code>-d</code>) with the name "my_mysql_container". Now, the MySQL container is accessible on port 3308 of the host system.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Other applications or clients can connect to the MySQL container using the host system's IP address and port 3308, as if the MySQL server were running directly on the host system. This allows you to expose the containerized MySQL service on a specific port on the host system, making it accessible to external applications or clients for database connectivity.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Port mapping is a powerful feature in Docker that enables you to define how containerized services are exposed and accessed over the network, providing flexibility and control over network communication between containers and the host system or external network.</p>
+<p><!-- /wp:paragraph --></p>

@@ -1,0 +1,103 @@
+---
+layout: post
+title: How to Write Console Programs In Java
+date: 2023-03-04 06:29:34.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/how-to-write-console-programs-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Console programs in Java can be easily written using <code>System.out.println</code> for output and <code>Scanner</code> for input.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>For example, here is a simple guessing game which runs in the console: </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>import java.util.Random;
+import java.util.Scanner;
+
+public class GuessingGame {
+
+    public static void main(String&#91;] args) {
+
+        Random rand = new Random();
+        int secretNumber = rand.nextInt(100) + 1;
+
+        int guess = 0;
+        int numGuesses = 0;
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("I'm thinking of a number between 1 and 100. Can you guess what it is?");
+
+        while (guess != secretNumber) {
+            System.out.print("Enter your guess: ");
+            guess = scanner.nextInt();
+            numGuesses++;
+
+            if (guess &lt; secretNumber) {
+                System.out.println("Too low! Guess higher.");
+            } else if (guess > secretNumber) {
+                System.out.println("Too high! Guess lower.");
+            } else {
+                System.out.println("Congratulations, you guessed the number in " + numGuesses + " guesses!");
+            }
+        }
+    }
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Another example will be of a downloader which takes as input an url to be downloaded:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>import java.io.BufferedInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
+
+public class Downloader {
+
+    public static void main(String&#91;] args) {
+
+        if (args.length != 1) {
+            System.err.println("Usage: java Downloader &#91;url]");
+            System.exit(1);
+        }
+
+        String url = args&#91;0];
+        String fileName = url.substring(url.lastIndexOf('/') + 1);
+
+        try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
+             FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
+
+            byte&#91;] dataBuffer = new byte&#91;1024];
+            int bytesRead;
+
+            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+                fileOutputStream.write(dataBuffer, 0, bytesRead);
+            }
+
+            System.out.println("File downloaded successfully.");
+
+        } catch (IOException e) {
+            System.err.println("Error downloading file: " + e.getMessage());
+        }
+    }
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>This downloader takes a single command line argument, which is the URL of the file to download. It creates a <code>BufferedInputStream</code> to read the data from the URL, and a <code>FileOutputStream</code> to write the data to a file. The program reads the data in chunks of 1024 bytes, and writes each chunk to the file until there is no more data to read.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>If the download is successful, the program outputs a success message. If there is an error, the program outputs an error message.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Note that this is just a basic example and does not handle all possible errors and edge cases.</p>
+<p><!-- /wp:paragraph --></p>

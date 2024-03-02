@@ -1,0 +1,87 @@
+---
+layout: post
+title: How To Secure Your MongoDB Database Server on Ubuntu 14.04
+date: 2017-07-02 14:48:38.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- databases
+- Security
+tags: []
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '1'
+  _wpas_done_all: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613243774;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:14;}i:1;a:1:{s:2:"id";i:8;}i:2;a:1:{s:2:"id";i:30;}i:3;a:1:{s:2:"id";i:135;}i:4;a:1:{s:2:"id";i:138;}i:5;a:1:{s:2:"id";i:72;}}}}
+permalink: "/how-to-secure-your-mongodb-database-server-on-ubuntu-14-04/"
+---
+<p>The MongoDB database server is well-known for its unmatched capabilities for processing large NoSQL data. Its latest performance improvements are always under the spotlights and probably not a single MongoDB user has missed the recent news about the change of its default storage engine to the more powerful WiredTiger. At the same time, its security features are less known and often neglected. That's why the purpose of this article is MongoDB security.</p>
+<h2>Prerequisites</h2>
+<p>Before following this tutorial, please make sure you complete the following prerequisites:</p>
+<ul>
+<li>A Ubuntu 14.04 server.</li>
+<li>Preferably a non-root sudo user.</li>
+<li>MongoDB installed and configured.</li>
+<li>Except otherwise noted, all of the commands that require root privileges in this tutorial should be run as a non-root user with sudo privileges.</li>
+</ul>
+<h2>Step 1 - Requiring authentication</h2>
+<p>By default, in MongoDB you can manage any database without authentication. Obviously, this is quite insecure even though the MongoDB service doesn't listen on external interfaces and an attacker will need local access to the server first.</p>
+<p>Let's start securing MongoDB by creating an admin user who can manage all the databases. This user will have the role userAdminAnyDatabase.</p>
+<p>To create this super admin user, log in MongoDB and connect to the admin database with the command:</p>
+<pre><code>mongo admin
+</code></pre>
+<p>As you can see, you don't need a password for operating MongoDB at this point. You don't even need Linux sudo rights and you can run the command as a normal user.</p>
+<p>Now let's create the user mongoadmin with password S3cr3t11.@ with the query:</p>
+<pre><code>&gt; db.createUser(
+{
+user: "mongoadmin",
+pwd: "S3cr3t11.@",
+roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+}
+)
+</code></pre>
+<p>The name mongoadmin is arbitrary and you can use any other to your liking. A good security practice is to pick up a non-standard name, different from the standard admin. Thus, in the case of a brute-force attack, the attacker will have to guess not only your password but also username.</p>
+<p>The output of the above command should confirm the successful creation of the user like this:</p>
+<pre><code>Successfully added user: {
+"user" : "mongoadmin",
+"roles" : [
+{
+"role" : "userAdminAnyDatabase",
+"db" : "admin"
+}
+]
+}
+</code></pre>
+<p>We'll continue working with the MongoDB shell and exit it later.</p>
+<p>So far we have a super admin user who should be used only for administration, i.e. tasks like creating other users and granting them privileges. By default, you cannot and should not use this user to connect to other databases. This might be something new for people acquainted with other database systems where the super admin (root) has limitless privileges.</p>
+<p>In addition to that user, let's create another one for connecting to a database. For the example we'll use a database called newdb and add to it an user with read/write permissions called newdbUser.</p>
+<p>In the MongoDB shell switch to the newdb with the command:</p>
+<pre><code>&gt; use newdb
+</code></pre>
+<p>If you don't have already such a database, it will be automatically created for you. Then add its user with the command:</p>
+<pre><code>&gt; db.createUser(
+{
+user: "newdbUser",
+pwd: "S0m3Pass",
+roles: [
+{ role: "readWrite", db: "newdb" },
+]
+}
+)
+</code></pre>
+<p>You should see again a confirmation like this:</p>
+<pre><code>Successfully added user: {
+"user" : "newdbUser",
+"roles" : [
+{
+"role" : "readWrite",
+"db" : "newdb"
+}
+]
+}
+</code></pre>
+<p>After we have these two users created, we can enable authentication in MongoDB. For this purpose exit the MongoDB shell and start editing the main MongoDB configuration file /etc/mongod.conf such as with vim or nano. Add the following two lines there:</p>
+<pre><code>security:

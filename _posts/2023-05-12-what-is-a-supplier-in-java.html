@@ -1,0 +1,91 @@
+---
+layout: post
+title: What is a Supplier in Java
+date: 2023-05-12 04:59:45.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- supplier
+meta: {}
+permalink: "/what-is-a-supplier-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In Java, a supplier is a functional interface from the Java.util.function package that represents a supplier of results. It does not take any arguments and returns a value of the specified type. The functional interface defines a single abstract method called "get()" that returns a result.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The Supplier interface is commonly used in functional programming and is often used to represent a factory or generator function that can create or provide a value when needed. It can be used to lazily initialize a value or generate a series of values on demand.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here is an example of a Supplier interface:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public interface Supplier&lt;T> {
+    T get();
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here is an example of using a Supplier in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>import java.util.function.Supplier;
+
+public class SupplierExample {
+    public static void main(String[] args) {
+        Supplier&lt;String> supplier = () -> "Hello, world!";
+        String result = supplier.get();
+        System.out.println(result); // Output: Hello, world!
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we created a Supplier of type String that returns the string "Hello, world!" when the "get()" method is called. We then called the "get()" method to retrieve the result from the Supplier and printed it to the console.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>There are several reasons why you might want to use a Supplier in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Lazy initialization: A Supplier can be used to lazily initialize a value or object. Instead of creating an object or value upfront, you can use a Supplier to generate the value only when it's needed.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Delayed execution: A Supplier can be used to represent a delayed execution of a computation. This can be useful when you need to pass a computation as a parameter to a method, but you don't want the computation to be executed immediately.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Simplifying code: Using a Supplier can help simplify code and make it more readable by separating the creation or retrieval of a value from its use. This can make the code easier to maintain and test.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Caching: A Supplier can be used to cache the result of a computation or value, so that it can be reused multiple times without having to recalculate it.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example of how you might use a Supplier in Java to lazy initialize a value:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>import java.util.function.Supplier;
+
+public class LazyInitializationExample {
+    private Supplier&lt;String> valueSupplier = () -> {
+        System.out.println("Initializing value...");
+        return "Hello, world!";
+    };
+    private String value;
+
+    public String getValue() {
+        if (value == null) {
+            value = valueSupplier.get();
+        }
+        return value;
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the "valueSupplier" variable is a Supplier that generates the string "Hello, world!" when its "get()" method is called. The "value" variable is only initialized with the value returned by the Supplier when the "getValue()" method is called for the first time. Subsequent calls to "getValue()" return the cached value without re-executing the Supplier. This technique can be used to avoid unnecessary computation and improve performance in some cases.</p>
+<p><!-- /wp:paragraph --></p>

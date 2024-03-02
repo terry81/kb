@@ -1,0 +1,109 @@
+---
+layout: post
+title: How to Backup and Restore H2 Database
+date: 2023-03-27 11:53:19.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta: {}
+permalink: "/how-to-backup-and-restore-h2-database/"
+---
+<p><!-- wp:paragraph --></p>
+<p>H2Database (or simply H2) is an open-source, lightweight, and fast relational database management system written in Java. It is a pure Java database that can be used as an embedded database, or as a standalone database server. H2Database provides a small footprint (less than 2MB in size), yet it supports SQL and JDBC API, making it a good choice for small to medium-scale applications, or when you need an embedded database.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Some of the features of H2Database include support for various data types, transactions, triggers, stored procedures, functions, and views. It also supports advanced features such as full-text search, encryption, and clustering. Additionally, H2Database can be used in embedded mode or server mode, allowing you to use it in various applications, including desktop, web, and mobile applications.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>H2Database is compatible with various platforms, including Windows, Linux, and Mac, and it can be used with various programming languages such as Java, Kotlin, Python, Ruby, and more. Its small size and ease of use make it an excellent choice for developers who want a lightweight and easy-to-use database management system for their applications.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The drawback of the H2 database is that when you restart the JVM, the records are lost. That's why here's an example Java code which demonstrates how to persist records from an in-memory database such as H2Database and how to backup and restore these records:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted">javaCopy code<code>import java.io.File;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import org.h2.tools.Backup;
+
+public class H2DatabaseExample {
+
+    private static final String DB_DRIVER = "org.h2.Driver";
+    private static final String DB_URL = "jdbc:h2:mem:test";
+    private static final String DB_USER = "sa";
+    private static final String DB_PASSWORD = "";
+
+    public static void main(String[] args) throws SQLException, IOException {
+
+        // Create a connection to the H2Database
+        Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+
+        // Create a table
+        Statement statement = connection.createStatement();
+        statement.execute("CREATE TABLE users (id INT PRIMARY KEY, name VARCHAR(255))");
+
+        // Insert some data into the table
+        statement.execute("INSERT INTO users (id, name) VALUES (1, 'John')");
+        statement.execute("INSERT INTO users (id, name) VALUES (2, 'Mary')");
+        statement.execute("INSERT INTO users (id, name) VALUES (3, 'Peter')");
+
+        // Select all records from the table
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
+
+        // Print the records to the console
+        while (resultSet.next()) {
+            System.out.println("id: " + resultSet.getInt("id") + ", name: " + resultSet.getString("name"));
+        }
+
+        // Backup the database
+        Backup.execute("backup", "./test_backup.zip", "", false);
+
+        // Drop the table
+        statement.execute("DROP TABLE users");
+
+        // Restore the database
+        Backup.execute("restore", "./test_backup.zip", "", false);
+
+        // Select all records from the table again
+        resultSet = statement.executeQuery("SELECT * FROM users");
+
+        // Print the records to the console again
+        while (resultSet.next()) {
+            System.out.println("id: " + resultSet.getInt("id") + ", name: " + resultSet.getString("name"));
+        }
+
+        // Close the resources
+        resultSet.close();
+        statement.close();
+        connection.close();
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this code, we first create a connection to the H2Database using the JDBC driver. We create a table called "users" and insert some data into it. We then select all records from the table and print them to the console.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Next, we backup the database using the <code>Backup.execute()</code> method from the H2Database library. The backup file is saved as "./test_backup.zip".</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>We then drop the table to simulate a scenario where the table is accidentally deleted or corrupted.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To restore the database, we use the <code>Backup.execute()</code> method again and specify the backup file to restore from.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Finally, we select all records from the table again and print them to the console to verify that the data has been restored.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Note that this code only shows how to backup and restore the data from an in-memory database to a file. In a real-world scenario, you would want to backup the database to a more reliable and secure storage solution.</p>
+<p><!-- /wp:paragraph --></p>

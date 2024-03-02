@@ -1,0 +1,69 @@
+---
+layout: post
+title: How to Add Dependencies in a Maven Project
+date: 2023-03-26 16:39:36.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta: {}
+permalink: "/how-to-add-dependencies-in-a-maven-project/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In Maven, you can manage dependencies using a <code>pom.xml</code> file. Here's how you can add dependencies to your <code>pom.xml</code> file:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Open your <code>pom.xml</code> file in a text editor or an integrated development environment (IDE).</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Locate the <code>&lt;dependencies&gt;</code> tag in your <code>pom.xml</code> file. If it does not exist, you can add it after the <code>&lt;project&gt;</code> tag.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Add a new <code>&lt;dependency&gt;</code> tag for each dependency you want to add. The <code>&lt;dependency&gt;</code> tag contains information about the artifact that you want to use, such as the group ID, artifact ID, and version.Here's an example of how to add the JUnit dependency:xmlCopy code<code>&lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;junit&lt;/groupId&gt; &lt;artifactId&gt;junit&lt;/artifactId&gt; &lt;version&gt;4.12&lt;/version&gt; &lt;scope&gt;test&lt;/scope&gt; &lt;/dependency&gt; &lt;/dependencies&gt; </code>In this example, we're adding the JUnit dependency with group ID <code>junit</code>, artifact ID <code>junit</code>, and version <code>4.12</code>. The <code>&lt;scope&gt;</code> tag specifies that this dependency is only needed for testing.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Save your <code>pom.xml</code> file.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Finally, run <code>mvn install</code> or <code>mvn compile</code> command in your terminal or command prompt to download and install the dependencies specified in your <code>pom.xml</code> file.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>That's it! Your Maven project now has the necessary dependencies to build and run successfully.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>When you build a Java project with Maven, by default it creates a packaged output called a JAR (Java ARchive) file. This JAR file includes all the compiled Java classes and resources, along with any dependencies that you have specified in your <code>pom.xml</code> file.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To include the dependencies in the JAR file, you can use the Maven Assembly Plugin or the Maven Shade Plugin. Here's how you can use each of these plugins:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading {"level":3} --></p>
+<h3>Maven Assembly Plugin</h3>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Add the Maven Assembly Plugin to your <code>pom.xml</code> file by adding the following code to the <code>&lt;plugins&gt;</code> section:xmlCopy code<code>&lt;plugin&gt; &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt; &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt; &lt;version&gt;3.3.0&lt;/version&gt; &lt;configuration&gt; &lt;archive&gt; &lt;manifest&gt; &lt;mainClass&gt;com.example.MainClass&lt;/mainClass&gt; &lt;/manifest&gt; &lt;/archive&gt; &lt;descriptorRefs&gt; &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt; &lt;/descriptorRefs&gt; &lt;/configuration&gt; &lt;/plugin&gt; </code>This configures the Maven Assembly Plugin to create a JAR file with dependencies included.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Run the <code>mvn package</code> command to build your project and create the JAR file with dependencies included.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:heading {"level":3} --></p>
+<h3>Maven Shade Plugin</h3>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Add the Maven Shade Plugin to your <code>pom.xml</code> file by adding the following code to the <code>&lt;plugins&gt;</code> section:xmlCopy code<code>&lt;plugin&gt; &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt; &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt; &lt;version&gt;3.2.4&lt;/version&gt; &lt;executions&gt; &lt;execution&gt; &lt;phase&gt;package&lt;/phase&gt; &lt;goals&gt; &lt;goal&gt;shade&lt;/goal&gt; &lt;/goals&gt; &lt;configuration&gt; &lt;transformers&gt; &lt;transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"&gt; &lt;mainClass&gt;com.example.MainClass&lt;/mainClass&gt; &lt;/transformer&gt; &lt;/transformers&gt; &lt;/configuration&gt; &lt;/execution&gt; &lt;/executions&gt; &lt;/plugin&gt; </code>This configures the Maven Shade Plugin to create a JAR file with dependencies included.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Run the <code>mvn package</code> command to build your project and create the JAR file with dependencies included.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>After running either of these commands, you should have a JAR file with all the necessary dependencies included. You can find the JAR file in the <code>target</code> directory of your project.</p>
+<p><!-- /wp:paragraph --></p>

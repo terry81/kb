@@ -1,0 +1,103 @@
+---
+layout: post
+title: Reasons to Make Methods Final in Java
+date: 2023-03-26 10:43:53.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+- Security
+tags: []
+meta: {}
+permalink: "/reasons-to-make-methods-final-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Making methods <code>final</code> in Java can provide several benefits, including:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Preventing method overriding: When a method is marked <code>final</code>, it cannot be overridden by subclasses. This can help ensure that the behavior of the method is consistent across the entire inheritance hierarchy, which can help prevent bugs and make the code easier to reason about.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Improving performance: When a method is marked <code>final</code>, the compiler can optimize the method call by inlining the method code at compile time. This can improve performance by eliminating the overhead of a method call and reducing the number of instructions that need to be executed.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Enhancing security: When a method is marked <code>final</code>, it cannot be modified by subclasses or other classes, which can help prevent security vulnerabilities that could be introduced by overriding the method.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Facilitating parallel programming: When a method is marked <code>final</code>, it is guaranteed to be thread-safe and can be safely used in parallel programming environments without the risk of race conditions or other synchronization issues.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>However, it's important to note that marking methods <code>final</code> is not always necessary or appropriate. It should only be used when it makes sense for the specific use case and design of the code. Additionally, marking a method <code>final</code> can limit the flexibility and extensibility of the code, so it should be used judiciously.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example of a class with a final method:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public class Circle {
+    private final double radius;
+
+    public Circle(double radius) {
+        this.radius = radius;
+    }
+
+    public final double getArea() {
+        return Math.PI * radius * radius;
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we have a <code>Circle</code> class with a final method <code>getArea()</code>. The <code>getArea()</code> method calculates the area of the circle using the formula <code>πr²</code>, where <code>r</code> is the radius of the circle. By marking the method <code>final</code>, we're ensuring that it cannot be overridden by any subclasses of <code>Circle</code>.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>This can be useful because the area calculation for a circle is a fundamental geometric formula that should not be modified by any subclasses. By making the <code>getArea()</code> method <code>final</code>, we're preventing any potential bugs or unexpected behavior that could be introduced by subclasses that attempt to modify the area calculation.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Additionally, marking the <code>getArea()</code> method <code>final</code> can improve performance, because it allows the compiler to inline the method code at compile time, eliminating the overhead of a method call.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example where using the <code>final</code> keyword to prevent method overriding can help enhance security:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Let's say you have a banking application that includes a <code>BankAccount</code> class with a method called <code>withdraw()</code> that allows a user to withdraw funds from their account. The <code>withdraw()</code> method might look something like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public class BankAccount {
+    // Other fields and methods omitted for brevity
+    
+    public void withdraw(double amount) {
+        if (balance >= amount) {
+            balance -= amount;
+        } else {
+            throw new InsufficientFundsException();
+        }
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the <code>withdraw()</code> method checks if the account has enough funds to cover the requested withdrawal, and if so, it subtracts the amount from the account balance. If the account does not have enough funds, it throws an <code>InsufficientFundsException</code>.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Now, let's say a malicious attacker creates a subclass of <code>BankAccount</code> called <code>MaliciousAccount</code>, and overrides the <code>withdraw()</code> method to allow unlimited withdrawals, regardless of the account balance:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public class MaliciousAccount extends BankAccount {
+    @Override
+    public void withdraw(double amount) {
+        balance -= amount;
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>If the <code>withdraw()</code> method is not marked as <code>final</code> in the <code>BankAccount</code> class, the attacker's <code>MaliciousAccount</code> class can be used to circumvent the withdrawal restrictions and steal funds from the account. This is an example of a security vulnerability that can be prevented by using the <code>final</code> keyword to prevent method overriding.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>If we had marked the <code>withdraw()</code> method as <code>final</code> in the <code>BankAccount</code> class, the attacker would not be able to override it and create the <code>MaliciousAccount</code> subclass, thus preventing the vulnerability.</p>
+<p><!-- /wp:paragraph --></p>

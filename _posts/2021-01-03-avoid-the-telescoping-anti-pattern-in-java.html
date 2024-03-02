@@ -1,0 +1,129 @@
+---
+layout: post
+title: Avoid the Telescoping Anti-pattern in Java
+date: 2021-01-03 16:26:55.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- Anti-pattern
+- Telescoping pattern
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231394;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:311;}i:1;a:1:{s:2:"id";i:328;}i:2;a:1:{s:2:"id";i:339;}i:3;a:1:{s:2:"id";i:190;}i:4;a:1:{s:2:"id";i:273;}i:5;a:1:{s:2:"id";i:248;}}}}
+  _last_editor_used_jetpack: block-editor
+  _wpas_done_all: '1'
+permalink: "/avoid-the-telescoping-anti-pattern-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>The Telescoping anti-pattern is widely-spread, just like a virus. It starts with good intentions. For example, a class that has two properties like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>public class Example {
+	private int x;
+	private int y;
+
+	public Example(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	...</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>The above constructor starts being used for creating new Example objects. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Example ex = new Example(2, 4);</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>At one point, the project requirements change and a third parameter is needed. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>For example, let's assume that the above Example object should support a third dimension and we need a third int property:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>public class Example {
+	private int x;
+	private int y;
+	private int z; //new property
+...</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Consider the fact that the old constructor is already being used with two parameters and you cannot just remove it. Because of that, the easiest solution is to follow the Telescoping anti-pattern:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>	public Example(int x, int y, int z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+	
+	public Example(int x, int y) {
+		this(x, y, 0);
+	}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>With the above, you preserve the original constructor with two parameters and it calls a new constructor with three parameters and a default value of 0 for z. This will ensure that the new z property will not break previous implementation of the Example object. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>This saves you from having to fix older code and that's why it's a widely spread practice recognised as a design anti-pattern.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The drawbacks of the telescoping constructor is that it is confusing, ugly and incorrect from clean code point of view. Instead, the correct way to address such a problem with an increasing number of class properties is using the so called Builder. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>We can implement the Builder pattern this with with an additional class called ExampleBuilder:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>class Example {
+	private int x;
+	private int y;
+	private int z;
+
+	public Example(int x, int y, int z) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+	}
+}
+
+class ExampleBuilder {
+	private int x;
+	private int y;
+	private int z;
+
+	public ExampleBuilder setX(int x) {
+		this.x = x;
+		return this;
+	}
+
+	public ExampleBuilder setY(int y) {
+		this.y = y;
+		return this;
+	}
+
+	public ExampleBuilder setZ(int z) {
+		this.z = z;
+		return this;
+	}
+
+	public Example build() {
+		return new Example(x, y, z);
+	}
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Once you have the builder class, you can instantiate the Example object like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>	ExampleBuilder eb = new ExampleBuilder();
+	eb.setX(1).setY(2).setZ(3);
+	Example ex = eb.build();</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>The above will require fixing your old code in the places where the Example object is instantiated but it will provide you with greater flexibility in future by allowing you to easily add more properties to the Example class. </p>
+<p><!-- /wp:paragraph --></p>

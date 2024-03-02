@@ -1,0 +1,77 @@
+---
+layout: post
+title: How to Use Properly Lambdas in Java
+date: 2023-03-26 17:12:09.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta: {}
+permalink: "/how-to-use-properly-lambdas-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Lambdas are a concise way to define and use functional interfaces in Java. Here are some guidelines on how to use lambdas effectively in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Know when to use lambdas: Lambdas are best used when you need to define a single-method interface (a functional interface) in a concise way. This is often the case when working with the Streams API, where you need to provide a lambda expression to the <code>map()</code>, <code>filter()</code>, <code>reduce()</code>, and other methods.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Understand the syntax: The syntax for a lambda expression is <code>(arguments) -&gt; expression</code>. The arguments are enclosed in parentheses and separated by commas (if there are multiple arguments), and the expression is the body of the lambda. The curly braces can be omitted if the expression is a single statement, but they are required if the expression is a block of code.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Use type inference: The type of the lambda expression is inferred from the context in which it is used. For example, if you pass a lambda expression to a method that expects a <code>Predicate&lt;String&gt;</code>, the compiler will infer the type of the lambda expression as <code>Predicate&lt;String&gt;</code>.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Keep it simple: Lambdas are meant to be concise, so try to keep them simple and easy to read. If a lambda expression becomes too complex, it might be better to define a separate method instead.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Be mindful of scope: A lambda expression can access variables in its enclosing scope, but the variables must be effectively final (i.e., they cannot be reassigned). If you need to modify a variable inside a lambda expression, you can use a mutable container such as an <code>AtomicReference</code> or a <code>StringBuilder</code>.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example that demonstrates the use of a lambda expression in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>import java.util.Arrays;
+import java.util.List;
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        List&lt;String> names = Arrays.asList("Alice", "Bob", "Charlie", "Dave");
+
+        names.stream()
+             .filter(name -> name.length() > 4)
+             .forEach(System.out::println);
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we use a lambda expression to define the condition for filtering the list of names. The lambda expression <code>(name -&gt; name.length() &gt; 4)</code> takes a single argument (<code>name</code>) and returns a boolean value indicating whether the length of the name is greater than 4. We then use this lambda expression to filter the list using the <code>filter()</code> method of the Stream API, and print out the filtered results using the <code>forEach()</code> method.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's another example that demonstrates how to use a lambda expression to sort a list of strings in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted">i<code>mport java.util.Arrays;
+import java.util.List;
+
+public class LambdaExample {
+    public static void main(String[] args) {
+        List&lt;String> names = Arrays.asList("Alice", "Bob", "Charlie", "Dave");
+
+        names.sort((name1, name2) -> name1.compareToIgnoreCase(name2));
+
+        System.out.println(names); // [Alice, Bob, Charlie, Dave]
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we use a lambda expression to define the comparator for sorting the list of names. The lambda expression <code>(name1, name2) -> name1.compareToIgnoreCase(name2)</code> takes two arguments (<code>name1</code> and <code>name2</code>) and returns an integer value indicating the order of the two names. We then use this lambda expression to sort the list using the <code>sort()</code> method of the <code>List</code> interface. Finally, we print out the sorted list of names.</p>
+<p><!-- /wp:paragraph --></p>

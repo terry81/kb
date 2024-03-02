@@ -1,0 +1,51 @@
+---
+layout: post
+title: What is a Filesystem Mapping in Docker
+date: 2023-04-11 13:19:41.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+- Virtualization
+tags: []
+meta: {}
+permalink: "/what-is-a-filesystem-mapping-in-docker/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In Docker, a file system mapping refers to the process of associating a directory or a file from the host system with a directory or a file inside a Docker container. This allows the container to access and manipulate files and directories on the host system, or share files between the host system and the container.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>File system mapping is accomplished using the <code>-v</code> or <code>--volume</code> option when running Docker containers. This option allows you to specify the source and destination directories or files that you want to map. For example, the following command maps the <code>/path/on/host</code> directory on the host system to the <code>/path/in/container</code> directory inside the Docker container:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker run -v /path/on/host:/path/in/container my_container
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This means that any changes made to files or directories inside <code>/path/on/host</code> on the host system will be reflected inside the container at <code>/path/in/container</code>, and vice versa.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>File system mapping is commonly used for a variety of purposes in Docker, such as sharing configuration files, providing data persistence, and allowing containers to interact with files on the host system. It provides a flexible way to manage file system access and sharing between the host system and Docker containers, making it a powerful feature for containerized applications.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's another example of file system mapping in Docker:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Let's say you have a web application that requires a configuration file located on your host system. The configuration file is located at <code>/my_app/config/my_config.conf</code> on the host. You want to map this configuration file to a location inside the Docker container, so that the container can access and use it.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>You can use the <code>-v</code> or <code>--volume</code> option to map the directory containing the configuration file on the host to a directory inside the container. For example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker run -v /my_app/config:/app/config my_container
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This command maps the <code>/my_app/config</code> directory on the host to the <code>/app/config</code> directory inside the Docker container named <code>my_container</code>. Now, any changes made to the configuration file on the host system will be reflected inside the container, and the container can access and use the configuration file as needed.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>This file system mapping allows the containerized application to read and write to the configuration file on the host system, without having to bundle the configuration file into the container image. This provides flexibility and separation of concerns, as the configuration can be managed separately from the container, and can be easily updated or replaced without rebuilding the container image.</p>
+<p><!-- /wp:paragraph --></p>

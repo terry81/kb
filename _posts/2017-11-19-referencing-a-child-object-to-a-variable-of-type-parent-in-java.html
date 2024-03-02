@@ -1,0 +1,82 @@
+---
+layout: post
+title: Referencing a Child Object to a Variable of Type Parent in Java
+date: 2017-11-19 07:19:02.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613067670;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:269;}i:1;a:1:{s:2:"id";i:273;}i:2;a:1:{s:2:"id";i:311;}i:3;a:1:{s:2:"id";i:339;}i:4;a:1:{s:2:"id";i:262;}i:5;a:1:{s:2:"id";i:210;}}}}
+  _wpas_done_all: '1'
+permalink: "/referencing-a-child-object-to-a-variable-of-type-parent-in-java/"
+---
+<p>Referencing a child object to a variable of type parent in Java can be real confusing.</p>
+<p>Here is an example of two classes <code>Person</code> and <code>Student</code> and an overriden method <code>whatAmI</code>:</p>
+<pre><code>class Person {
+    String it = "It is a Person.";
+    public void whatAmI(Object x) {
+        System.out.print("Person's object... " + it);
+    }
+}
+
+class Student extends Person {
+    String it = "It is a Student.";
+    public void whatAmI(Object x) {
+        System.out.print("Student's object... " + it);
+    }
+}
+
+public class Calling {
+    public static void main(String[] args) {
+        Student s1 = new Student();
+        Person p1 = new Student();
+
+        p1.whatAmI(s1);
+    }
+}
+</code></pre>
+<p>When run, the above produces:</p>
+<p><code>Student's object... It is a Student.</code></p>
+<p>With the above example, the overriden method from the child class is used. This might be intuitive and makes sense.</p>
+<p>Though, if we overload the method <code>whatAmI</code> and NOT override it:</p>
+<pre><code>class Person {
+    String it = "It is a Person.";
+    public void whatAmI(Object x) {
+        System.out.print("Person's object... " + it);
+    }
+}
+
+class Student extends Person {
+    String it = "It is a Student.";
+    public void whatAmI(Student x) {
+        System.out.print("Student's object... " + it);
+    }
+}
+
+public class Calling {
+    public static void main(String[] args) {
+        Student s1 = new Student();
+        Person p1 = new Student();
+
+        p1.whatAmI(s1);
+    }
+}
+</code></pre>
+<p>Then the output is:</p>
+<p><code>Person's object... It is a Person.</code></p>
+<p>The above is not following the logic from to the previous example with the overriden method. Here because of the reference type, the method <code>whatAmI</code> from the parent class is used. And this is just because we have overloaded the method.</p>
+<p>As for the String property <code>it</code>, it is always bound to the type of reference. If we print <code>p1.it</code>, the result will be</p>
+<p><code>It is a Person.</code></p>
+<p>To summarise it:</p>
+<ul>
+<li>Overriden methods are taken from the instantiated object;</li>
+<li>Overloaded methods are taken from the type of reference;</li>
+<li>Properties depend of the type of reference.</li>
+</ul>

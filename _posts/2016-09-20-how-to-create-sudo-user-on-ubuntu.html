@@ -1,0 +1,37 @@
+---
+layout: post
+title: How to Create Sudo User On Ubuntu
+date: 2016-09-20 08:23:40.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+tags:
+- administration
+- security
+- sudo
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613066929;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:30;}i:1;a:1:{s:2:"id";i:14;}i:2;a:1:{s:2:"id";i:69;}i:3;a:1:{s:2:"id";i:135;}i:4;a:1:{s:2:"id";i:43;}i:5;a:1:{s:2:"id";i:138;}}}}
+  _wpas_done_all: '1'
+  _jetpack_dont_email_post_to_subs: '1'
+permalink: "/how-to-create-sudo-user-on-ubuntu/"
+---
+<p>Working with root (admin privileged user) in Ubuntu is not a good idea because you can easily make a costly mistake. Instead, it's much better to grant the special <em>sudo</em> privileges which allow a regular user to run super user commands by just preceding the commands with <em>sudo</em> in front.</p>
+<p>Example of a <em>sudo</em> command:</p>
+<pre><code>sudo ls
+</code></pre>
+<p>By default, a fresh Ubuntu installation comes with an user who has <em>sudo</em> privileges. To create a new <em>sudo</em> user, you first need a regular user. To create it run the command:</p>
+<pre><code>sudo adduser your_user
+</code></pre>
+<p>Then open the file <em>/etc/sudoers</em> and you have two options. First is to add a user which is asked for a password when running <em>sudo</em> commands:</p>
+<pre><code>your_user     ALL=(ALL:ALL) ALL
+</code></pre>
+<p>The second, less secure alternative is to allow the user to run <em>sudo</em> commands without being asked for a password:</p>
+<pre><code>your_user     ALL=(ALL:ALL) NOPASSWD:ALL
+</code></pre>
+<p>That's how easy it is to have a <em>sudo</em> user in Ubuntu if you already don't have one or if you need additional ones.</p>

@@ -1,0 +1,54 @@
+---
+layout: post
+title: Terminate Java Thread
+date: 2017-12-26 18:29:19.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '1'
+  _jetpack_related_posts_cache: a:2:{s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613224455;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:248;}i:1;a:1:{s:2:"id";i:269;}i:2;a:1:{s:2:"id";i:339;}}}s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613243685;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:248;}i:1;a:1:{s:2:"id";i:269;}i:2;a:1:{s:2:"id";i:339;}i:3;a:1:{s:2:"id";i:273;}i:4;a:1:{s:2:"id";i:352;}i:5;a:1:{s:2:"id";i:233;}}}}
+  _wpas_done_all: '1'
+  _wp_old_slug: terminate-java-thread-job
+permalink: "/terminate-java-thread/"
+---
+<p>The best way to terminate a Java thread is with a switch such as a boolean property, .e.g <code>abort</code>. As soon as a condition is met, usually a timeout, you can change the value of abort to true and thus exit thread. Example:</p>
+<pre><code>import java.util.concurrent.*;
+
+public class CheckResults {
+    private static int counter = 0;
+    private static int timeout = 10;
+    private static boolean abort = false;
+
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        try {
+            ExecutorService service = Executors.newSingleThreadExecutor();
+            Future&lt;?&gt; result = service.submit(() -&gt; {
+                for (int i = 0; i &lt; 5000; i++) {
+                    try {
+                        CheckResults.counter++;
+                        System.out.println(CheckResults.counter);
+                        Thread.sleep(4000); //some logic to slow down and reach the timeout
+                        if (abort == true)
+                            return;
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            result.get(timeout, TimeUnit.SECONDS);
+            System.out.println("Reached!");
+        } catch (TimeoutException e) {
+            System.out.println("Not reached in time. Quitting.");
+            abort = true;
+        }
+    }
+}
+</code></pre>
+<p>The above example makes use of Java 8's functional programming capability (Lambda expression), java.util.concurrent.Future<v> object for checking the timeout and <code>return</code> to exit the thread. It all works smoothly. Any other way to try to interrupt the execution of the Thread could be prone to problems.</v></p>

@@ -1,0 +1,77 @@
+---
+layout: post
+title: How to Protect the Class State from Unintended Changes in Java
+date: 2023-03-08 14:17:46.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+- Security
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/how-to-protect-the-class-state-from-unintended-changes-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In Java, objects can be classified as either mutable or immutable based on whether their state can be changed or not.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>A mutable object is one whose state can be modified after its creation. For example, an array can have its elements added, removed or modified after it has been created.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>On the other hand, an immutable object cannot be changed after its creation. A string is a good example of an immutable object in Java. Once a string object is created, its value cannot be modified.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>When designing classes in Java, it is generally a good practice to avoid exposing mutable objects to callers directly. This is because any changes made to the object by the caller can have unintended consequences on the class state.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Instead, it is recommended to use an unmodifiable collection, such as an unmodifiable list or set, or to create a copy of the mutable object and return the copy instead. This ensures that the caller cannot modify the original object and avoids unexpected changes to the class state.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Java provides the <code>Collections.unmodifiableXXX</code> methods that can be used to create an unmodifiable view of a mutable collection. For example, <code>Collections.unmodifiableList</code> returns an unmodifiable view of a list.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Alternatively, a copy of the mutable object can be created using methods like <code>clone()</code> or the copy constructor, and the copy can be returned to the caller instead.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here is an example to illustrate the concept of mutable objects and how to protect the class state from unintended changes by using an unmodifiable collection or a copy of the mutable object:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>import java.util.*;
+
+public class MyClass {
+    private List&lt;String&gt; mutableList;
+
+    public MyClass(List&lt;String&gt; mutableList) {
+        this.mutableList = mutableList;
+    }
+
+    public List&lt;String&gt; getMutableList() {
+        // return an unmodifiable view of the mutableList
+        return Collections.unmodifiableList(mutableList);
+    }
+
+    public List&lt;String&gt; getCopyOfMutableList() {
+        // return a copy of the mutableList
+        return new ArrayList&lt;&gt;(mutableList);
+    }
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the above example, <code>MyClass</code> has a private instance variable <code>mutableList</code> of type <code>List&lt;String&gt;</code>. This list is mutable, and its state can be changed by adding or removing elements from it.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The class provides two methods for accessing the <code>mutableList</code>: <code>getMutableList()</code> and <code>getCopyOfMutableList()</code>.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><code>getMutableList()</code> returns an unmodifiable view of the <code>mutableList</code> using the <code>Collections.unmodifiableList()</code> method. This ensures that any changes made to the list by the caller will result in an <code>UnsupportedOperationException</code> being thrown, and the class state will remain unaffected.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><code>getCopyOfMutableList()</code> returns a copy of the <code>mutableList</code> using the <code>ArrayList</code> copy constructor. This ensures that the caller receives a completely separate instance of the list, and any changes made to this copy will not affect the state of the original list held by the class.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In summary, by returning an unmodifiable view or a copy of a mutable object instead of the object itself, we can protect the class state from unintended changes and ensure that the class remains in a consistent state.</p>
+<p><!-- /wp:paragraph --></p>

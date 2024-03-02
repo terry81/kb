@@ -1,0 +1,69 @@
+---
+layout: post
+title: Delete Files with Java 8
+date: 2020-01-23 21:40:32.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- java
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:2:{s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613216788;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:248;}i:1;a:1:{s:2:"id";i:273;}i:2;a:1:{s:2:"id";i:311;}}}s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231921;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:248;}i:1;a:1:{s:2:"id";i:273;}i:2;a:1:{s:2:"id";i:311;}i:3;a:1:{s:2:"id";i:190;}i:4;a:1:{s:2:"id";i:180;}i:5;a:1:{s:2:"id";i:262;}}}}
+  _wpas_done_all: '1'
+  _wp_old_slug: delete-files-with-java
+  _last_editor_used_jetpack: block-editor
+permalink: "/delete-files-with-java-8/"
+---
+<p><!-- wp:paragraph --></p>
+<p>A friend asked me to help him with the following in Bash - delete all files but a whitelisted and use mix / max depth for directory traversal. It's probably possible in Bash with some crazy find, grep, etc one-liner.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>But here's how good it looks in Java 8 with streams, predicates, etc...</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+public class DeleteFiles {
+
+	final static int MIN_DEPTH = 2;
+	final static int MAX_DEPTH = 2;
+	final static String ROOT_DIR = "/home/example";
+	final static String WHITELISTED_FILE = "test.txt";
+
+	public static &lt;T&gt; Predicate&lt;T&gt; not(Predicate&lt;T&gt; t) {
+		return t.negate();
+	}
+
+	public static void main(String&#91;] args) {
+		try {
+			try (Stream&lt;Path&gt; paths = Files.find(Paths.get(ROOT_DIR), MAX_DEPTH, (path, file) -&gt; file.isRegularFile())
+			        .filter(e -&gt; e.getNameCount() - Paths.get(ROOT_DIR).getNameCount() &gt;= MIN_DEPTH)
+			        .filter(not(s -&gt; s.toString().endsWith(File.separator + WHITELISTED_FILE)))) {
+				
+				paths.map(Path::toFile).forEach(
+						file-&gt;{
+						    System.out.println("To delete: " + file);
+						    file.delete();
+						});
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>With Java you can also easily extend the above functionality. Imagine the Bash hell you'll get into when trying to whitelist a second file for example... Ahh, and it also works on Windows :)</p>
+<p><!-- /wp:paragraph --></p>

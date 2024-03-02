@@ -1,0 +1,136 @@
+---
+layout: post
+title: How to Improve Resilience With Hystrix
+date: 2023-03-26 10:13:06.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- database
+- resillience
+meta:
+  _edit_last: '1'
+permalink: "/how-to-improve-resilience-with-hystrix/"
+---
+<p><!-- wp:paragraph --></p>
+<p><a href="https://github.com/Netflix/Hystrix">Hystrix</a> is a library created by Netflix that provides fault tolerance and latency tolerance for distributed systems. It is particularly useful in microservices architecture where failures in one service can propagate to others.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In a Java program, a good use of Hystrix is to wrap remote service calls, database calls, and other potentially slow or unreliable operations with Hystrix commands. The Hystrix command is essentially a wrapper around the original operation that monitors its execution time and can take corrective actions if the execution time exceeds a certain threshold or if the operation returns an error.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Some examples of corrective actions that can be taken by Hystrix include returning a fallback response, retrying the operation after a certain time period, or circuit breaking to prevent further requests from being sent to the failing service.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>By using Hystrix, Java developers can improve the resiliency and fault tolerance of their applications, making them more robust and reliable in the face of failures and high load.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example of how Hystrix can be used to improve the resiliency of a Java application that interacts with a remote web service:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Let's say that your Java application needs to make calls to a third-party web service to retrieve data. However, this web service can be slow or unreliable, and you want to ensure that your application can continue functioning even if the web service is unavailable.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To achieve this, you could use Hystrix to wrap the web service calls with a HystrixCommand. Here's an example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public class RemoteServiceCommand extends HystrixCommand&lt;Response> {
+    private final String url;
+
+    public RemoteServiceCommand(String url) {
+        super(HystrixCommandGroupKey.Factory.asKey("RemoteServiceGroup"));
+        this.url = url;
+    }
+
+    @Override
+    protected Response run() throws Exception {
+        return makeRemoteCall();
+    }
+
+    @Override
+    protected Response getFallback() {
+        return new ResponseBuilder()
+            .setStatus(Status.SERVICE_UNAVAILABLE)
+            .build();
+    }
+
+    private Response makeRemoteCall() {
+        // Make the remote call using a HTTP client library
+        // Return the response object
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the RemoteServiceCommand class extends HystrixCommand and overrides the run() and getFallback() methods. The run() method makes the actual remote call, while the getFallback() method defines what to do if the remote call fails or takes too long.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this case, the getFallback() method simply returns a HTTP response with a status code indicating that the remote service is unavailable. This ensures that the application can continue functioning even if the web service is down.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To use this command in your Java code, you would simply create an instance of RemoteServiceCommand and execute it:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>RemoteServiceCommand command = new RemoteServiceCommand("http://remote-service.com/api/data");
+Response response = command.execute();
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>If the remote service call succeeds, the Response object will contain the data returned by the web service. If the call fails or takes too long, the getFallback() method will be called and return a fallback response.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's another example of how Hystrix can be used to improve the resiliency of a Java application that interacts with a database:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Let's say that your Java application needs to make calls to a database to retrieve or update data. However, the database can be slow or become unavailable due to network issues or other problems. To ensure that your application can continue functioning even if the database is unavailable, you can use Hystrix to wrap your database calls with a HystrixCommand.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example of how you could use Hystrix to wrap a database query:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public class DatabaseCommand extends HystrixCommand&lt;List&lt;Data>> {
+    private final String query;
+
+    public DatabaseCommand(String query) {
+        super(HystrixCommandGroupKey.Factory.asKey("DatabaseGroup"));
+        this.query = query;
+    }
+
+    @Override
+    protected List&lt;Data> run() throws Exception {
+        return executeQuery();
+    }
+
+    @Override
+    protected List&lt;Data> getFallback() {
+        return Collections.emptyList();
+    }
+
+    private List&lt;Data> executeQuery() {
+        // Execute the query using a database library
+        // Return the result as a list of Data objects
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the DatabaseCommand class extends HystrixCommand and overrides the run() and getFallback() methods. The run() method executes the actual database query, while the getFallback() method defines what to do if the query fails or takes too long.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this case, the getFallback() method simply returns an empty list. This ensures that the application can continue functioning even if the database is down, although it may not have access to the latest data.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To use this command in your Java code, you would simply create an instance of DatabaseCommand and execute it:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>DatabaseCommand command = new DatabaseCommand("SELECT * FROM data_table");
+List&lt;Data> result = command.execute();
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>If the database query succeeds, the result list will contain the data returned by the query. If the query fails or takes too long, the getFallback() method will be called and return an empty list.</p>
+<p><!-- /wp:paragraph --></p>

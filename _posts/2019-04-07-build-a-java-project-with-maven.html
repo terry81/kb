@@ -1,0 +1,224 @@
+---
+layout: post
+title: Build A Java Project With Maven
+date: 2019-04-07 16:10:33.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- Maven
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613232017;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:210;}i:1;a:1:{s:2:"id";i:190;}i:2;a:1:{s:2:"id";i:14;}i:3;a:1:{s:2:"id";i:282;}i:4;a:1:{s:2:"id";i:91;}i:5;a:1:{s:2:"id";i:135;}}}}
+  _edit_last: '1'
+  _wpas_done_all: '1'
+  _wp_old_slug: build-a-simple-java-project-with-maven
+permalink: "/build-a-java-project-with-maven/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Using <a href="https://maven.apache.org/">Maven</a> to maintain and build your Java projects has a lot of advantages including automatically resolving dependencies, running tests and packaging. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this article you will learn about a complete development cycle using Maven from creating the project to building it.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Installing Maven</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>You can install Maven on most Linux distributions using the default installer. In Ubuntu you can use apt like this.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>apt-get install maven</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p> On Mac you can install it with <a href="https://brew.sh/">Homebrew</a>:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>brew install maven</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>For Windows, download it manually and unpack it. Then add the unpacked directory your executable path. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Creating a new Maven Project</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Once you have Maven installed, you can start your new project like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>mvn -B archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -DgroupId=com.knowledgebasement.example -DartifactId=example</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>This will create a new directory called example and generate all the necessary artefacts for a new Java project under the package com.knowledgebasement.example. Make sure that you run this command in your usual development workspace such as the directory eclipse-workspace.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Inside the newly created directory (example in our case), you will find your automatically generated <a href="https://maven.apache.org/guides/introduction/introduction-to-the-pom.html">pom.xml</a>, the file with all essential details about your project.  It will look like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  &lt;modelVersion>4.0.0&lt;/modelVersion>
+  &lt;groupId>com.knowledgebasement.example&lt;/groupId>
+  &lt;artifactId>example&lt;/artifactId>
+  &lt;packaging>jar&lt;/packaging>
+  &lt;version>1.0-SNAPSHOT&lt;/version>
+  &lt;name>example&lt;/name>
+  &lt;url>http://maven.apache.org&lt;/url>
+  &lt;dependencies>
+    &lt;dependency>
+      &lt;groupId>junit&lt;/groupId>
+      &lt;artifactId>junit&lt;/artifactId>
+      &lt;version>3.8.1&lt;/version>
+      &lt;scope>test&lt;/scope>
+    &lt;/dependency>
+  &lt;/dependencies>
+&lt;/project></code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Note that junit was automatically added as a dependency. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Adding Dependencies to Your Project</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Unless you intend to write everything by yourself from scratch, chances are that you will use external libraries and dependencies. For the current example, let's use javax.mail which would allow us to send mails from our Java code.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Open your pom.xml and go to the dependencies part. After the junit dependenice, add javax.mail with the latest current version 1.5.0-b01:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>    &lt;dependency>
+      &lt;groupId>javax.mail&lt;/groupId>
+      &lt;artifactId>mail&lt;/artifactId>
+      &lt;version>1.5.0-b01&lt;/version>
+    &lt;/dependency></code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Before starting coding and being able to use the javax classes, you will have to resolve this dependency, i.e. download it, with the help of Maven like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>mvn dependency:resolve</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Running the above command will download the needed javax.mail files to your local Maven repo, i.e. in your home directory .m2/repository/javax/mail/mail/1.5.0-b01/mail-1.5.0-b01-sources.jar.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Import the New Project in Your IDE</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>After that you are ready to import the new project in your IDE and start coding. For Eclipse, use Import -&gt; Maven -&gt; Existing Maven Project. Point it to the directory of the new project, example in our case.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Now you are ready to start coding. Let's create a simple class which sends mails and looks like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>package com.knowledgebasement.example;
+
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
+public class Example {
+	public static void main(String[] args) throws Exception {
+		System.out.println("Going to send mail.");
+		sendMail("test@example.org", "test@example.org", "Test mail subject", "Test mail body");
+	}
+
+	public static void sendMail(String from, String to, String subject, String msgBody) throws Exception {
+
+		Properties props = new Properties();
+		Session session = Session.getDefaultInstance(props, null);
+
+		try {
+			Message msg = new MimeMessage(session);
+			msg.setFrom(new InternetAddress(from));
+			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+			msg.setSubject(subject);
+			msg.setText(msgBody);
+			Transport.send(msg);
+		} catch (Exception e) {
+			throw new Exception(e);
+		}
+	}
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Provided you have resolved your dependencies correctly with Maven, the above imports should work fine. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>If you try executing the above code in your IDE (Eclipse), it should compile correctly and print "Going to send mail". If you have a local smtp server, it will even try to send email to test@example.org. If you don't have, it will print an exception. Either way is fine for the testing.   </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Packaging the Code in a Single Jar</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>For convenience let's assume that we want our project bundled in a single jar file which we can easily transport and execute. To accomplish this aim, open again the project's pom.xml file and add a new <strong>build</strong> configuration part which looks like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>&lt;build>
+  &lt;plugins>
+    &lt;plugin>
+      &lt;artifactId>maven-assembly-plugin&lt;/artifactId>
+      &lt;configuration>
+        &lt;archive>
+          &lt;manifest>
+            &lt;mainClass>com.knowledgebasement.example.Example&lt;/mainClass>
+          &lt;/manifest>
+        &lt;/archive>
+        &lt;descriptorRefs>
+          &lt;descriptorRef>jar-with-dependencies&lt;/descriptorRef>
+        &lt;/descriptorRefs>
+      &lt;/configuration>
+    &lt;/plugin>
+  &lt;/plugins>
+&lt;/build></code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Notice two important things:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>mainClass will be our main entry point when we execute the jar.</li>
+<li>the jar file will contain all the needed dependencies as per the descriptorRef property.</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Now you are able to build your example application and test it. For this purpose use Maven as follows:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>mvn clean compile assembly:single</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>This will produce a new jar file inside the target directory of your project example-1.0-SNAPSHOT-jar-with-dependencies.jar. Besides our own code, this jar file will contain also all the necessary libraries, javax.mail in our case. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The automatically generated example-1.0-SNAPSHOT-jar-with-dependencies.jar name comes from the property &nbsp;&lt;version&gt; inside your pom.xml and SNAPSHOT hints that this is still a development version. With each new code change, ensure to increment the version number and remove the snapshot string when it is going to be a production-ready version.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2 id="mce_54">Executing the Jar</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Finally, you can execute your new Example application by just running:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>java -jar example-1.0-jar-with-dependencies.jar</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>From this point on, just copy the jar file to wherever you need it and execute it. You don't have to worry whether:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>the needed libraries (javax.mail in our case) have been copied already there.</li>
+<li>the same libraries are in the java's build path.</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>This is one example of going through a complete development lifecyle with Maven and of what great help it can be. </p>
+<p><!-- /wp:paragraph --></p>

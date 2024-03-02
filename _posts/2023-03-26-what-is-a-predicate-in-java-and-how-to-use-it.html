@@ -1,0 +1,79 @@
+---
+layout: post
+title: What is a Predicate in Java and How to Use It
+date: 2023-03-26 17:08:30.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta: {}
+permalink: "/what-is-a-predicate-in-java-and-how-to-use-it/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In Java, a predicate is a functional interface from the java.util.function package that represents a function that takes in one argument and returns a boolean value. The functional interface is defined as:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public interface Predicate&lt;T> {
+    boolean test(T t);
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>The <code>test()</code> method takes in a single argument of type <code>T</code> and returns a boolean value indicating whether the input satisfies some condition.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example of how to use a predicate in Java. Let's say we have a list of integers and we want to filter out the even numbers. We can use a predicate to define the condition for filtering:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class PredicateExample {
+    public static void main(String[] args) {
+        List&lt;Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        Predicate&lt;Integer> isEven = n -> n % 2 == 0;
+
+        List&lt;Integer> evenNumbers = numbers.stream()
+                                           .filter(isEven)
+                                           .collect(Collectors.toList());
+
+        System.out.println(evenNumbers); // [2, 4, 6, 8, 10]
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we define a predicate called <code>isEven</code> that checks if a given integer is even. We then use this predicate to filter the list of integers using the <code>filter()</code> method of the Stream API, and collect the filtered results into a new list using the <code>collect()</code> method. Finally, we print out the even numbers.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's another example that demonstrates how to use a predicate to filter a list of strings based on a certain condition</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
+
+public class PredicateExample {
+    public static void main(String[] args) {
+        List&lt;String> words = Arrays.asList("hello", "world", "java", "programming");
+
+        Predicate&lt;String> startsWithJ = s -> s.startsWith("j");
+
+        List&lt;String> jWords = words.stream()
+                                   .filter(startsWithJ)
+                                   .collect(Collectors.toList());
+
+        System.out.println(jWords); // [java]
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we define a predicate called <code>startsWithJ</code> that checks if a given string starts with the letter "j". We then use this predicate to filter the list of strings using the <code>filter()</code> method of the Stream API, and collect the filtered results into a new list using the <code>collect()</code> method. Finally, we print out the strings that start with "j".</p>
+<p><!-- /wp:paragraph --></p>

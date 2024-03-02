@@ -1,0 +1,113 @@
+---
+layout: post
+title: What are Java's Access Modifiers and How to Use Them
+date: 2023-03-16 06:45:52.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+- Security
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/what-are-javas-access-modifiers-and-how-to-use-them/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In Java, access modifiers are keywords that determine the accessibility of classes, methods, and variables in an object-oriented program. There are four access modifiers in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li><code>public</code>: Classes, methods, and variables declared as public can be accessed from anywhere in the program.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li><code>private</code>: Classes, methods, and variables declared as private can only be accessed within the same class.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li><code>protected</code>: Classes, methods, and variables declared as protected can be accessed within the same class, as well as within any subclasses (classes that extend the original class) and within the same package.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li><code>default</code> (also known as package-private): Classes, methods, and variables that have no access modifier specified (i.e., not marked as public, private, or protected) can only be accessed within the same package.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Access modifiers are used to control the level of encapsulation of an object-oriented program and to restrict access to sensitive or implementation-specific details of the program.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here are some examples of how access modifiers are used in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Public Access Modifier:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public class Car {
+    public String make;
+    public String model;
+
+    public void startEngine() {
+        // code to start the engine
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the <code>Car</code> class and its variables <code>make</code> and <code>model</code> are declared as public, meaning that they can be accessed from anywhere in the program. The <code>startEngine</code> method is also declared as public, meaning that it can be called from anywhere in the program.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Private Access Modifier:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public class BankAccount {
+    private double balance;
+
+    private void updateBalance(double amount) {
+        balance += amount;
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the <code>balance</code> variable is declared as private, meaning that it can only be accessed within the same <code>BankAccount</code> class. The <code>updateBalance</code> method is also declared as private, meaning that it can only be called from within the same <code>BankAccount</code> class.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Protected Access Modifier:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public class Animal {
+    protected String name;
+
+    protected void makeSound() {
+        // code to make a sound
+    }
+}
+
+public class Dog extends Animal {
+    public void bark() {
+        System.out.println(name + " barks!");
+        makeSound();
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the <code>Animal</code> class declares the <code>name</code> variable and the <code>makeSound</code> method as protected, meaning that they can be accessed within the same <code>Animal</code> class as well as within any subclass of <code>Animal</code>. The <code>Dog</code> class extends the <code>Animal</code> class and declares the <code>bark</code> method, which uses the <code>name</code> and <code>makeSound</code> methods inherited from the <code>Animal</code> class.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Default Access Modifier:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>class Person {
+    String name;
+    int age;
+
+    void sayHello() {
+        System.out.println("Hello, my name is " + name + " and I am " + age + " years old.");
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the <code>Person</code> class does not declare any access modifiers for its <code>name</code>, <code>age</code>, or <code>sayHello</code> methods, meaning that they are only accessible within the same package. This is the default access level for classes, methods, and variables in Java if no access modifier is specified.</p>
+<p><!-- /wp:paragraph --></p>

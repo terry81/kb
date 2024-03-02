@@ -1,0 +1,113 @@
+---
+layout: post
+title: Why Mutable Members should not be Stored or Returned Directly in Java
+date: 2023-11-15 12:26:04.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta: {}
+permalink: "/why-mutable-members-should-not-be-stored-or-returned-directly-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In Java, mutable members (variables whose values can change after object creation) should not be stored or returned directly from a class when dealing with encapsulation and maintaining object integrity. This principle is related to the concept of encapsulation, which promotes controlling access to the internal state of an object.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here are some reasons why mutable members should not be stored or returned directly:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li><strong>Encapsulation and Information Hiding:</strong> Encapsulation is a fundamental principle in object-oriented programming that hides the internal state of an object and exposes only necessary functionalities through methods. Directly exposing mutable members allows external classes to modify the object's state without any control or validation, breaking encapsulation and potentially leading to inconsistent or invalid object states.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li><strong>Maintaining Object Integrity:</strong> Direct access to mutable members makes it harder to maintain object integrity and ensure that the object remains in a valid state throughout its lifecycle. By controlling access to these members through methods (getters and setters), you can enforce constraints, perform validation, or trigger specific actions when these values are modified.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li><strong>Flexibility for Future Changes:</strong> Using getters and setters instead of directly exposing mutable members allows you to modify the internal representation or logic of the class without affecting the external code that interacts with it. You can change the internal implementation while keeping the external interface (methods) intact.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li><strong>Concurrency and Thread Safety:</strong> When dealing with multi-threaded environments, direct access to mutable members can lead to race conditions and other concurrency issues. By using methods to control access, you can implement synchronization or other strategies to ensure thread safety.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>To adhere to best practices:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul><!-- wp:list-item --></p>
+<li>Encapsulate the state of an object by making member variables private and controlling access to them via getter and setter methods.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Validate and manage changes to the internal state within these methods, enforcing constraints or performing necessary actions when setting values.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Consider immutability where possible, i.e., making objects or their members immutable to avoid unintended changes and promote thread safety.</li>
+<p><!-- /wp:list-item --></ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example illustrating encapsulation by using private member variables and public methods (getters and setters) in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>public class Example {
+    private int value; // Mutable member
+
+    // Getter method
+    public int getValue() {
+        return value;
+    }
+
+    // Setter method
+    public void setValue(int newValue) {
+        // Perform validation or actions before setting the value
+        this.value = newValue;
+    }
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>By using getter and setter methods, you control access to the mutable member <code>value</code> and can perform any necessary operations before allowing changes to the internal state of the object.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's another example demonstrating the use of encapsulation and avoiding direct access to mutable members in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Let's consider a <code>Person</code> class where we encapsulate the <code>age</code> attribute and provide methods to get and set the age:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>public class Person {
+    private int age; // Mutable member
+
+    // Getter method
+    public int getAge() {
+        return age;
+    }
+
+    // Setter method
+    public void setAge(int newAge) {
+        if (newAge &gt;= 0 &amp;&amp; newAge &lt;= 120) { // Validate the age
+            this.age = newAge;
+        } else {
+            System.out.println("Invalid age. Please provide an age between 0 and 120.");
+        }
+    }
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul><!-- wp:list-item --></p>
+<li><code>age</code> is encapsulated within the <code>Person</code> class as a private member variable.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>The <code>getAge()</code> method provides access to the <code>age</code> attribute without allowing direct modification of the member variable.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>The <code>setAge(int newAge)</code> method validates the provided age before setting it. If the provided age is within a valid range (0 to 120 in this case), it updates the <code>age</code> member variable. Otherwise, it displays an error message.</li>
+<p><!-- /wp:list-item --></ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Using this approach ensures that the <code>age</code> is modified only through the <code>setAge()</code> method, enabling validation and ensuring that invalid age values are not set. This promotes encapsulation and helps in maintaining the integrity of the <code>Person</code> object by controlling access to its mutable state.</p>
+<p><!-- /wp:paragraph --></p>

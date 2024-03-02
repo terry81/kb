@@ -1,0 +1,100 @@
+---
+layout: post
+title: Java Built-In Functional Interfaces Cheatsheet and Examples
+date: 2021-01-16 13:37:10.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- consumer
+- function
+- functional interfaces
+- supplier
+- unaryoperator
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231515;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:269;}i:1;a:1:{s:2:"id";i:241;}i:2;a:1:{s:2:"id";i:328;}i:3;a:1:{s:2:"id";i:233;}i:4;a:1:{s:2:"id";i:311;}i:5;a:1:{s:2:"id";i:180;}}}}
+  _last_editor_used_jetpack: block-editor
+  _wpas_done_all: '1'
+permalink: "/java-built-in-functional-interfaces-cheatsheet-and-examples/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In order to use lambda expressions  in Java 8, you need a functional interface. For most of your needs, you can use the already built ones in Java which are as follows:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li><strong>Supplier</strong> - generate output without taking any input. For example, get the current date:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Supplier&lt;LocalDate&gt; getDate = () -&gt; LocalDate.now();</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Then use getDate to assign a LocalDate variable: </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>LocalDate today = getDate.get();</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li><strong>Consumer</strong> - do something with a parameter without returning anything. For example, print some input:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Consumer&lt;String&gt; print = x -&gt; System.out.println(x);</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Then use print to print to system out a string:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>print.accept("asd");</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li><strong>Predicate</strong> - check whether something is true or false. For example, check if a string is empty:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Predicate&lt;String&gt; isStringEmpty = x -&gt; x.isEmpty();</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Use it to assign a boolean variable:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>boolean isEmpty = isStringEmpty.test(""); //true</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li><strong>Function</strong> - turn one parameter into a potentially different type value and return it. For example, count the characters in a string:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Function&lt;String, Integer&gt; countCharacters = x -&gt; x.length();</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Use it to assign an integer variable: </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>int count = countCharacters.apply("test")); //count equals 4</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li><strong>UnaryOperator</strong> - a type of function where all parameters are the same. For example, convert all characters to uppercase:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>UnaryOperator&lt;String&gt; toUpperCase = x -&gt; x.toUpperCase();</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Use it to convert "asd" to uppercase "ASD" string:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>String upperCase = toUpperCase.apply("asd");</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Most of the above have also a Bi variation such as BiConsumer. The Bi variation is simply double to what the single is. For example, BiConsumer consumes two parameters and etc.</p>
+<p><!-- /wp:paragraph --></p>

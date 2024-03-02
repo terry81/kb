@@ -1,0 +1,31 @@
+---
+layout: post
+title: How to Install Azure Python Package
+date: 2016-12-04 18:47:01.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+tags: []
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613194630;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:14;}i:1;a:1:{s:2:"id";i:180;}i:2;a:1:{s:2:"id";i:52;}}}}
+  _wpas_done_all: '1'
+  _jetpack_dont_email_post_to_subs: '1'
+permalink: "/how-to-install-azure-python-package/"
+---
+<p>You can install Azure Python package either for Python 2 or Python 3 using pip (Python package index). Before you are able to install it though you have to:</p>
+<p>First, make sure <code>pip</code> is installed, of course. It's available on most Linux distributions such as <code>python-pip</code> (for Python 2) or <code>python3-pip</code> (for Python 3).</p>
+<p>Second, ensure that you have the latest <code>distribute</code> and <code>setuptools</code> Python packages. This can be done with the commands:</p>
+<p><code>pip install --upgrade distribute</code></p>
+<p><code>pip install --upgrade setuptools</code></p>
+<p>Third, install the necessary operating system dependencies <code>libffi-dev</code>, <code>libssl-dev</code>, <code>python-dev</code>. In Ubuntu you can do it with the command:</p>
+<p><code>sudo apt-get install libffi-dev libssl-dev python-dev</code></p>
+<p>Finally, install the full Azure bundle package with the command:</p>
+<p><code>pip install --pre azure</code></p>
+<p>In some cases where you have both Python 2 and Python 3, you have to run <code>pip3</code> instead of just <code>pip</code> to invoke pip for Python 3.</p>
+<p>Once you have installed the bundle you can start using it following the <a href="https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-python-how-to-use-service-management">official Azure instructions</a>.</p>

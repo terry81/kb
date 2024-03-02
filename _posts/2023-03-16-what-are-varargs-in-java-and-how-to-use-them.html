@@ -1,0 +1,77 @@
+---
+layout: post
+title: What are Varargs in Java and How to Use Them
+date: 2023-03-16 07:04:22.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+- Linux
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/what-are-varargs-in-java-and-how-to-use-them/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In Java, varargs (variable-length arguments) are a feature that allows a method to accept an arbitrary number of arguments of the same type. The <code>varargs</code> feature was introduced in Java 5 and is denoted by an ellipsis <code>...</code> after the parameter type in the method signature.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example of a method that uses varargs:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public static int sum(int... numbers) {
+    int sum = 0;
+    for (int num : numbers) {
+        sum += num;
+    }
+    return sum;
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the <code>sum</code> method takes an arbitrary number of <code>int</code> arguments, which are stored in an array called <code>numbers</code>. The method then loops through the array and calculates the sum of all the integers.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's how the <code>sum</code> method can be called:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>int result1 = sum(1, 2, 3); // result1 is 6
+int result2 = sum(4, 5, 6, 7); // result2 is 22
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In both cases, the <code>sum</code> method is called with multiple <code>int</code> arguments, but the number of arguments can vary. The <code>varargs</code> feature allows us to write more flexible and concise code when dealing with methods that take a variable number of arguments.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Note that the <code>varargs</code> parameter must be the last parameter in the method signature, and a method can only have one <code>varargs</code> parameter.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's another example of a method that uses varargs to concatenate strings:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public static String concatenate(String... strings) {
+    StringBuilder sb = new StringBuilder();
+    for (String str : strings) {
+        sb.append(str);
+    }
+    return sb.toString();
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the <code>concatenate</code> method takes an arbitrary number of <code>String</code> arguments, which are stored in an array called <code>strings</code>. The method then loops through the array and concatenates all the strings into a single <code>StringBuilder</code> object, which is then converted to a <code>String</code> using the <code>toString</code> method.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's how the <code>concatenate</code> method can be called:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>String result1 = concatenate("hello", " ", "world"); // result1 is "hello world"
+String result2 = concatenate("foo", "bar", "baz", "qux"); // result2 is "foobarbazqux"
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In both cases, the <code>concatenate</code> method is called with multiple <code>String</code> arguments, but the number of arguments can vary. The <code>varargs</code> feature allows us to write more flexible and concise code when dealing with methods that take a variable number of arguments.</p>
+<p><!-- /wp:paragraph --></p>

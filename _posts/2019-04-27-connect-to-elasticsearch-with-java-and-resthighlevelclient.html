@@ -1,0 +1,293 @@
+---
+layout: post
+title: Connect to Elasticsearch with Java and  RestHighLevelClient
+date: 2019-04-27 13:49:27.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- Elasticsearch
+- java
+- Querying
+- RestHighLevelClient
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:2:{s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613209305;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:233;}i:1;a:1:{s:2:"id";i:210;}i:2;a:1:{s:2:"id";i:91;}}}s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231298;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:233;}i:1;a:1:{s:2:"id";i:210;}i:2;a:1:{s:2:"id";i:91;}i:3;a:1:{s:2:"id";i:352;}i:4;a:1:{s:2:"id";i:328;}i:5;a:1:{s:2:"id";i:311;}}}}
+  _edit_last: '1'
+  _wpas_done_all: '1'
+permalink: "/connect-to-elasticsearch-with-java-and-resthighlevelclient/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Connecting to Elasticsearch and executing queries is generally considered easy.  In fact, in many cases a simple curl query like this one is all you need:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>curl http://localhost:9200/_search?q=mySearch</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p> Though, if you want something more than just finding all documents that contain mySearch (as per the example above), you may get lost in the abundance of options and different ways of doing it.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this article we'll go through the following scenario for searching documents in Elasticsearch:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Filter a few keywords that must be present in the results;</li>
+<li>Filter a few keywords that must NOT be present in the results;</li>
+<li>Set a specific time range for the search;</li>
+<li>Filter the output only to the fields in which we are interested.</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>To accomplish the above we'll use Java and the official Elasticsearch RestHighLevelClient API.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Setting up the environment</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>The RestHighLevelClient is the currently recommended client for integrating Elasticsearch in an application. It's available for different programming languages and in this article we'll use the Java version.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Let's start by <a href="http://knowledgebasement.com/build-a-java-project-with-maven/">creating a new Maven project.</a></p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>mvn -B archetype:generate -DarchetypeGroupId=org.apache.maven.archetypes -DgroupId=com.knowledgebasement.elasticsearch.example -DartifactId=elasticsearch</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Go inside the newly created elasticsearch directory in your workspace and open the pom.xml file. There add a dependency for Elasticsearch RestHighLevelClient.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>&lt;dependency>
+    &lt;groupId>org.elasticsearch.client&lt;/groupId>
+    &lt;artifactId>elasticsearch-rest-high-level-client&lt;/artifactId>
+    &lt;version>7.0.0&lt;/version>
+&lt;/dependency></code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Either resolve the dependencies manually<code> (mvn dependency:resolve)</code> or leave it to your IDE. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Next, ensure that Elasticsearch is installed and started. You can follow the <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/getting-started-install.html">official getting starting guide</a> for this purpose. At the time of writing this article the latest Elasticsearch version is 7.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Loading the example data</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>To demonstrate how the code works and to test, we'll need some sample data. The sample data should be big enough to allow us to test different scenarios and filtering options. For example, the the <a href="http://elastic.co/guide/en/kibana/current/tutorial-load-dataset.html">logstash logs</a> are a good choice.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Create their indices (for each day, the logs have a different index) logs like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>curl -X PUT "localhost:9200/logstash-2015.05.18" -H 'Content-Type: application/json' -d'
+{
+  "mappings": {
+    "properties": {
+      "geo": {
+        "properties": {
+          "coordinates": {
+            "type": "geo_point"
+          }
+        }
+      }
+    }
+  }
+}
+'</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>curl -X PUT "localhost:9200/logstash-2015.05.19" -H 'Content-Type: application/json' -d'
+{
+  "mappings": {
+    "properties": {
+      "geo": {
+        "properties": {
+          "coordinates": {
+            "type": "geo_point"
+          }
+        }
+      }
+    }
+  }
+}
+'</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>curl -X PUT "localhost:9200/logstash-2015.05.20" -H 'Content-Type: application/json' -d'
+{
+  "mappings": {
+    "properties": {
+      "geo": {
+        "properties": {
+          "coordinates": {
+            "type": "geo_point"
+          }
+        }
+      }
+    }
+  }
+}
+'</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Then download the json file with the datasets and extract it:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>curl -O https://download.elastic.co/demos/kibana/gettingstarted/7.x/logs.jsonl.gz
+ &amp;&amp; gunzip logs.jsonl.gz</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Finally, load the data:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>curl -H 'Content-Type: application/x-ndjson' -XPOST 'localhost:9200/_bulk?pretty' --data-binary @logs.jsonl</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted">To ensure that you have the dataset loaded correctly, execute a simple query for the keyword <em>brewster-shaw</em> as follows:<br /></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>curl 'http://localhost:9200/logstash-2015.05.20/_search?pretty&amp;q=brewster-shaw'</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Event though, the keyword is relatively unique and it's against a specific index, you will see a long output with 44 result. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>From this point on our challenge will be to filter these results in a way that allows us to work easily with this otherwise bulky data.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2>Using the Java RestHighLevelClient</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>The following example class App demonstrates how to use the RestHighLevelClient. Ensure that you have resolved its dependency first before being able to use it as explained above in Setting up the environment.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>If you have followed the steps so far, the class should be created in elasticsearch/src/main/java/com/knowledgebasement/elasticsearch/example/App.java as follows:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>package com.knowledgebasement.elasticsearch.example;
+
+import java.io.IOException;
+
+import org.apache.http.HttpHost;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+
+public class App {
+
+	final private static String[] FETCH_FIELDS = { "@timestamp", "@message" };
+
+	final private static String MATCH_FIELD = "@message";
+	final private static String[] MUST_MATCH = { "brewster-shaw", "AppleWebKit" };
+	final private static String[] MUST_NOT_MATCH = { "21.211.33.63" };
+
+	final private static String TIME_FIELD = "@timestamp";
+	final private static String START_TIME = "2015-05-20T13:06:50";
+	final private static String END_TIME = "2025-05-06T00:00:00";
+
+	final private static String INDEX = "logstash-2015.05.20"; // accepts * as wildcard, .e.g log*
+
+	public static void main(String[] args) throws IOException {
+
+		RestHighLevelClient client = new RestHighLevelClient(
+				RestClient.builder(new HttpHost("localhost", 9200, "http")));
+		SearchRequest searchRequest = new SearchRequest();
+
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+		BoolQueryBuilder qb = QueryBuilders.boolQuery();
+
+		if (MUST_MATCH.length > 0) {
+			for (String match : MUST_MATCH) {
+				qb.must(QueryBuilders.matchQuery(MATCH_FIELD, match));
+			}
+		}
+
+		if (MUST_NOT_MATCH.length > 0) {
+			for (String notMatch : MUST_NOT_MATCH) {
+				qb.mustNot(QueryBuilders.matchQuery(MATCH_FIELD, notMatch));
+			}
+		}
+
+		qb.must(QueryBuilders.rangeQuery(TIME_FIELD).gte(START_TIME));
+		qb.must(QueryBuilders.rangeQuery(TIME_FIELD).lte(END_TIME));
+
+		searchSourceBuilder.query(qb).fetchSource(FETCH_FIELDS, null);
+
+		searchRequest.indices(INDEX);
+		searchRequest.source(searchSourceBuilder);
+
+		SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+
+		if (searchResponse.getHits().getTotalHits().value > 0) {
+
+			System.out.println(searchResponse.getHits().getTotalHits());
+			
+			for (SearchHit hit : searchResponse.getHits()) {
+				System.out.println("Match: ");
+				for (String fetchField : FETCH_FIELDS) {
+					System.out.println(" - " + fetchField + " " + hit.getSourceAsMap().get(fetchField));
+				}
+			}
+		} else {
+			System.out.println("No results matching the criteria.");
+		}
+
+		client.close();
+
+	}
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>The Java code above is pretty clear (and hopefully clean). Looking at the constants you should note that:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Two fields @timestamp and @message are used both for querying and for the output.
+<ul>
+<li>A specific time range should be matched in @timestamp.</li>
+<li>There are strings that must be present and such that should not be in @message.</li>
+</ul>
+</li>
+<li>Only one index is queried. You could specify more with a wildcard match.</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>The query is composed using QueryBuilders. It's quite powerful and has many more options than ones used. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Once you run the above code, you should see the following output acknowledging two successful hits for our search:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>2 hits
+Match: 
+ - @timestamp 2015-05-20T14:29:07.004Z
+ - @message 97.73.86.149 - - [2015-05-20T14:29:07.004Z] "GET /uploads/brewster-shaw.jpg HTTP/1.1" 200 2317 "-" "Mozilla/5.0 (X11; Linux i686) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.50 Safari/534.24"
+Match: 
+ - @timestamp 2015-05-20T16:15:34.664Z
+ - @message 139.18.210.214 - - [2015-05-20T16:15:34.664Z] "GET /uploads/brewster-shaw.jpg HTTP/1.1" 200 8345 "-" "Mozilla/5.0 (X11; Linux i686) AppleWebKit/534.24 (KHTML, like Gecko) Chrome/11.0.696.50 Safari/534.24"</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:heading --></p>
+<h2>Extending it further</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>It's easy to extend the code further and here are few ideas:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Alerting - if you run the above code periodically and the results are more than 0, you could further process the output to send you a notification by mail, Slack, etc. Such a functionality in ELK (Elasticsearch Logstash Kibana) is also present but it is paid.</li>
+<li>Aggregation of the results from many independent Elasticsearch clusters. The above code connects to localhost but you could connect to other hosts too and aggregate the results in the end.</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Thank you for reading this article and good luck with using RestHighLevelClient further.</p>
+<p><!-- /wp:paragraph --></p>

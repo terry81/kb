@@ -1,0 +1,86 @@
+---
+layout: post
+title: Java Generics With Upper and Lower Bounds Simply Explained
+date: 2021-01-10 12:56:39.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- generics
+- lower bounds
+- upper bounds
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:2:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231475;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:273;}i:1;a:1:{s:2:"id";i:311;}i:2;a:1:{s:2:"id";i:262;}i:3;a:1:{s:2:"id";i:180;}i:4;a:1:{s:2:"id";i:210;}i:5;a:1:{s:2:"id";i:339;}}}s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613235999;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:273;}i:1;a:1:{s:2:"id";i:311;}i:2;a:1:{s:2:"id";i:262;}}}}
+  _last_editor_used_jetpack: block-editor
+  _wpas_done_all: '1'
+permalink: "/java-generics-upper-and-lower-bounds-simply-explained/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Generics in Java and especially such with upper and lower bounds can be confusing even though they are otherwise very useful.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here is an example which explains it all well:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>import java.util.ArrayList;
+import java.util.List;
+
+class A {
+}
+
+class B extends A {
+}
+
+public class Test {
+	public static void main(String&#91;] args) {
+		// First example with upper bound A
+		List&lt;? extends A&gt; list1 = new ArrayList&lt;A&gt;();
+		List&lt;? extends A&gt; list2 = new ArrayList&lt;B&gt;();
+		// List&lt;? extends A&gt; list3 = new ArrayList&lt;Object&gt;(); won't compile
+
+		// Second example with lower bound A
+		List&lt;? super A&gt; list5 = new ArrayList&lt;A&gt;();
+		List&lt;? super A&gt; list6 = new ArrayList&lt;Object&gt;();
+		// List&lt;? super A&gt; list5 = new ArrayList&lt;B&gt;(); // won't compile
+	}
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>We have two classes - A and B. B extends A. We'll use them to test the upper and lower bounds of the wildcard generics in a class called Test with a List object.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To simplify it in short: </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Upper bound is a boundary that includes the specified class or any which it extends.</li>
+<li>Lower bound includes the specified class or any super class to it. </li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the first example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>List&lt;? extends A&gt; list1 = new ArrayList&lt;A&gt;();
+List&lt;? extends A&gt; list2 = new ArrayList&lt;B&gt;();
+// List&lt;? extends A&gt; list3 = new ArrayList&lt;Object&gt;(); won't compile</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>When the wildcard extends A this means that the accepted objects will be either A or B. B is accepted because it extends A. Object will not be accepted because it doesn't extend A.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the second example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>List&lt;? super A&gt; list5 = new ArrayList&lt;A&gt;();
+List&lt;? super A&gt; list6 = new ArrayList&lt;Object&gt;();
+// List&lt;? super A&gt; list5 = new ArrayList&lt;B&gt;(); // won't compile</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>The wildcard (?) is linked with the keyword super A, this means that classes A or super classes of A (such as Object) will be accepted. However, B is not accepted because it is not a super class to A.</p>
+<p><!-- /wp:paragraph --></p>

@@ -1,0 +1,43 @@
+---
+layout: post
+title: How to Mock Variables for Interfaces and Casts in Java
+date: 2023-03-07 10:48:19.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- Mockito
+meta:
+  _edit_last: '1'
+permalink: "/how-to-mock-variables-for-interfaces-and-casts-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>One common issue when writing JUnit tests is how to create a mock when the variable is an an interface / implementation or a casting.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>For example, in the case of casting:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>public PaymentGateway {
+    void refund(SomePaymentProcessor processor);
+    processor = new PaymentProcessorImpl(); //concrete implementation
+    processor = (SomeOtherProcessor) processor; //casting
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>The variable processor is casted to SomeOtherProcessor. That's why when you create a mock with it, you have to cover both SomePaymentProcessor and SomeOtherProcessor like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>processor = mock(SomePaymentProcessor.class, withSettings().extraInterfaces(PaymentProcessorImpl.class, SomeOtherProcessor.class));
+</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>To add the extra classes PaymentProcessorImpl and SomeOtherProcessor we have used the additional Mockitor method <code>withSettings().extraInterfaces()</code>. In Java, <code>withSettings().extraInterfaces()</code> is a method that is used in conjunction with the Mockito library. This method allows you to specify additional interfaces that you want to mock along with the class you are mocking.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In summary, you would use <code>withSettings().extraInterfaces()</code> when you want to mock an object that implements multiple interfaces, and you want to specify all of these interfaces when creating the mock object.</p>
+<p><!-- /wp:paragraph --></p>

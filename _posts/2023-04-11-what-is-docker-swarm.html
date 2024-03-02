@@ -1,0 +1,135 @@
+---
+layout: post
+title: What is Docker Swarm
+date: 2023-04-11 13:41:29.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+- Virtualization
+tags:
+- docker
+meta: {}
+permalink: "/what-is-docker-swarm/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Docker Swarm is a native container orchestration solution provided by Docker for managing and scaling containerized applications across a swarm of Docker nodes. It enables you to create and manage a swarm of Docker nodes as a single virtual Docker engine, allowing you to deploy and manage services across a distributed cluster of Docker nodes.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>With Docker Swarm, you can define and deploy multi-service applications as stacks using a declarative service definition, which includes the desired state of the services, the number of replicas, the networks, and other configurations. Docker Swarm automatically handles the scheduling and placement of containers across the swarm, ensuring that the desired state is maintained even when nodes fail or new nodes are added.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Some key features of Docker Swarm include:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Scalability: Docker Swarm allows you to scale services up or down based on the desired number of replicas, enabling you to easily handle increased or decreased workload.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>High availability: Docker Swarm provides built-in high availability for services, ensuring that services are automatically rescheduled to healthy nodes when a node fails, maintaining the desired state of the services.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Load balancing: Docker Swarm automatically load balances incoming requests to services across multiple replicas, distributing the workload evenly across the swarm.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Rolling updates and rollbacks: Docker Swarm supports rolling updates and rollbacks of services, allowing you to update or rollback services without downtime or manual intervention.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Service discovery: Docker Swarm includes an integrated DNS-based service discovery mechanism, enabling services to discover each other by their service name within the swarm.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Security: Docker Swarm provides built-in security features, such as mutual TLS authentication between nodes, encrypted communication between nodes and services, and role-based access control (RBAC) for managing user access to the swarm.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Docker Swarm provides a robust and easy-to-use solution for managing containerized applications at scale, making it suitable for production deployments where high availability, scalability, and load balancing are essential requirements.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p> Here's an example of how you can use Docker Swarm to deploy a simple web service using a Docker stack.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul><!-- wp:list-item --></p>
+<li>Create a Docker Swarm:</li>
+<p><!-- /wp:list-item --></ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker swarm init
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This will initialize a Docker Swarm and create a manager node.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"start":2} --></p>
+<ul start="2"><!-- wp:list-item --></p>
+<li>Create a Docker Compose file for your service. For example, you can create a <code>docker-compose.yml</code> file with the following content:</li>
+<p><!-- /wp:list-item --></ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>version: '3.7'
+services:
+  web:
+    image: nginx:alpine
+    deploy:
+      replicas: 3
+    ports:
+      - "80:80"
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This Compose file defines a service named <code>web</code> that uses the <code>nginx:alpine</code> image, deploys 3 replicas of the service, and publishes port 80 on the host to port 80 on the container.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"start":3} --></p>
+<ul start="3"><!-- wp:list-item --></p>
+<li>Deploy the service using Docker stack:</li>
+<p><!-- /wp:list-item --></ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker stack deploy -c docker-compose.yml my_web_service
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This command deploys the service defined in the <code>docker-compose.yml</code> file as a stack named <code>my_web_service</code> in the Docker Swarm.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"start":4} --></p>
+<ul start="4"><!-- wp:list-item --></p>
+<li>Check the status of the deployed stack:</li>
+<p><!-- /wp:list-item --></ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker stack ps my_web_service
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This command shows the status of the service replicas, indicating whether they are running, restarting, or completed.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"start":5} --></p>
+<ul start="5"><!-- wp:list-item --></p>
+<li>Access the web service:</li>
+<p><!-- /wp:list-item --></ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>You can access the web service by navigating to <code>http://localhost</code> in a web browser or using curl or any other HTTP client.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"start":6} --></p>
+<ul start="6"><!-- wp:list-item --></p>
+<li>Update the service:</li>
+<p><!-- /wp:list-item --></ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>If you want to update the service, you can modify the <code>docker-compose.yml</code> file and then use the following command to update the service in the Docker Swarm:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker stack deploy -c docker-compose.yml my_web_service
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>Docker Swarm will automatically update the service replicas one by one without downtime, maintaining the desired state of the service.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>This is a simple example of how you can use Docker Swarm to deploy and manage containerized services in a distributed cluster. Docker Swarm provides many more features for managing containerized applications at scale, including load balancing, rolling updates, service discovery, and security options.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><!-- /wp:paragraph --></p>

@@ -1,0 +1,151 @@
+---
+layout: post
+title: How to Write Bash Script with User Input
+date: 2023-03-19 08:05:40.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/how-to-write-bash-script-with-user-input/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Here's a Linux bash script that performs the following tasks:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Prompts the user to enter a directory path.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Checks if the directory exists and if not, creates it.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Prompts the user to enter a file name.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Checks if the file exists in the directory and if not, creates it.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Appends the current date and time to the file.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Displays the contents of the file.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>#!/bin/bash
+
+# Prompt user to enter directory path
+echo "Enter a directory path:"
+read directory
+
+# Check if directory exists and create it if not
+if [ ! -d "$directory" ]; then
+  mkdir "$directory"
+  echo "Directory created: $directory"
+fi
+
+# Prompt user to enter file name
+echo "Enter a file name:"
+read filename
+
+# Check if file exists and create it if not
+filepath="$directory/$filename"
+if [ ! -f "$filepath" ]; then
+  touch "$filepath"
+  echo "File created: $filepath"
+fi
+
+# Append current date and time to file
+date_time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "$date_time" >> "$filepath"
+
+# Display contents of file
+echo "Contents of $filepath:"
+cat "$filepath"
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>When you run this script, it will prompt you to enter a directory path and a file name. If the directory and file do not exist, the script will create them. Then, it will append the current date and time to the file and display its contents.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To run the script, save it in a file with a <code>.sh</code> extension (e.g. <code>file_handling.sh</code>), navigate to the directory where the file is saved, and enter the following command in the terminal:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>bash file_handling.sh
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This will execute the script and guide you through the process of creating a directory, a file, and appending data to the file.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's a breakdown of what each line in the script does:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>#!/bin/bash
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This line specifies the shell interpreter to use for running the script. In this case, it's bash.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>echo "Enter a directory path:"
+read directory
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>These lines prompt the user to enter a directory path and store the input in the variable <code>directory</code>.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>if [ ! -d "$directory" ]; then
+  mkdir "$directory"
+  echo "Directory created: $directory"
+fi
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This block of code checks if the directory specified by the user exists. If it doesn't exist, it creates the directory using the <code>mkdir</code> command and prints a message to the console indicating that the directory was created.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted">bashCopy code<code>echo "Enter a file name:"
+read filename
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>These lines prompt the user to enter a file name and store the input in the variable <code>filename</code>.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>filepath="$directory/$filename"
+if [ ! -f "$filepath" ]; then
+  touch "$filepath"
+  echo "File created: $filepath"
+fi
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This block of code creates a file in the specified directory if it does not already exist. It uses the <code>touch</code> command to create the file and prints a message to the console indicating that the file was created.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>date_time=$(date "+%Y-%m-%d %H:%M:%S")
+echo "$date_time" >> "$filepath"
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This block of code gets the current date and time using the <code>date</code> command and formats it as <code>YYYY-MM-DD HH:MM:SS</code>. It then appends the date and time to the file specified by the user.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>echo "Contents of $filepath:"
+cat "$filepath"
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>Finally, this block of code displays the contents of the file to the console, along with a message indicating which file was displayed.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Overall, this script is a simple example of how to handle file I/O in bash, including checking for file and directory existence, creating new files and directories, and appending data to files.</p>
+<p><!-- /wp:paragraph --></p>

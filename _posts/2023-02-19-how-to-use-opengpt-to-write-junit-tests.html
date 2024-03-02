@@ -1,0 +1,93 @@
+---
+layout: post
+title: How to Use OpenGPT to Write JUnit Tests
+date: 2023-02-19 05:23:17.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- JUnit
+- OpenGPT
+meta:
+  _edit_last: '1'
+permalink: "/how-to-use-opengpt-to-write-junit-tests/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Test driven development is the standard nowadays but sometimes somehow there appears a class before the test is written. This is especially true for legacy projects and legacy code.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The most unpleasant task in such moments is to write the JUnit tests. That's when OpenGPT comes to help. You just paste the class to OpenGPT and ask it to write the JUnit tests code.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Even better, once the tests are done and verified by you, you can ask JUnit to refactor your code if needed and then run the code again.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here is an example. Let's see the tests OpenGPT will write for the following code:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>public class Calculator {
+  
+  public int add(int num1, int num2) {
+    return num1 + num2;
+  }
+  
+  public int subtract(int num1, int num2) {
+    return num1 - num2;
+  }
+  
+  public int multiply(int num1, int num2) {
+    return num1 * num2;
+  }
+  
+  public int divide(int num1, int num2) {
+    return num1 / num2;
+  }
+  
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>The tests written are:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class CalculatorTest {
+  
+  @Test
+  public void testAdd() {
+    Calculator calculator = new Calculator();
+    int result = calculator.add(2, 3);
+    assertEquals(5, result);
+  }
+  
+  @Test
+  public void testSubtract() {
+    Calculator calculator = new Calculator();
+    int result = calculator.subtract(5, 3);
+    assertEquals(2, result);
+  }
+  
+  @Test
+  public void testMultiply() {
+    Calculator calculator = new Calculator();
+    int result = calculator.multiply(2, 3);
+    assertEquals(6, result);
+  }
+  
+  @Test
+  public void testDivide() {
+    Calculator calculator = new Calculator();
+    int result = calculator.divide(10, 2);
+    assertEquals(5, result);
+  }
+  
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Of course, always double-check and verify everything that comes from OpenGPT because the responsibility is yours after all. This is especially true if you write code for a living and a colleagues finds a silly mistake in the generated code. Imagine how a response like "OpenGPT" wrote it will sound.</p>
+<p><!-- /wp:paragraph --></p>

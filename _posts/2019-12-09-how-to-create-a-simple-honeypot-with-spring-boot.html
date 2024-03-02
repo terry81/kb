@@ -1,0 +1,57 @@
+---
+layout: post
+title: How to Create a Simple Honeypot with Spring Boot
+date: 2019-12-09 20:32:19.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:2:{s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613193878;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:14;}i:1;a:1:{s:2:"id";i:69;}i:2;a:1:{s:2:"id";i:190;}}}s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231948;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:14;}i:1;a:1:{s:2:"id";i:69;}i:2;a:1:{s:2:"id";i:190;}i:3;a:1:{s:2:"id";i:180;}i:4;a:1:{s:2:"id";i:226;}i:5;a:1:{s:2:"id";i:282;}}}}
+  _wpas_done_all: '1'
+  _last_editor_used_jetpack: block-editor
+permalink: "/how-to-create-a-simple-honeypot-with-spring-boot/"
+---
+<p><!-- wp:paragraph --></p>
+<p>I am sure that there are plenty of honeypots for logging remote intruders but none yet has been done on Spring Boot. So I decided to write a simple one while exploring Spring Boot:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><a href="https://github.com/terry81/blocker">https://github.com/terry81/blocker</a></p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>It does the following - listens on a preconfigured port. Define it in the application properties (src/main/resources/application.properties) as blocker.honeypot_port. By default the port is 6666. If you intend to run the honeypot under a non-privileged user, which is recommended, you must choose a port above 1024.  </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Anyone that connects on the predefined port will be logged to a file name defined by blocker.log_filename in the application properties. By default, it is /tmp/blocker.log. One and the same IP is logged only once.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>It's also possible to whitelist IPs under the property blocker.whitelisted_ips again in the application properties. It's a good idea to whitelist your own IP so that you don't get blocked.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To compile it, simply download it and run the usual 'mvn clean install'. In the target directory you will find the jar blocker-0.1.jar. Run it as usually:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>java -jar blocker-0.1.jar &amp;</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p> I've added '&amp;' at the end so that the process continues in the background and doesn't exit when you exit the terminal.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The above is best run under a non-root, dedicated user. Once you have intruders logged in /tmp/blocker.log, you can block them with iptables. For this purpose create a simple Bash file such as:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>#!/bin/bash
+for i in `cat /tmp/blocker.log`; do iptables -I INPUT -s $i -j DROP; done
+&gt; /tmp/blocker.log</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>The above script will block each IP and after that clear the log file. You have to run it as root and you can set it as a periodic cron job.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Take a look at the code and hopefully you will find something useful. If you have any comments / questions let me know. </p>
+<p><!-- /wp:paragraph --></p>

@@ -1,0 +1,116 @@
+---
+layout: post
+title: How to Install and Configure SuPHP
+date: 2017-07-02 14:59:16.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Middleware
+- Security
+tags: []
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '1'
+  _wpas_done_all: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613243746;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:138;}i:1;a:1:{s:2:"id";i:14;}i:2;a:1:{s:2:"id";i:69;}i:3;a:1:{s:2:"id";i:158;}i:4;a:1:{s:2:"id";i:65;}i:5;a:1:{s:2:"id";i:135;}}}}
+permalink: "/how-to-install-and-configure-suphp/"
+---
+<p>Notice: This article was written when  SuPHP was the most popular choice for running multiple PHP sites on the same Apache server. Now, php-fpm with different users is a better choice. But still, if you need this article, here it is...</p>
+<p>In short, SuPHP runs the PHP web scripts as a  predefined system user, respecting all system file privileges and ownership rights. If that user cannot read / execute / write to a file then its corresponding website can do no harm to other websites on the same server. This is essential for website security because very often a compromised site on a server spreads malware across the rest. This is especially true for shared webhosting.</p>
+<p>While there are many advanced ways for restricting scripts such as those provided in Litespeed or even running chrooted Apache the current setup will prove to be absolutely perfect for our needs, i.e. not to allow a script from one site even to read (not to mention write / execute) scripts from another site.</p>
+<p>Before continuing we should mention that using SuPHP might be slower then using Apache PHP module. This is the main drawback of this otherwise great solution for website security.</p>
+<p>We will be compiling the latest SuPHP from source on a Centos 5.5 Linux server. First we make sure that the following packets are installed:</p>
+<pre><code># yum php-cli httpd-devel apr apr-devel gcc-c++ ncurses-devel
+</code></pre>
+<p>Especially php-cli is important since it will provide us with php-cgi binary (/usr/bin/php-cgi) which processes all requests from SuPHP.</p>
+<p>After that we get the latest (currently version 0.7.1) source for SuPHP from <a href="http://www.suphp.org/download/suphp-0.7.1.tar.gz">here</a> and extract it in a test directory. After that we go into this directory and begin compiling from source:</p>
+<pre><code># ./configure --prefix=/usr --sysconfdir=/etc --with-apr=/usr/bin/apr-1-config --with-apxs=/usr/sbin/apxs --with-apache-user=apache --with-setid-mode=paranoid --with-php=/usr/bin/php-cgi --with-logfile=/var/log/httpd/suphp_log --enable-SUPHP_USE_USERGROUP=yes
+</code></pre>
+<p>Finally we run 'make &amp;&amp; make install' when there are hopefully no errors. To confirm everything has gone fine you should end up with a new file in:</p>
+<pre><code>/etc/httpd/modules/mod_suphp.so
+</code></pre>
+<p>Next, we remove the default php handlers. For this purpose make sure that you have commented in the main configuration file and /etc/httpd/conf.d/php.conf:</p>
+<pre><code>#LoadModule php5_module modules/libphp5.so
+</code></pre>
+<p>Instead, we create a new conf file in /etc/httpd/conf.d/suphp.conf which contains:</p>
+<pre><code>LoadModule suphp_module modules/mod_suphp.so
+AddHandler x-httpd-php .php .php3 .php4 .php5 .phtml
+suPHP_AddHandler x-httpd-php
+suPHP_Engine on
+suPHP_ConfigPath /etc/
+</code></pre>
+<p>Next, step is to create the SuPHP core configuration file /etc/suphp.conf:</p>
+<pre><code>[global]
+;Path to logfile
+logfile=/var/log/suphp/suphp.log
+
+;Loglevel
+loglevel=info
+
+;User Apache is running as
+webserver_user=apache
+
+;Path all scripts have to be in
+docroot=/var/www
+
+;Path to chroot() to before executing script
+;chroot=/mychroot
+
+; Security options
+allow_file_group_writeable=false
+allow_file_others_writeable=false
+allow_directory_group_writeable=false
+allow_directory_others_writeable=false
+
+;Check wheter script is within DOCUMENT_ROOT
+check_vhost_docroot=true
+
+;Send minor error messages to browser
+errors_to_browser=true
+
+;PATH environment variable
+env_path=/bin:/usr/bin
+
+;Umask to set, specify in octal notation
+umask=0073
+
+; Minimum UID
+min_uid=200
+
+; Minimum GID
+min_gid=200
+
+[handlers]
+;Handler for php-scripts
+x-httpd-php="php:/usr/bin/php-cgi"
+
+;Handler for CGI-scripts
+x-suphp-cgi="execute:!self"
+</code></pre>
+<p>All of the above options are very important. For example, min_uid and min_gid should be in accordance with your users uid and gid. If your web users begin with 500 then the above is optimal making sure that root(uid and gid 0) files are not executed.</p>
+<p>Also, very important is to put quotes around php:/usr/bin/php-cgi. Otherwise you will end up with a similar error in your apache error log(/etc/httpd/logs/error_log):</p>
+<pre><code>[Thu Apr 28 17:05:58 2011] [error] [client 192.168.0.223] SecurityException in Application.cpp:511: Unknown Interpreter: php
+[Thu Apr 28 17:05:58 2011] [error] [client 192.168.0.223] Premature end of script headers: opa.php
+</code></pre>
+<p>The last thing is to create the proper vhosts. Here are 2 samples:</p>
+<pre><code>&lt;VirtualHost *:80&gt;
+ServerName  example.org
+DocumentRoot /var/www/test
+suPHP_UserGroup testtt testtt
+&lt;/VirtualHost&gt;
+&lt;VirtualHost *:80&gt;
+ServerName  website-security.info
+DocumentRoot /var/www/test2
+suPHP_UserGroup test2 test2
+&lt;/VirtualHost&gt;
+</code></pre>
+<p>Just make sure that:</p>
+<ol>
+<li>The specified users in the vhosts exist (run 'adduser test2').</li>
+<li>That the DocumentRoot directories are owned by these users (run 'chown test2: /var/www/test2)</li>
+</ol>
+<p>To check it try creating a test php file (e.g. /var/www/test/test.php) in one of the sites with permissions 400, i.e. the owner can only read it. This page will run correctly as you can easily find out by opening it in your browser. Then try to open it with a php file from the other site using something as simple as echo system('/bin/cat /var/www/test/opa.php'). You will see an empty page, i.e. you cannot read it.</p>
+<p>Using SuPHP was the most popular and reliable solution for isolating sites from one another and taking best care for your websites security.</p>

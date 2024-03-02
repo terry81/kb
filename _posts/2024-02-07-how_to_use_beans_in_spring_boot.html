@@ -1,0 +1,153 @@
+---
+layout: post
+title: How to Use Beans in Spring Boot
+date: 2024-02-07 06:45:48.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories: []
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/how_to_use_beans_in_spring_boot/"
+---
+<p>In Spring Boot, beans are managed objects that are instantiated, assembled, and otherwise managed by the Spring IoC (Inversion of Control) container. To use a bean in Spring Boot, you typically follow these steps:</p>
+<h2>Define the Bean</h2>
+<p>You define a bean by creating a class and annotating it with <code>@Component</code> or one of its specialized stereotypes like <code>@Service</code>, <code>@Repository</code>, or <code>@Controller</code>.</p>
+<pre><code class="language-java">import org.springframework.stereotype.Component;
+
+@Component
+public class MyBean {
+    // Bean implementation
+}</code></pre>
+<h2>Inject the Bean</h2>
+<p>You can inject the bean into other classes using constructor injection, field injection, or setter injection.</p>
+<h3>Constructor Injection</h3>
+<pre><code class="language-java">import org.springframework.stereotype.Component;
+
+@Component
+public class MyService {
+    private final MyBean myBean;
+
+    public MyService(MyBean myBean) {
+        this.myBean = myBean;
+    }
+
+    // Other methods using myBean
+}</code></pre>
+<h3>Field Injection</h3>
+<pre><code class="language-java">import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class MyService {
+    @Autowired
+    private MyBean myBean;
+
+    // Other methods using myBean
+}</code></pre>
+<h3>Setter Injection:</h3>
+<pre><code class="language-java">import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class MyService {
+    private MyBean myBean;
+
+    @Autowired
+    public void setMyBean(MyBean myBean) {
+        this.myBean = myBean;
+    }
+
+    // Other methods using myBean
+}</code></pre>
+<h2>Use the Bean</h2>
+<p>Once injected, you can use the bean within your class as needed.</p>
+<pre><code class="language-java">import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class MyService {
+    private final MyBean myBean;
+
+    @Autowired
+    public MyService(MyBean myBean) {
+        this.myBean = myBean;
+    }
+
+    public void doSomething() {
+        // Use myBean here
+    }
+}</code></pre>
+<h2>Enable Component Scanning (if necessary)</h2>
+<p>Ensure that your Spring Boot application is set up to scan the package containing your beans for components. Typically, Spring Boot does this by default.</p>
+<p>To make it even more clear, let's create a simple example where we have a <code>UserService</code> that depends on a <code>UserRepository</code> bean. The <code>UserRepository</code> will be responsible for accessing the user data, and the <code>UserService</code> will use it to perform operations like fetching user details or saving new users.</p>
+<p>First, let's define the <code>UserRepository</code>:</p>
+<pre><code class="language-java">import org.springframework.stereotype.Repository;
+
+@Repository
+public class UserRepository {
+    public void saveUser(User user) {
+        // Logic to save user to a database
+    }
+
+    public User getUserById(long id) {
+        // Logic to retrieve user from a database by id
+        return null; // Placeholder for demonstration
+    }
+}</code></pre>
+<p>Now, let's define the <code>UserService</code> that depends on the <code>UserRepository</code>:</p>
+<pre><code class="language-java">import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService {
+    private final UserRepository userRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void createUser(User user) {
+        userRepository.saveUser(user);
+    }
+
+    public User getUserById(long id) {
+        return userRepository.getUserById(id);
+    }
+}</code></pre>
+<p>In this example:</p>
+<ul>
+<li><code>UserRepository</code> is annotated with <code>@Repository</code>, indicating that it's a repository component.</li>
+<li><code>UserService</code> is annotated with <code>@Service</code>, indicating that it's a service component.</li>
+<li>The <code>UserService</code> constructor takes a <code>UserRepository</code> parameter, indicating its dependency on <code>UserRepository</code>.</li>
+<li>The methods in <code>UserService</code> delegate the actual user data operations to methods in <code>UserRepository</code>.</li>
+</ul>
+<p>You can now use <code>UserService</code> in your application to create and retrieve users:</p>
+<pre><code class="language-java">import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+
+@SpringBootApplication
+public class MyApp {
+    public static void main(String[] args) {
+        ApplicationContext context = SpringApplication.run(MyApp.class, args);
+
+        // Get UserService bean from the context
+        UserService userService = context.getBean(UserService.class);
+
+        // Create a new user
+        User user = new User();
+        user.setId(1);
+        user.setName("John Doe");
+        userService.createUser(user);
+
+        // Retrieve the user by id
+        User retrievedUser = userService.getUserById(1);
+        System.out.println("Retrieved User: " + retrievedUser.getName());
+    }
+}</code></pre>
+<p>In this example, <code>MyApp</code> is the main Spring Boot application class, where we retrieve the <code>UserService</code> bean from the Spring context and use it to create and retrieve users.</p>

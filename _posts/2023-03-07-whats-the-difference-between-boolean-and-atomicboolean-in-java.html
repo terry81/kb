@@ -1,0 +1,58 @@
+---
+layout: post
+title: What's the Difference Between Boolean and AtomicBoolean in Java
+date: 2023-03-07 15:00:52.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- thread-safety
+meta:
+  _edit_last: '1'
+permalink: "/whats-the-difference-between-boolean-and-atomicboolean-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In Java, both <code>Boolean</code> and <code>AtomicBoolean</code> are used to represent Boolean values, but they have different characteristics and use cases.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><code>Boolean</code> is a wrapper class that represents a Boolean value as an object. It has two possible values: <code>true</code> or <code>false</code>. <code>Boolean</code> objects are immutable, which means that once created, their value cannot be changed.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><code>AtomicBoolean</code>, on the other hand, is a class that provides atomic operations on a Boolean value. Atomic operations are thread-safe, meaning that they can be safely used in a concurrent environment without the risk of race conditions or other synchronization issues. <code>AtomicBoolean</code> provides methods such as <code>get()</code>, <code>set()</code>, <code>compareAndSet()</code>, <code>getAndSet()</code>, etc., which can be used to perform atomic operations on its underlying Boolean value.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The main difference between <code>Boolean</code> and <code>AtomicBoolean</code> is that <code>Boolean</code> is immutable and cannot be changed once created, whereas <code>AtomicBoolean</code> is mutable and can be modified using atomic operations.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><code>AtomicBoolean</code> is typically used in concurrent programming scenarios where multiple threads may access and modify the same Boolean value. In such cases, using <code>AtomicBoolean</code> can help avoid race conditions and other synchronization issues that may arise when multiple threads access and modify the same value concurrently.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>On the other hand, <code>Boolean</code> is typically used when you need a Boolean value as an object, for example, when passing it as an argument to a method that expects an object or when storing it in a collection that only accepts objects.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here is an example of a <code>Counter</code> class where you would typically use <code>AtomicBoolean</code>:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>public class Counter {
+    private AtomicBoolean isIncrementing = new AtomicBoolean(false);
+    private int count = 0;
+
+    public int increment() {
+        while (!isIncrementing.compareAndSet(false, true)) {
+            // wait until it's safe to increment
+        }
+
+        count++;
+        isIncrementing.set(false);
+
+        return count;
+    }
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>In short, whenever it's more than one thread could change a boolean value at the same time, it's better to use <code>AtomicBoolean</code> for thread-safety.</p>
+<p><!-- /wp:paragraph --></p>

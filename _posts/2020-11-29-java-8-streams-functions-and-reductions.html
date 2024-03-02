@@ -1,0 +1,73 @@
+---
+layout: post
+title: Java 8 Streams, Functions and Reductions Explained
+date: 2020-11-29 16:08:38.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- java
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231247;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:262;}i:1;a:1:{s:2:"id";i:233;}i:2;a:1:{s:2:"id";i:311;}i:3;a:1:{s:2:"id";i:339;}i:4;a:1:{s:2:"id";i:269;}i:5;a:1:{s:2:"id";i:190;}}}}
+  _last_editor_used_jetpack: block-editor
+  _wpas_done_all: '1'
+permalink: "/java-8-streams-functions-and-reductions/"
+---
+<p><!-- wp:paragraph --></p>
+<p>There is a relatively simple <a href="https://edabit.com/challenge/EFFCkmQcYTFkt3FxC">challenge to extend the vowels in a string</a>. Here is a way to do it in Java 8:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>import java.util.function.Function;
+
+public class WordVowels {
+
+	public static String extendVowels(String string, int i) {
+
+		if (i &lt; 0) {
+			return "invalid";
+		}
+
+		Function&lt;Character, String&gt; charsFunction = (ch) -&gt; isVowel(ch) ? multiplyChars(ch, i) : ch.toString();
+
+		return string.chars().mapToObj(c -&gt; (char) c).map(c -&gt; charsFunction.apply(c)).reduce("", String::concat);
+
+	}
+
+	private static boolean isVowel(char ch) {
+		switch (Character.toLowerCase(ch)) {
+		case 'a':
+		case 'e':
+		case 'i':
+		case 'o':
+		case 'u':
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	private static String multiplyChars(char ch, int i) {
+
+		StringBuilder s = new StringBuilder();
+
+		for (int j = 0; j &lt;= i; j++) {
+			s.append(ch);
+		}
+		return s.toString();
+	}
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the above I've tried to make the code as short as possible while still ensuring it's readable and conforming to the clean code rules. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>All of that could be written without streams and functions but it would be much more ugly and long, probably with nested loops and complex conditions.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>For code readability I've added additional methods which should explain what is being done.  </p>
+<p><!-- /wp:paragraph --></p>

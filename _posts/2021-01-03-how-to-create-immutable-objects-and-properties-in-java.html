@@ -1,0 +1,122 @@
+---
+layout: post
+title: How to Create Immutable Objects and Properties in Java
+date: 2021-01-03 10:03:00.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- immutable objects
+- immutable properties
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231447;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:210;}i:1;a:1:{s:2:"id";i:190;}i:2;a:1:{s:2:"id";i:311;}i:3;a:1:{s:2:"id";i:233;}i:4;a:1:{s:2:"id";i:180;}i:5;a:1:{s:2:"id";i:262;}}}}
+  _last_editor_used_jetpack: block-editor
+  _wpas_done_all: '1'
+permalink: "/how-to-create-immutable-objects-and-properties-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Being able to create an immutable object in Java is one of the most essential skills for any Java programmer. Such objects are needed when you want to rest assured that a created object cannot change for whatever reason.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The common approach is to create an object with private final fields and allow only getters for these fields. However, if you reference directly these properties when returning them you are making them mutable. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here is an example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+final class MutableOrNot {
+	private final List&lt;String&gt; supposedlyImmutable;
+
+	public MutableOrNot(List&lt;String&gt; supposedlyImmutable) {
+		this.supposedlyImmutable = new ArrayList&lt;String&gt;(supposedlyImmutable);
+	}
+
+	public List&lt;String&gt; getSupposedlyImmutable() {
+		// if you return supposedlyImmutable directly you make it mutable
+		// return supposedlyImmutable;
+		
+		// instead you should return an unmodifiable view of the specified list
+		return Collections.unmodifiableList(supposedlyImmutable);
+	}
+}
+
+public class Test {
+	public static void main(String&#91;] args) {
+
+		MutableOrNot immutable = new MutableOrNot(Arrays.asList("aa", "bb"));	
+		immutable.getSupposedlyImmutable().clear(); //try to alter the contents of the immutable property by clearing it.
+		System.out.println(immutable.getSupposedlyImmutable());
+	}
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p><em>Note: To run the above you have to paste it in a file called Test.java.</em></p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the above example, the method getSupposedlyImmutable() returns a unmodifiable view of the supposedlyImmutable list:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Collections.unmodifiableList(supposedlyImmutable);</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Similarly, there are also methods for making maps (Collections.<em>unmodifiableMap</em>()),  sets (Collections.<em>unmodifiableSet</em>()), etc, unmodifiable.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Later in the Test class, when we try to execute the clear() method on that list, we'll get an UnsupportedOperationException exception:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Exception in thread "main" java.lang.UnsupportedOperationException
+	at java.util.Collections$UnmodifiableCollection.clear(Collections.java:1076)
+	at testing.Test.main(Test.java:29)</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>However, if we make a change to the above code and return directly a reference to the list, we'll be able to clear the list:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+final class MutableOrNot {
+	private final List&lt;String&gt; supposedlyImmutable;
+
+	public MutableOrNot(List&lt;String&gt; supposedlyImmutable) {
+		this.supposedlyImmutable = new ArrayList&lt;String&gt;(supposedlyImmutable);
+	}
+
+	public List&lt;String&gt; getSupposedlyImmutable() {
+		// if you return supposedlyImmutable directly you make it mutable
+		 return supposedlyImmutable;
+	}
+}
+
+public class Test {
+	public static void main(String&#91;] args) {
+
+		MutableOrNot immutable = new MutableOrNot(Arrays.asList("aa", "bb"));	
+		immutable.getSupposedlyImmutable().clear(); //try to alter the contents of the immutable property by clearing it.
+		System.out.println(immutable.getSupposedlyImmutable());
+	}
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>The above will print an empty list:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>&#91;]</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>This shows that despite the fact that we mark the list as private and final we are still able to make a change to it and extra measures have to be taken to make it really immutable.  </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><!-- /wp:paragraph --></p>

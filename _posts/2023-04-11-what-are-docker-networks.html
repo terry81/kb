@@ -1,0 +1,111 @@
+---
+layout: post
+title: What are Docker Networks
+date: 2023-04-11 13:29:11.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+- Virtualization
+tags:
+- docker
+meta: {}
+permalink: "/what-are-docker-networks/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Docker networks are virtual networks that provide communication channels for Docker containers to communicate with each other and with the host system, allowing containers to communicate securely and efficiently. Docker networks are used to isolate containers from the host system and from other containers, providing a controlled and secure environment for containerized applications.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Docker networks can be created using Docker's built-in networking features, which provide various network drivers that enable different types of networking configurations for containers. Some common Docker network drivers include bridge, overlay, host, and MACVLAN, among others.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here are some key concepts related to Docker networks:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Bridge Network: Bridge network is the default network driver used by Docker, and it provides a private network for containers running on the same Docker host. Containers on the same bridge network can communicate with each other using container names or IP addresses, and they can also communicate with the host system. Bridge network provides isolation between containers and the host system, but not between containers running on different Docker hosts.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Overlay Network: Overlay network is used for connecting containers across multiple Docker hosts in a swarm. Overlay network allows containers running on different Docker hosts to communicate with each other using container names or service names, and it provides secure communication over an encrypted overlay network. Overlay network is useful for creating distributed applications that span across multiple Docker hosts in a swarm.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Host Network: Host network allows containers to share the host system's network stack, including its IP address and network interfaces. Containers using host network can directly access the host system's network, and there is no isolation between the containers and the host system. Host network is useful for performance-sensitive applications that require direct access to the host system's network interfaces.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>MACVLAN: MACVLAN network allows containers to have their own MAC address and network interfaces, providing the containers with dedicated network resources. Containers using MACVLAN network can communicate with other containers and the host system using their own MAC addresses and IP addresses, and they can also communicate with the external network. MACVLAN network is useful for scenarios where containers need to have their own network identity and resources.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Docker networks provide isolation, security, and flexibility in managing container communication, and allow you to define how containers communicate with each other and with the host system. Docker networks are useful for creating multi-container applications with defined network boundaries, enabling containers to communicate securely and efficiently within the Docker environment.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example of how you can create and use a Docker bridge network:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Create a Docker bridge network:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker network create my_network
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This command creates a Docker bridge network named <code>my_network</code>.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true,"start":2} --></p>
+<ol start="2"><!-- wp:list-item --></p>
+<li>Run two containers connected to the <code>my_network</code> network:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker run -d --name container1 --network my_network nginx
+docker run -d --name container2 --network my_network nginx
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>These commands run two instances of the official Nginx Docker image, and connect them to the <code>my_network</code> network using the <code>--network</code> flag. The containers are named <code>container1</code> and <code>container2</code> respectively.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true,"start":3} --></p>
+<ol start="3"><!-- wp:list-item --></p>
+<li>Verify containers are connected to the network:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker network inspect my_network
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This command inspects the <code>my_network</code> network and verifies that <code>container1</code> and <code>container2</code> are listed as connected containers.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true,"start":4} --></p>
+<ol start="4"><!-- wp:list-item --></p>
+<li>Test container communication:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker exec container1 ping container2
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This command runs a ping command from <code>container1</code> to <code>container2</code> to test container communication over the <code>my_network</code> network.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true,"start":5} --></p>
+<ol start="5"><!-- wp:list-item --></p>
+<li>Connect containers to a shared network:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker run -d --name container3 --network my_network nginx
+docker run -d --name container4 --network my_network nginx
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>These commands run two more instances of the Nginx container and connect them to the <code>my_network</code> network.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Docker bridge networks provide a private network for containers running on the same Docker host, allowing containers to communicate with each other using container names or IP addresses. Containers connected to the same bridge network can communicate securely and efficiently, enabling multi-container applications to interact within the Docker environment.</p>
+<p><!-- /wp:paragraph --></p>

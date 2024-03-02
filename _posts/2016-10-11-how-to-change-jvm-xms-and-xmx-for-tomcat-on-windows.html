@@ -1,0 +1,37 @@
+---
+layout: post
+title: How to Change JVM Xms and Xmx for Tomcat on Windows
+date: 2016-10-11 12:19:34.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Middleware
+- Windows
+tags:
+- java
+- jvm
+- tomcat
+- windows
+- xms
+- xmx
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '1'
+  _jetpack_related_posts_cache: a:2:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613241930;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:62;}i:1;a:1:{s:2:"id";i:65;}i:2;a:1:{s:2:"id";i:69;}i:3;a:1:{s:2:"id";i:14;}i:4;a:1:{s:2:"id";i:180;}i:5;a:1:{s:2:"id";i:30;}}}s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613266138;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:62;}i:1;a:1:{s:2:"id";i:65;}i:2;a:1:{s:2:"id";i:69;}}}}
+  _wpas_done_all: '1'
+  _jetpack_dont_email_post_to_subs: '1'
+permalink: "/how-to-change-jvm-xms-and-xmx-for-tomcat-on-windows/"
+---
+<p>Changing Tomcat's initial (Xms) and maximum (Xmx) memory turns out to be counter-intuitive on Windows, especially when Tomcat is installed as a service. That's because when running under a service on Windows, Tomcat does not read initial runtime configure files such as setenv.bat (or setenv.sh for Linux) and thus you cannot define variables there.</p>
+<p>So the proper (and the easiest) way to change Xms and Xmx values for Tomcat under Windows is with the command tomcat7w.exe (for Tomcat 7) or tomcat8w.exe which are found in tomcat's "bin" directory. When you run the command, you should see this window with options to change the JVM options along with Xmx and Xms:</p>
+<p><img src="{{ site.baseurl }}/assets/2016/10/java_properties_tomcat.png" alt="java_properties_tomcat" width="416" height="403" class="alignnone size-full wp-image-38" /></p>
+<p>Here's a tricky part. If you have installed the Tomcat service under a custom name, you have to specify this custom name. Otherwise, you will get an error such as:</p>
+<pre><code>"The specified service does not exist as an installed service"
+</code></pre>
+<p>The trick to resolve this is to start tomcat7w.exe with an argument for the service name like this:</p>
+<pre><code>.\tomcat7w.exe \\ES\Name_of_service
+</code></pre>
+<p>If you are not sure what this name is, open Services (services.msc) and you will find the exact name of the service in the first tab (General) under Service name.</p>

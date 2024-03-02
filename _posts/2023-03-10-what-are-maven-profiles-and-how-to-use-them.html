@@ -1,0 +1,95 @@
+---
+layout: post
+title: What are Maven Profiles and How to Use Them
+date: 2023-03-10 08:30:35.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories: []
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/what-are-maven-profiles-and-how-to-use-them/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Maven profiles are a way to define a set of configuration options for a Maven build. Profiles are used to specify different build configurations for different environments or situations. For example, you may have a development profile that uses a local database for testing and a production profile that uses a remote database.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Profiles can be activated in several ways, including by specifying a command-line option, by setting an environment variable, or by configuring the POM file. When a profile is activated, it can modify the behavior of the build by adding or removing dependencies, setting properties, or executing specific goals.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example of a profile definition in a POM file:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>&lt;profiles&gt;
+  &lt;profile&gt;
+    &lt;id&gt;development&lt;/id&gt;
+    &lt;activation&gt;
+      &lt;activeByDefault&gt;true&lt;/activeByDefault&gt;
+    &lt;/activation&gt;
+    &lt;properties&gt;
+      &lt;database.url&gt;jdbc:mysql://localhost/mydb_dev&lt;/database.url&gt;
+    &lt;/properties&gt;
+    &lt;dependencies&gt;
+      &lt;dependency&gt;
+        &lt;groupId&gt;com.example&lt;/groupId&gt;
+        &lt;artifactId&gt;myapp-dev-utils&lt;/artifactId&gt;
+        &lt;version&gt;1.0.0&lt;/version&gt;
+      &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+  &lt;/profile&gt;
+  &lt;profile&gt;
+    &lt;id&gt;production&lt;/id&gt;
+    &lt;properties&gt;
+      &lt;database.url&gt;jdbc:mysql://prod-db-server/mydb_prod&lt;/database.url&gt;
+    &lt;/properties&gt;
+  &lt;/profile&gt;
+&lt;/profiles&gt;</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, there are two profiles defined: "development" and "production". The "development" profile is activated by default and sets the database URL property to a local development database. It also includes a dependency on a utility library for development purposes. The "production" profile sets the database URL property to a production database.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Profiles can be very useful for managing different build configurations in a flexible and customizable way.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>You can use Maven profiles in different ways with the <code>mvn</code> command. Here are a few examples:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>To activate a specific profile during the build process, you can use the <code>-P</code> option followed by the profile ID. For example, to activate the "production" profile from the example in the previous answer, you can run:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>mvn clean install -Pproduction
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This will activate the "production" profile and configure the build accordingly.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true,"start":2} --></p>
+<ol start="2"><!-- wp:list-item --></p>
+<li>You can also activate multiple profiles at once by separating their IDs with commas. For example:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>mvn clean install -Pdevelopment,debug
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This will activate the "development" and "debug" profiles at the same time.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true,"start":3} --></p>
+<ol start="3"><!-- wp:list-item --></p>
+<li>If you have defined a default profile in your POM file, you can activate it without specifying its ID by using the <code>-Dmaven.profiles.default</code> option followed by <code>true</code>. For example:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>mvn clean install -Dmaven.profiles.default=true
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This will activate the default profile, if one is defined in the POM file.</p>
+<p><!-- /wp:paragraph --></p>

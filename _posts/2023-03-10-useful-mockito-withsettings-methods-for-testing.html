@@ -1,0 +1,68 @@
+---
+layout: post
+title: Useful Mockito withSettings() Methods For Testing
+date: 2023-03-10 09:57:32.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories: []
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/useful-mockito-withsettings-methods-for-testing/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In one of our previous articles <a href="https://knowledgebasement.com/how-to-mock-variables-for-interfaces-and-casts-in-java/">How to Mock Variables for Interfaces and Casts in Java</a> we described how to use the method <code>withSettings().extraInterfaces()</code> in order to add more interfaces / implementations to mocked objects. In this article we'll look at other similar methods.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The withSettings() method in <a href="https://site.mockito.org/">Mockito</a> provides several useful methods that can be used to customize the behavior of mock objects. Here are some examples of the methods provided by withSettings():</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>name(): This method is used to give a name to the mock object. The name can be useful when debugging or logging test failures.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>defaultAnswer(): This method is used to specify a default answer for the mock object. The default answer is used when no explicit behavior is defined for a method call on the mock object.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>serializable(): This method is used to create a mock object that can be serialized.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>verboseLogging(): This method is used to enable verbose logging for the mock object. This can be useful when debugging test failures.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>stubOnly(): This method is used to create a mock object that only allows stubbing and doesn't allow method calls that aren't stubbed.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example of how these methods can be used with withSettings():</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>// Create a mock object with custom settings
+List&lt;String> mockList = mock(List.class, withSettings()
+        .name("mockList")
+        .defaultAnswer(RETURNS_SMART_NULLS)
+        .serializable()
+        .verboseLogging()
+        .stubOnly());
+
+// Set up behavior for the mock object
+when(mockList.get(0)).thenReturn("first");
+
+// Call the method under test
+String result = mockList.get(0);
+
+// Verify that the mock object behaves as expected
+assertEquals("first", result);
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the above example, we create a mock object for the List interface with custom settings. We give the mock object a name, specify a default answer of RETURNS_SMART_NULLS, make it serializable, enable verbose logging, and make it stubOnly. We then use the when() method to set up the behavior for the get() method, and call it to obtain the result. Finally, we use assertions to verify that the mock object behaves as expected.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Overall, withSettings() is a powerful method that can be used to create mock objects with custom behavior and characteristics. It is particularly useful when you need to create complex mock objects that require specific settings or behavior.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><!-- /wp:paragraph --></p>

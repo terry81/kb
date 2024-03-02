@@ -1,0 +1,102 @@
+---
+layout: post
+title: What are Docker Image Registries
+date: 2023-04-11 13:46:59.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+- Virtualization
+tags:
+- docker
+meta: {}
+permalink: "/what-are-docker-image-registries/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Docker image registries are central repositories that store and distribute Docker container images. Docker container images are the building blocks of Docker containers, containing all the necessary files, libraries, and dependencies to run a containerized application.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Docker image registries serve as a central location where Docker images can be stored, shared, and pulled by Docker hosts to create container instances. Docker images are typically versioned, and registries provide a way to manage different versions of Docker images, making it easy to distribute and deploy containerized applications across different environments and platforms.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>There are several popular Docker image registries available, including:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Docker Hub: Docker Hub is the default and official public Docker image registry provided by Docker. It hosts a vast collection of Docker images, including official images from Docker and community-contributed images. Docker Hub allows users to search for, download, and publish Docker images.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Docker Store: Docker Store is a curated set of Docker images that are maintained and verified by Docker, ensuring that they are secure, reliable, and up-to-date. Docker Store offers a selection of official images from trusted vendors and partners, including operating systems, databases, middleware, and other popular software.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Private registries: Docker also allows you to set up private Docker image registries for hosting and distributing custom Docker images within your organization or for specific projects. Private registries provide greater control over the images that are used in your Docker environment, allowing you to manage and secure your own Docker images.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Other public registries: There are also other public Docker image registries maintained by third-party organizations or individuals, offering their own collection of Docker images for specific purposes or software stacks.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Docker image registries are an essential part of the Docker ecosystem, providing a convenient and efficient way to store, share, and distribute Docker container images. They enable users to easily access and deploy Docker images, making it easier to build, package, and distribute containerized applications across different environments and platforms.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example of how you can use Docker Hub, the default and official public Docker image registry, to search for, pull, and run a Docker container image.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul><!-- wp:list-item --></p>
+<li>Search for a Docker image:</li>
+<p><!-- /wp:list-item --></ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>You can search for Docker images on Docker Hub using the Docker CLI. For example, let's search for an official Docker image for the NGINX web server:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker search nginx
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This will display a list of Docker images related to NGINX available on Docker Hub, along with their official or community-contributed status, description, and other details.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"start":2} --></p>
+<ul start="2"><!-- wp:list-item --></p>
+<li>Pull a Docker image:</li>
+<p><!-- /wp:list-item --></ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Once you have identified the Docker image you want to use, you can pull it from Docker Hub using the <code>docker pull</code> command. For example, let's pull the official NGINX Docker image:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker pull nginx
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This will download the NGINX Docker image from Docker Hub to your local Docker host.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"start":3} --></p>
+<ul start="3"><!-- wp:list-item --></p>
+<li>Run a Docker container:</li>
+<p><!-- /wp:list-item --></ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>After pulling the Docker image, you can run a Docker container from it using the <code>docker run</code> command. For example, let's run an NGINX container using the pulled image:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>docker run -d -p 8080:80 nginx
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This will start a Docker container based on the NGINX image, running it in detached mode (<code>-d</code>) and publishing port 8080 on the host to port 80 on the container (<code>-p 8080:80</code>).</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"start":4} --></p>
+<ul start="4"><!-- wp:list-item --></p>
+<li>Access the running container:</li>
+<p><!-- /wp:list-item --></ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>You can now access the NGINX web server running inside the Docker container by navigating to <code>http://localhost:8080</code> in a web browser or using curl or any other HTTP client.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>This is a simple example of how you can use Docker Hub to search for, pull, and run Docker container images. Docker Hub provides a vast collection of Docker images for various software and applications, making it easy to find and use containerized solutions in your Docker environment.</p>
+<p><!-- /wp:paragraph --></p>

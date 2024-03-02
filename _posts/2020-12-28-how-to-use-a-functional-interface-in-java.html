@@ -1,0 +1,72 @@
+---
+layout: post
+title: How to Use a Functional Interface in Java
+date: 2020-12-28 17:34:40.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- functional interface
+- lambdas
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:2:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231732;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:299;}i:1;a:1:{s:2:"id";i:248;}i:2;a:1:{s:2:"id";i:262;}i:3;a:1:{s:2:"id";i:311;}i:4;a:1:{s:2:"id";i:273;}i:5;a:1:{s:2:"id";i:339;}}}s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613235119;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:299;}i:1;a:1:{s:2:"id";i:248;}i:2;a:1:{s:2:"id";i:262;}}}}
+  _last_editor_used_jetpack: block-editor
+  _wpas_done_all: '1'
+permalink: "/how-to-use-a-functional-interface-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>A functional interface is an interface that contains a single abstract method.  It is used as the basis for lambda expressions in functional programming.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Such an interface may contain also other non-abstract methods even though this is not considered a good practice. Also, the notation @FunctionalInterface is optional but it will ensure that the intention of the interface is clear and the Java compiler will make sure the code conforms to the rules for functional interfaces. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here is an example with finding cars that can fly by checking the boolean value of the canFly property of the Car objects:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>class Car {
+	private String name;
+	private boolean canFly;
+
+	public Car(String name, boolean canFly) {
+		this.name = name;
+		this.canFly = canFly;
+	}
+
+	public boolean canFly() {
+		return canFly;
+	}
+
+	public String toString() {
+		return name;
+	}
+}
+
+@FunctionalInterface
+interface CheckIfCanFly {
+	public boolean test(Car a);
+}
+
+public class FindFlyingCars {
+	private static void print(Car car, CheckIfCanFly fly) {
+		if (fly.test(car)) {
+			System.out.printf("%s can fly.", car);
+		}
+	}
+
+	public static void main(String&#91;] args) {
+		print(new Car("Pal-v", true), a -&gt; a.canFly());
+		print(new Car("Tesla", false), a -&gt; a.canFly());
+	}
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>The above will print that Pal-v can fly. Tesla can't (yet).</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><!-- /wp:paragraph --></p>

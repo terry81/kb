@@ -1,0 +1,42 @@
+---
+layout: post
+title: How to make your own docker container and persist changes
+date: 2024-02-11 12:48:16.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+tags:
+- docker
+meta:
+  _edit_last: '1'
+permalink: "/how-to-make-your-own-docker-container-and-persist-changes/"
+---
+<h1>A Beginner's Guide to Creating and Persisting Changes in Docker Containers</h1>
+<h2>Introduction</h2>
+<p>Docker is a revolutionary open-source platform that allows developers to automate the deployment, scaling, and management of applications. It uses containerization technology to bundle an application and its dependencies into a single object called a container. This blog post will guide you through the process of creating your own Docker container and persisting changes.</p>
+<h2>Understanding Docker Containers</h2>
+<p>Before we dive into the creation process, it's essential to understand what Docker containers are. They are lightweight, standalone, and executable software packages that include everything needed to run an application: the code, runtime, system tools, system libraries, and settings. Containers are isolated from each other and bundle their own software, libraries, and configuration files.</p>
+<h2>Creating a Docker Container</h2>
+<p>Step 1: Install Docker</p>
+<p>The first step is to install Docker on your machine. Docker is available for Windows, macOS, and Linux. Visit the Docker website, download the appropriate version for your operating system, and follow the installation instructions.</p>
+<p>Step 2: Pull a Docker Image</p>
+<p>Once Docker is installed, open your terminal and pull a Docker image from Docker Hub, a cloud-based registry service that allows you to share your containerized applications with your team. For instance, to pull the latest Ubuntu image, type <code>docker pull ubuntu:latest</code>.</p>
+<p>Step 3: Run the Docker Container</p>
+<p>After pulling the image, you can now run a Docker container using the <code>docker run</code> command followed by the image name. For example, <code>docker run -it ubuntu:latest</code> will start a new container and provide interactive shell access to it.</p>
+<h2>Persisting Changes in Docker Containers</h2>
+<p>Now that you have a running Docker container, you might want to make changes to it and save those changes. Here's how to do it:</p>
+<p>Step 1: Make Changes in the Container</p>
+<p>You can make changes to the container just like you would in any other Linux system. For instance, you can install new software using the apt package manager: <code>apt-get update &amp;&amp; apt-get install -y vim</code>.</p>
+<p>Step 2: Exit the Container</p>
+<p>Once you've made your changes, type <code>exit</code> to leave the container.</p>
+<p>Step 3: Commit Changes</p>
+<p>After exiting, your changes are not yet saved. To persist them, you need to commit the changes to a new Docker image. First, get the container ID by typing <code>docker ps -a</code> in the terminal. This command lists all containers, running or stopped.</p>
+<p>Next, commit the changes using the <code>docker commit</code> command followed by the container ID and the new image name. For example, <code>docker commit c3f279d17e0a my-new-ubuntu-image</code>.</p>
+<p>Step 4: Run the New Docker Image</p>
+<p>You can now run a new container from the newly created image, and it will include all the changes you made: <code>docker run -it my-new-ubuntu-image</code>.</p>
+<h2>Conclusion</h2>
+<p>Docker containers offer a convenient way to package and distribute applications. They ensure that your application will run the same, regardless of any customized settings or previously installed software on the machine. By creating your own Docker containers and persisting changes, you can customize your development environment to suit your needs. Remember, the key to mastering Docker is practice, so keep experimenting with different commands and options. Happy Dockering!</p>

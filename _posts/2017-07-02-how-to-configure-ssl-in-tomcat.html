@@ -1,0 +1,48 @@
+---
+layout: post
+title: How To Configure SSL In Tomcat
+date: 2017-07-02 14:41:20.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Middleware
+tags: []
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '1'
+  _wpas_done_all: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613267643;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:69;}i:1;a:1:{s:2:"id";i:14;}i:2;a:1:{s:2:"id";i:62;}}}}
+permalink: "/how-to-configure-ssl-in-tomcat/"
+---
+<p>To secure the communication and increase the level of privacy to and from your Tomcat servlet container you should use SSL. Usually there's an Apache or Nginx in front of Tomcat to serve external clients' request and this web front server is also supposed to provide SSL connectivity. However, this is not always the case and Tomcat may be accessed by clients directly so the SSL should be installed on Tomcat.</p>
+<p>Furthermore, even if there's a dedicated frontend, the communication between that frontend and Tomcat should be also secured with an SSL, especially if the two servers are in two different networks and there is a chance of network sniffing. The latter is not only a good security practice but often a requirement such as for the PCI SSC Data Security Standards.</p>
+<p>Once you have decided to enable SSL for a Tomcat connector here is the best way to do it. First, you need a Java SSL keystore. To avoid confusion with other Java applications you can use a dedicated keystore. If you don't already have a dedicated, it will be created when you create your first private key. Here is how to create a private key for example.org with minimum details:</p>
+<pre><code>/usr/bin/keytool -genkey -alias 'server' -dname "CN=example.org, O=Default, C=US"
+ -keyalg RSA -keystore /var/local/keystore1.jks
+</code></pre>
+<p>While you create the private key, and possibly the keystore, you will be asked for the password. By default, all Java keystores have password changeit. You are encouraged to use a stronger one, of course. Note the alias parameter – server. This alias must be always specified when you deal with the certificate for example.org.</p>
+<p>Once you have the private key you can create the CSR (Certificate Signing Request) for your CA (Certificate Authority). A CA can be any SSL provider and you could even create your own CA but this is a different topic. So to create the CSR for example.org based on the previously stored private key run the command:</p>
+<pre><code>/usr/bin/keytool -certreq -keyalg RSA -alias server -file /root/example.org.csr
+ -keystore /var/local/keystore1.jks
+</code></pre>
+<p>The above command creates the CSR in the file /root/example.org.csr with the RSA algorithm. Provide this file or its text content to the CA in order to be issued an SSL certificate.</p>
+<p>Once the SSL is issued by the CA you have to import it in the same keystore with the same alias. Try to obtain the certificate in p7c binary format to ensure there are no compatibility issues when the time to import it comes. Most CAs offer this format. Then run the command:</p>
+<pre><code>/usr/bin/keytool  -import -alias server -file /root/path_to_the_file/example.org.p7c
+ -keystore /var/local/keystore1.jks
+</code></pre>
+<p>To confirm the SSL has been properly imported list the available SSLs in your keystore with the command:</p>
+<pre><code>/usr/bin/keytoolkeytool -list -keystore /var/local/keystore1.jks
+</code></pre>
+<p>After you confirm the SSL is in the keystore, you can start using it such as for your Tomcat connectors. Here is an example configuration for a connector:</p>
+<pre><code>&lt;Connector
+    protocol="HTTP/1.1"
+    port="10443" maxThreads="400"
+    scheme="https" secure="true" SSLEnabled="true" keyAlias="server"
+    keystoreFile="/var/local/keystore1.jks" keystorePass="changeit"
+    clientAuth="false" sslProtocol="TLS"/&gt;
+</code></pre>
+<p>The above configures a new http connector on TCP port 10443 with the key alias server and etc. If you don't specify explicitly keyAlias then the first certificate in your keystore will be used.</p>
+<p>This is how easy and straight-forward configuring SSL for Tomcat is. SSL will not only help you improve the security for your Tomcat and your website but it will also help you with your page ranking and public trust.</p>

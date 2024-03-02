@@ -1,0 +1,155 @@
+---
+layout: post
+title: How to Properly Use Reflection in Java
+date: 2023-04-01 05:48:04.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta: {}
+permalink: "/how-to-properly-use-reflection-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Reflection in Java is a mechanism that allows you to inspect and modify the behavior of classes, methods, interfaces, and fields at runtime, even if you do not have access to their source code during compile time.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Using reflection, you can access and modify the internal structures of Java objects, examine and modify their fields and methods, invoke methods dynamically, and create new objects of classes that were not known at compile time.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Reflection can be useful in many scenarios, such as when you need to create generic code that can work with different types of objects, or when you need to dynamically load and use classes based on runtime conditions.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To use reflection in Java, you can use the classes in the java.lang.reflect package, which provide methods for inspecting and modifying the behavior of classes, methods, and fields at runtime.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here is a simple example of how to use reflection in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Suppose we have a class called <code>Person</code> with private fields <code>name</code> and <code>age</code>, and a public method <code>printInfo</code> that prints out the person's name and age:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public class Person {
+    private String name;
+    private int age;
+    
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+    
+    public void printInfo() {
+        System.out.println("Name: " + name);
+        System.out.println("Age: " + age);
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>Now, let's say we want to create a new instance of <code>Person</code> using reflection, and invoke its <code>printInfo</code> method:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted">i<code>mport java.lang.reflect.*;
+
+public class ReflectionExample {
+    public static void main(String[] args) throws Exception {
+        Class&lt;?> personClass = Class.forName("Person");
+        Constructor&lt;?> constructor = personClass.getConstructor(String.class, int.class);
+        Object person = constructor.newInstance("John Doe", 25);
+        Method method = personClass.getMethod("printInfo");
+        method.invoke(person);
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we first obtain a <code>Class</code> object for the <code>Person</code> class using the <code>Class.forName</code> method. We then obtain a <code>Constructor</code> object for the constructor that takes a <code>String</code> and an <code>int</code> parameter, and use it to create a new instance of <code>Person</code> using the <code>newInstance</code> method.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Finally, we obtain a <code>Method</code> object for the <code>printInfo</code> method and invoke it on the <code>person</code> object using the <code>invoke</code> method.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>This will output:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted">makefileCopy code<code>Name: John Doe
+Age: 25
+</code>
+Here's another example that demonstrates how to access and modify private fields using reflection in Java:</pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>Suppose we have a class called <code>Person</code> with private fields <code>name</code> and <code>age</code>:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    private void setName(String name) {
+        this.name = name;
+    }
+
+    private void setAge(int age) {
+        this.age = age;
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>Now, let's say we want to access and modify the private fields of a <code>Person</code> object using reflection:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>import java.lang.reflect.*;
+
+public class ReflectionExample {
+    public static void main(String[] args) throws Exception {
+        Person person = new Person("John Doe", 25);
+        System.out.println("Original name: " + person.getName());
+        System.out.println("Original age: " + person.getAge());
+
+        Field nameField = Person.class.getDeclaredField("name");
+        nameField.setAccessible(true);
+        nameField.set(person, "Jane Doe");
+
+        Field ageField = Person.class.getDeclaredField("age");
+        ageField.setAccessible(true);
+        ageField.setInt(person, 30);
+
+        System.out.println("New name: " + person.getName());
+        System.out.println("New age: " + person.getAge());
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we first create a <code>Person</code> object with the name "John Doe" and age 25. We then use reflection to obtain a <code>Field</code> object for the <code>name</code> and <code>age</code> fields of the <code>Person</code> class using the <code>getDeclaredField</code> method.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Since the fields are private, we need to call the <code>setAccessible</code> method on the fields to make them accessible. We then use the <code>set</code> method to set the value of the <code>name</code> field to "Jane Doe", and the <code>setInt</code> method to set the value of the <code>age</code> field to 30.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Finally, we print out the new values of the <code>name</code> and <code>age</code> fields using the <code>getName</code> and <code>getAge</code> methods, respectively. This will output:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>Original name: John Doe
+Original age: 25
+New name: Jane Doe
+New age: 30
+</code></pre>
+<p><!-- /wp:preformatted --></p>

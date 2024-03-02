@@ -1,0 +1,90 @@
+---
+layout: post
+title: When and How to Use Iptables and Ipsets
+date: 2023-03-14 03:32:04.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+- Security
+tags:
+- ipset
+- iptables
+- linux
+meta:
+  _edit_last: '1'
+permalink: "/when-and-how-to-use-iptables-and-ipsets/"
+---
+<p><!-- wp:paragraph --></p>
+<p>iptables and ipsets are both tools that are commonly used in Linux-based operating systems for managing network traffic. However, they serve different purposes and have different capabilities.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>iptables is a firewall tool that allows you to configure rules for filtering and manipulating network traffic. It uses a set of predefined chains (INPUT, OUTPUT, and FORWARD) to apply rules to incoming, outgoing, and forwarded packets. You can use iptables to block or allow traffic based on various criteria such as source IP address, destination IP address, port number, protocol type, and more.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>On the other hand, ipsets are a more specialized tool that can be used in conjunction with iptables or other firewall tools. Ipsets allow you to create and manage lists of IP addresses or networks, which can then be used in firewall rules to match traffic against those lists. Ipsets can be more efficient than individual iptables rules for filtering large numbers of IP addresses, especially when used in combination with iptables multiport and stateful filtering.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In summary, while iptables is a general-purpose firewall tool, ipsets are a specialized tool for creating and managing lists of IP addresses or networks, which can be used in firewall rules to match traffic against those lists.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here are some examples to illustrate the differences between iptables and ipsets:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Example 1: Block traffic from a specific IP address range</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To block traffic from a specific IP address range, you can use iptables with the following rule:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>iptables -A INPUT -s 192.168.1.0/24 -j DROP
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This rule drops all incoming packets with a source IP address in the range 192.168.1.0 to 192.168.1.255.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Alternatively, you can use an ipset to create a list of IP addresses in that range and then use that list in an iptables rule:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>ipset create blacklist hash:net
+ipset add blacklist 192.168.1.0/24
+iptables -A INPUT -m set --match-set blacklist src -j DROP
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This creates an ipset named "blacklist" with a hash type of "net" (for network addresses), adds the IP address range 192.168.1.0/24 to the list, and then creates an iptables rule that matches incoming packets with a source IP address in that list and drops them.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Example 2: Allow traffic on specific ports</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To allow traffic on specific ports, you can use iptables with rules like:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>These rules allow incoming TCP traffic on ports 22 and 80.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Alternatively, you can use an ipset to create a list of ports and then use that list in an iptables rule:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>ipset create portlist hash:ip,port
+ipset add portlist 192.168.1.1,tcp:22
+ipset add portlist 192.168.1.1,tcp:80
+iptables -A INPUT -m set --match-set portlist dst -j ACCEPT
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This creates an ipset named "portlist" with a hash type of "ip,port", adds the IP address 192.168.1.1 with TCP ports 22 and 80 to the list, and then creates an iptables rule that matches incoming packets with a destination IP address and port in that list and allows them.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In summary, iptables is a general-purpose tool for configuring firewall rules, while ipsets are a specialized tool for creating and managing lists of IP addresses or ports that can be used in conjunction with iptables or other firewall tools.</p>
+<p><!-- /wp:paragraph --></p>

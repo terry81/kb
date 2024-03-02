@@ -1,0 +1,123 @@
+---
+layout: post
+title: Why and How to Use Optional in Java
+date: 2021-01-20 20:36:29.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+- Refactoring
+tags:
+- clean code
+- Java 8
+- Optional
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231621;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:299;}i:1;a:1:{s:2:"id";i:262;}i:2;a:1:{s:2:"id";i:269;}i:3;a:1:{s:2:"id";i:282;}i:4;a:1:{s:2:"id";i:335;}i:5;a:1:{s:2:"id";i:233;}}}}
+  _last_editor_used_jetpack: block-editor
+  _wpas_done_all: '1'
+permalink: "/why-and-how-to-use-optional-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>The Optional object type in Java was introduced with version 8 of Java. It is used when we want to express that a value might not be known (yet) or it's not applicable at this moment. Before Java 8 developers might have been tempted to return a null value in this case.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Ultimately, there are two scenarios for Optional:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Case 1: An empty box in which there is no value - Optional.empty(). </li>
+<li>Case 2: A box in which there is a value X - Optional.of(X).</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Let's have an example. What's our car gas mileage?</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Unknown / not applicable if we haven't driven our car yet (Case 1).  </li>
+<li>30 mpg if we have traveled 30 miles with 1 gallon (Case 2).</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>So how could we express this with a method and an Optional? Here is an example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Optional&lt;Integer&gt; getMGP(int miles, int gallons) {
+	if (miles == 0) {
+		return Optional.empty();
+	}
+		return Optional.of(miles / gallons);
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Next, if we want to use it:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>System.out.println(getMGP(100, 3));
+//prints Optional&#91;33]
+System.out.println(getMGP(0, 3));
+//prints Optional.empty</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>As we've pointed, Optional is like a box, so to "unpack" this box and get the value inside, we have to use its get() method like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Optional&lt;Integer&gt; mpg = getMGP(100, 3);
+
+if (mpg.isPresent()) {
+	System.out.println(mpg.get()); // prints 33
+} else {
+	System.out.println("MPG is not available yet.");
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Note that the isPresent() method is used before we try to get the mpg value. If we try get() on an empty Optional we'll get java.util.NoSuchElementException: </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Exception in thread "main" Optional.empty
+java.util.NoSuchElementException: No value present
+	at java.util.Optional.get(Optional.java:135)
+	at testing.Test.main(Test.java:22)</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>To make our lives easier, Optional has a few additional methods:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>ifPresent(Consumer c) - if the value is present, execute a consumer. With this we can rewrite the above if like this:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>mpg.ifPresent(x -> System.out.println(x));</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>orElse(T other) - return a different value if there is no value. Note that if there is a value, it will be returned. For example, return 0 if there is no value:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>mpg.orElse(0);</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>orElseGet(Supplier s) - if there is no value, then execute a supplier. For example, return 0:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>mpg.orElseGet(() -> 0)</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>orElseThrow(Supplier s) - if there is no value, throw an exception, e.g. IllegalStateException:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>mpg.orElseThrow(() -> new IllegalStateException())</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>That's the beauty and power of Optional. As we know from the clean code paradigms, null values shouldn't be returned so use Optional instead.</p>
+<p><!-- /wp:paragraph --></p>

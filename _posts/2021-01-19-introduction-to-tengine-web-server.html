@@ -1,0 +1,72 @@
+---
+layout: post
+title: Introduction to Tengine Web Server
+date: 2021-01-19 20:43:09.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+- Middleware
+- Security
+tags:
+- Tengine
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613241675;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:14;}i:1;a:1:{s:2:"id";i:138;}i:2;a:1:{s:2:"id";i:72;}i:3;a:1:{s:2:"id";i:65;}i:4;a:1:{s:2:"id";i:69;}i:5;a:1:{s:2:"id";i:52;}}}}
+  _last_editor_used_jetpack: block-editor
+  _wpas_done_all: '1'
+permalink: "/introduction-to-tengine-web-server/"
+---
+<p><!-- wp:paragraph --></p>
+<p><a rel="noreferrer noopener" href="https://tengine.taobao.org/" target="_blank">Tengine</a> seems to be a popular web server for Chinese websites. I've come upon it while browsing through Aliexpress and stumbling upon a 404 error:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"id":318,"sizeSlug":"large","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-large"><img src="{{ site.baseurl }}/assets/2021/01/404.png" alt="" class="wp-image-318" /></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>This error and more specifically its footer "Powered by Tengine" stirred up my interest and so I started looking for more information about this unknown to me web server.  </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here are some interesting things about Tengine:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>It's a fork of Nginx and still compliant with Nginx in term of configuration. This is important in case you decide to migrate from Nginx to Tengine.</li>
+<li>Tengine is developed by Taobao / Alibaba. This means plenty of resources and serious backing. Considering how huge Alibaba is and its sites such as aliexpress.com, Tengine is already very popular. </li>
+<li>Tengine has unique, in-house made modules which are not found in Nginx. Examples: <a rel="noreferrer noopener" href="https://tengine.taobao.org/document/http_sysguard.html" target="_blank">Sysguard</a> and <a href="https://tengine.taobao.org/document/http_upstream_consistent_hash.html" target="_blank" rel="noreferrer noopener">Consistent hash module</a>.</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>The Sysguard and Consistent hash modules impressed me as very useful because they would allow advanced load balancing. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To get an idea of Tengine's capabilities, imagine you wish the web server to return a 503 error or a custom page when your free memory is below 100M or CPU load is above 20? With the Sysguard module this can be easily done with a configuration like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>server {
+    sysguard on;
+    sysguard_mode or;
+
+    sysguard_load load=10 action=/loadlimit;
+    sysguard_mem free=100M action=/freelimit;
+
+    location /loadlimit {
+        return 503;
+    }
+    location /freelimit {
+        return 503;
+    }
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Beyond this simple example, the options of Sysguard, Consistent hash module and the other Tengine modules could help you provide easily maximum resilience to failures while ensuring reliable session stickiness. One could imagine these modules evolved from Taobao's needs to serve high traffic with high quality of service. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Tengine is still not available in Ubuntu's apt repo, nor in any other major Linux distribution. This means that you will have to install it manually if you decide to give it a try. The good news is that the installation is as simple as running the usual compilation steps of ./configure, make and make install.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>If and once Tengine appears in the official Linux distributions' repos, its popularity will swiftly increase. In any case, we'll be probably seeing more of Tengine in future, considering Nginx complications related to its F5 acquisition and Rambler Group accusations. </p>
+<p><!-- /wp:paragraph --></p>

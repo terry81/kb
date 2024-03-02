@@ -1,0 +1,75 @@
+---
+layout: post
+title: How to Create a Random Quote / Fact WordPress Plugin
+date: 2023-03-12 17:48:41.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Web
+tags:
+- php
+- wordpress
+meta:
+  _edit_last: '1'
+permalink: "/how-to-create-a-random-quote-fact-wordpress-plugin/"
+---
+<p><!-- wp:paragraph --></p>
+<p>To create a WordPress plugin which shows a random value from an array, such as quote or fact, follow these steps.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Open your editor and create a file <code>called fun_facts.php</code> (the name does not really matter). Then paste the following code:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>&lt;?php
+/*
+Plugin Name: Random Java Facts Plugin
+Description: Displays a random interesting fact about Java.
+*/
+function java_facts_shortcode() {
+    $java_facts = array(
+        "Java was originally called Oak, but was renamed to Java in 1995.",
+        "Java was created by James Gosling at Sun Microsystems.",
+        "Java was first released in 1995.",
+        "Java is used by more than 3 billion devices worldwide.",
+        "Java is a class-based, object-oriented programming language.",
+        "Java is designed to be platform-independent, meaning it can run on any device with a Java Virtual Machine.",
+        "Java is used to develop desktop, mobile, and web applications.",
+        "Java is one of the most popular programming languages in the world.",
+        "Java is used by companies such as Google, Amazon, and Netflix.",
+        "Java is one of the few programming languages that is still actively developed and maintained."
+    );
+
+    $fact = $java_facts&#91;rand(0, count($java_facts) - 1)];
+
+    $output = '&lt;div class="java-facts-widget">';
+    $output .= '&lt;h3>Did you know?&lt;/h3>';
+    $output .= '&lt;p>' . $fact . '&lt;/p>';
+    $output .= '&lt;/div>';
+
+    return $output;
+}
+
+add_shortcode('java_facts', 'java_facts_shortcode');
+?></code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>The above code creates a plugin for displaying Java fun facts. To display such facts, you have to use the short code <code>[java_facts]</code>. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Next, save the file. Create a zip archive with this file. The file should be at the root of the archive.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Next, go to the admin interface and install a new plugin using the zip file you have just created.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>You can start using the short code now. If you want to use it as a widget, you will have to edit the <code>functions.php</code> file of your current WordPress template and allow short code there like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>add_filter('widget_text', 'do_shortcode');</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>After that you can use it as a widget too and create a cool widget for your side panel. </p>
+<p><!-- /wp:paragraph --></p>

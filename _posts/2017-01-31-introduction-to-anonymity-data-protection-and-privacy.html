@@ -1,0 +1,75 @@
+---
+layout: post
+title: Introduction to Anonymity, Data Protection and Privacy
+date: 2017-01-31 08:02:15.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Security
+tags:
+- anonymity
+- anonymization
+- Data protection
+- pseudonymization
+- security
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '1'
+  _jetpack_related_posts_cache: a:2:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613067081;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:65;}i:1;a:1:{s:2:"id";i:138;}i:2;a:1:{s:2:"id";i:69;}i:3;a:1:{s:2:"id";i:190;}i:4;a:1:{s:2:"id";i:352;}i:5;a:1:{s:2:"id";i:282;}}}s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613097352;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:65;}i:1;a:1:{s:2:"id";i:138;}i:2;a:1:{s:2:"id";i:69;}}}}
+  _wpas_done_all: '1'
+permalink: "/introduction-to-anonymity-data-protection-and-privacy/"
+---
+<p>Almost every piece of information contains sensitive and private data. Exposing publicly such data could lead to serious financial losses, legal issues and personal inconveniences. That’s why data protection and privacy are essential tasks in any data processing project.</p>
+<p>When data cannot (public records) or should not (useful information for scientific research) remain private, anonymity or at least pseudonymity must be ensured. Anonymity is derived from the Greek word anonymia meaning "without a name" or "namelessness". The adjective "anonymous" is used to describe situations where the involved person's name is unknown or hidden.</p>
+<h1>Problems with anonymity and their solutions</h1>
+<p>Absolute anonymity is problematic because the connection to the original subject may be completely lost. Thus, in some cases important links and dependencies will not be revealed in the data analysis. The solution to this is pseudonymity. Pseudonymity is the use of pseudonyms as identifiers. A pseudonym is an identifier of a subject other than one of the subject’s real names. On one hand, pseudonymity prevents individuals to be publicly identified and exposed. On the other, it is still possible, if necessary, to identify them in full compliance with law and privacy requirements.</p>
+<p>The choice which data fields are to be protected or anonymised is subjective, but should include all fields that are highly selective, NHS number (in the UK) for example. Less selective fields, such as Birth Date or Postal Code are often also included because they could be cross-matched and lead to a record being identified. Protecting these less identifying fields removes most of their analytic value and should therefore be accompanied by the introduction of new derived and less identifying forms, such as year of birth.</p>
+<p>Data fields that are less identifying, such as date of attendance, are usually left untouched. This is mostly because too much statistical utility is lost in doing so. Such an acknowledged and accepted risk is worth in some cases where artificial intelligence will greatly benefit from such genuine information. Unfortunately, such a compromise could lead to the so called “inference attack”, e.g. given prior knowledge of a few attendance dates it is possible to identify someone by finding only those people with that pattern of dates. Even more, according to a research “87% (216 million of 248 million) of the population in the United States had reported characteristics that likely made them unique based only on {5-digit ZIP, gender, date of birth}” (Sweeney, 2000).</p>
+<p>Whenever any sensitive data is stored, such as in the case where original data with full personal details must be retained intact, protection against unauthorized access and modification should be implemented. Control access lists should strictly specify personal access rights. Each person with access has to be authenticated in order to verify his identity. This personalized data access control applies not only to the digitally stored data, but also to its physical dimensions.</p>
+<p>Last but not least, strong and modern encryption must protect the data so that it is unreadable and unusable even in cases of unauthorized access.</p>
+<h1>Legal regulations and requirements</h1>
+<p>The importance of privacy protection has been constituted in various legal forms and state regulations around the world. Two of them, in the USA and the EU, have been reviewed below.</p>
+<p>In the European Union, the main legal instrument concerning data protection is Directive 95/46/EC1. It defines the protection of individuals with regard to the processing of personal data and on the free movement of such data (Data Protection Directive). Article 8 of this directive specifies special categories of data that shouldn’t be processed. One of these categories is data concerning health.</p>
+<p>In the US, there is a large number of data privacy regulations on state level but on federal level the most important ones are The Federal Trade Commission Act (15 U.S.C. §§41-58) (FTC Act) and the Health Insurance Portability and Accountability Act (HIPAA) (42 U.S.C. §1301 et seq.). The latter is especially important because it regulates the use of medical information as in cases of scientific researches.</p>
+<p>In essence, both in the European Union and in the United States, consent is required for the use of personal information. However, this does not apply if the data has been anonymised and individuals cannot be identified through linking the information to other publicly available data.</p>
+<h1>Methods for ensuring anonymity, data protection and privacy</h1>
+<p>There are complete solutions, both commercial and open source, for the protection of data and privacy. Popular data anonymization tools such as <a href="http://arx.deidentifier.org">ARX </a>have advanced features to anonymize any sensitive data. Furthermore, strong encryption algorithms are supported out of the box by every modern computer operating system including Windows, Mac and Linux based such. There are also third party encryption solutions such as the <a href="https://www.spi.dod.mil/ewizard.htm">Encryption Wizard</a> developed and used by the American Army and Air Force.</p>
+<p>If a custom solution is needed for data protection, there are plenty of readily available libraries and modules in every popular programming language. For example, Python supports fast and powerful implementation both of anonymization and encryption as the next examples show.</p>
+<h2>Anonymization and pseudonymization</h2>
+<p>For a simple anonymization, regular expressions with search and replace functions can be used. Here is an example:</p>
+<pre><code>import re
+
+plain_text = """
+name: John Johnson, birth date: February 7 2010
+some data: Random data
+
+name: Jack Rohnson, birth date: January 8 2000
+some data: Other random data
+"""
+
+anonymized_text = re.sub(r'name: [A-Z]+[a-z]* [A-Z]+[a-z]*','name: Anonymized', plain_text)
+
+print(anonymized_text)
+</code></pre>
+<p>The above Python code will accomplish anonymization by replacing every occurrence of a name in the form of two alphabetical words with initial capital letter following the string “name:”.</p>
+<p>The above code is written specifically for the text example above and it can be further enhanced and customized to specific needs with different order of names and personal details. That’s thanks to the powerful and flexible regular expressions, supported in Python and many other programming languages.</p>
+<p>Names, and other personal details, can be also replaced with unique pseudonyms, for achieving pseudonymity. In Python this can be done using a dictionary and inserting a unique key – value pair for every name replaced by an automatically generated pseudonym. In this approach it will be essential from security point of view that this newly created dictionary is stored separately from the main file in a secure manner.</p>
+<h2>Authentication and authorization</h2>
+<p>Authentication represents the process by which one subject verifies the identity of another, and must be performed in a secure fashion; otherwise a perpetrator may impersonate others to gain access to a system. Authentication typically involves the subject demonstrating some form of evidence to prove its identity.</p>
+<p>Once authentication has successfully completed, access controls should be enforced upon the principals associated with the authenticated subject. The more detailed the access controls are, the better the data protection will be. As a rule of thumb, as little permissions should be granted by default.</p>
+<h2>Encryption</h2>
+<p>No sensitive information should be kept in clear, readable text format at any time. Instead, it must be encrypted so that it cannot be understood, nor exploited in case of an unauthorized access. The process of transforming plaintext into ciphertext is called encipherment or encryption. A cipher is a secret method of writing, whereby plaintext (or cleartext) is transformed into ciphertext.</p>
+<p>The reliability of an encryption method is determined by the strength of its algorithm and the length of its key. At the writing of this document, the algorithm called Advanced Encryption Standard (AES) with 256 bit key length is the most widely deployed and accepted method for encryption. It renders 2^256 combinations that have to be broken in order the encrypted document to be compromised. With the current computer power it is unfeasible to pursuit an approach of brute-force finding the correct combination. However, it should be noted that in the past, weaknesses of previously popular encryption algorithms have allowed an attacker to decrypt the information very fast without having to go through the combinations.</p>
+<p>Thanks to its popularity, AES is widely supported in programming and every modern language has implementation for it. Python has a library called <a href="https://www.dlitz.net/software/pycrypto">PyCrypto </a>which supports AES with 256 bit key length. The use of this library has been further facilitated by additional modules such as <a href="https://pypi.python.org/pypi/simple-crypt">Simple-crypt</a>  which make it very easy and simple to use encryption. Here is an example:</p>
+<pre><code>from simplecrypt import encrypt, decrypt
+#to encrypt text
+ciphertext = encrypt('secure_password', 'Some sensitive text')
+#to decrypt it again
+plaintext = decrypt('secure_password', ciphertext)
+</code></pre>
+<p>This ease of use of encryption further encourages its use and makes it possible to be applied in wider areas.</p>
+<h1>Conclusion</h1>
+<p>Anonymity, data protection and privacy are more than just an essential in today’s informational age. Whether for business or for scientific needs, the collected and stored data must comply with the corresponding data protection standards and official regulations. This has led to the development of many third-party tools and programming languages libraries which make the implementation of data protection mechanisms simple and easy.</p>

@@ -1,0 +1,121 @@
+---
+layout: post
+title: How to Run Sites Securely with Apache and Php-fpm on Ubuntu 16.04 LTS
+date: 2018-02-10 18:04:08.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Security
+- Web
+tags: []
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '1'
+  _jetpack_related_posts_cache: a:2:{s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613217638;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:72;}i:1;a:1:{s:2:"id";i:158;}i:2;a:1:{s:2:"id";i:14;}}}s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613232075;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:72;}i:1;a:1:{s:2:"id";i:158;}i:2;a:1:{s:2:"id";i:14;}i:3;a:1:{s:2:"id";i:65;}i:4;a:1:{s:2:"id";i:317;}i:5;a:1:{s:2:"id";i:226;}}}}
+  _wpas_done_all: '1'
+permalink: "/how-to-run-sites-securely-with-apache-and-php-fpm-on-ubuntu-16-04-lts/"
+---
+<p>A great security feature of <a href="http://php.net/manual/en/install.fpm.php">Php FastCGI Process Manager (Php-fpm)</a> is its ability to run Php scripts with different users. This in addition to its other merits such as performance and many fine grained options for tuning makes it the best choice for running Php sites.</p>
+<p>Before anything else, I must admit that Nginx with Php-fpm is preferred than Apache with Php-fpm for performance reasons mostly. There are fine articles such as <a href="https://www.digitalocean.com/community/tutorials/how-to-host-multiple-websites-securely-with-nginx-and-php-fpm-on-ubuntu-14-04">this one</a> explaining how to accomplish exactly the same as the current topic with Nginx and not with Apache. The setup for Php-fpm with Apache is similar but there are some Apache specifics which are important and on which the current article stresses.</p>
+<p>You might wonder why would anyone run Apache with Php-fpm instead of Nginx with Php-fpm if the latter is generally preferred. One good reason is that you might have a ton of Apache specific rewrite rules and virtual hosts configurations. It might not be so easy to rewrite them and may be even not worth it depending on what you expect to gain from running Nginx instead of Apache.</p>
+<p>Once you are convinced that you want to go for Apache with Php-fpm you can continue reading. Not only the basic setup is covered but you will also find out how to run different Php-fpm pools with different users and configure the Apache virtual hosts to use those different pools.</p>
+<h2>Prerequisites</h2>
+<p>This article is about Ubuntu 16.04 LTS, Apache 2.4 and Php7-fpm. Though, it should be very similar for other Linux distributions, Apache versions and Php-fpm versions.</p>
+<h2>Installation of Apache, Php-fpm and mod_fastcgi</h2>
+<p>For the perfect Apache - Php-fpm setup you will have to install the following packages with apt-get:</p>
+<pre><code>apt-get -y install apache2 libapache2-mod-fastcgi php7.0-fpm php7.0
+</code></pre>
+<p>If you wonder why the installation of Apache's mod_fastgi (<span class="s2">libapache2-mod-fastcgi) is needed, it is because it will be used for the connection between Apache and Php-fpm.</span></p>
+<p>Once everything needed is installed, make sure the necessary Apache modules are enabled:</p>
+<pre><code>a2enmod actions fastcgi alias proxy proxy_http proxy_fcgi
+</code></pre>
+<p>Finally, for the latter settings to take effect, restart Apache with:</p>
+<pre><code>service apache2 restart
+</code></pre>
+<h2>Configuring Php-fpm</h2>
+<p>The default configuration of Php-fpm is good enough for the start so you can leave it as is. There is one default Php-fpm pool<br />
+<code>/etc/php/7.0/fpm/pool.d/www.conf</code> that comes with the installation. It has the following distinct settings:</p>
+<pre><code>; pool name
+[www]
+...
+; Unix user/group of processes
+; will be used.
+user = www-data
+group = www-data
+...
+; Socket to which the Apache will connect
+listen = /run/php/php7.0-fpm.sock
+</code></pre>
+<p>For every new Php-fpm pool, you must have all these four parameters different. For example, let's create another pool called siteA. Make sure that beforehand you create the user and group that will be used by the new pool. To continue the example with siteA, let's run this pool under user sitea and group sitea. Create them with the commands:</p>
+<pre><code>groupadd sitea
+useradd -g sitea sitea
+</code></pre>
+<p>Then, copy the default pool file <code>/etc/php/7.0/fpm/pool.d/www.conf</code> to <code>/etc/php/7.0/fpm/pool.d/sitea.conf</code>. In the latter file adapt the four parameters:</p>
+<pre><code>; pool name
+[sitea]
+...
+; Unix user/group of processes
+; will be used.
+user = sitea
+group = sitea
+...
+; Socket to which the Apache will connect
+listen = /run/php/php7.0-fpm-sitea.sock
+</code></pre>
+<p>After that restart Php-fpm with:</p>
+<pre><code>service php7.0-fpm restart
+</code></pre>
+<p>To make sure the new pool works fine, check if its socket exists (/run/php/php7.0-fpm-sitea.sock) on the filesystem. Each pool has such a socket to which Apache will be connecting.</p>
+<h2>Configuring Apache vhosts to work with different Php-fpm pools</h2>
+<p>To accomplish isolation between different web sites or even parts of one site (e.g. blog, forum, etc), each entity should use different Php-fpm pools. Let's take an example with a different Vhost - siteA (with DNS www.example.com). Create a sample Vhost in Apache containing something similar to this:</p>
+<pre><code><br />ServerName www.example.com
+
+ServerAdmin webmaster@localhost
+DocumentRoot /var/www/sitea
+
+ErrorLog ${APACHE_LOG_DIR}/error.log
+CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+# Start of Php handling with Php-fpm
+
+Require all granted
+
+AddHandler php7-fcgi .php
+Action php7-fcgi /php7-fcgi virtual
+Alias /php7-fcgi /usr/lib/cgi-bin/php7-fcgi
+FastCgiExternalServer /usr/lib/cgi-bin/php7-fcgi -socket /run/php/php7.0-fpm-sitea.sock -pass-header Authorization
+
+# End of Php handling with Php-fpm
+
+</code></pre>
+<p>Before reloading Apache for the new Vhost to take effect, make sure that you create the directory specified as DocumentRoot for the vhost - <code>/var/www/sitea</code> in this case. This must be owned by the user <code>sitea</code> and group <code>sitea</code>.</p>
+<h2>Testing</h2>
+<p>To test everything so far, create a new test.php file containing phpinfo() and open it in your browser. In the newly opened page search for the Environment variables:</p>
+<h3>Environment</h3>
+<table>
+<tbody>
+<tr class="h">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+<tr>
+<td class="e">USER</td>
+<td class="v">usera</td>
+</tr>
+</tbody>
+</table>
+<p>The above proves that the test.php file was executed with the user usera. Have this test for each new Vhost - Php-fpm you create to make sure you have completed all steps properly.</p>
+<h2>Setting the Vhost permissions</h2>
+<p>Having Php scripts in your Vhosts run with dedicated users (such as usera) is beneficial because you can set individual access permissions (and also resource limits which is another topic). The simplest way to restrict these dedicated users is with files permissions.</p>
+<p>There are three steps in setting the permissions:</p>
+<ol>
+<li>Change recursively the ownership of the Vhost directory (Apache's DocumentRoot) to the dedicated user and the www-data user group. Example: chown usera:www-data /var/www/sitea</li>
+<li>Set some not-so-restrictive permissions recursively to this directory such as 740. This ensures that your dedicated user can read, write and execute files while www-data (the web server) else can just read and execute them. It's important that the group www-data is able to read the files because Apache must have read access to static files such as images, javascripts, css, etc. Otherwise, your site will not work in most cases.</li>
+<li>You can additionally change the permissions of the Php files with sensitive information to 600 so that only your dedicated user can read them. Such sensitive files are usually those containing credentials to log in databases which you don't want anyone but the dedicated user to be able to read.</li>
+</ol>
+<p>Setting the above permissions is the essence of this article and the whole idea behind running securely different Vhosts with Php-fpm.</p>
+<h2>Conclusion</h2>
+<p>By completing the steps in this article you will have isolated web sites in Apache. If one site is compromised the others will not suffer - their files cannot be read, changed, nor the sensitive information stolen. And all of these comes with great performance provided by Php-fpm running on the good old Apache.</p>

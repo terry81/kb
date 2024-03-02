@@ -1,0 +1,63 @@
+---
+layout: post
+title: How to make Hazelcast's cluster replication more resilient
+date: 2021-02-13 15:18:37.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- databases
+- Java
+tags:
+- hazelcast
+- setBackupCount
+meta: {}
+permalink: "/how-to-make-hazelcasts-cluster-replication-more-resilient/"
+---
+<p><!-- wp:paragraph --></p>
+<p><a rel="noreferrer noopener" href="https://hazelcast.org/" target="_blank">Hazelcast</a> is an open source in-memory data grid. It is written in Java and naturally it is popular for Java applications but not only. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In simple words, Hazelcast is like a shared map which you can use across different web applications, each of which might be situated on different network nodes and use this map to share information. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>As per the official getting started guide, working with Hazelcast is as easy as instantiating a new HazelCast client and acquiring a new map from it:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>HazelcastInstance hz = HazelcastClient.newHazelcastClient();
+IMap map = hz.getMap("my-distributed-map");
+map.put("key", "value");
+map.get("key");
+...</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Once you get started, you'll find out how powerful Hazelcast is and its abundance of advanced options, especially those related to the maps.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>One particularly interesting part of the Hazelcast cluster is how it is distributed and replicated, especially when there are more than 2 cluster nodes. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Hazelcast's maps are sharded / partitioned across all the nodes. This means that the maps are divided into chunks and each node receives an equal part of the divided chunks. Each chunk is replicated or backed up to one more node.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Thanks to this default backup mode, when one node is disconnected from the cluster, no information is lost. The other nodes still hold all the information. However, if you have four nodes and you suddenly shut down two of them simultaneously or lose connection to them, you will have information loss.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To address this, you can increase <a rel="noreferrer noopener" href="https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/config/MapConfig.html#setBackupCount-int-" data-type="URL" data-id="https://docs.hazelcast.org/docs/latest/javadoc/com/hazelcast/config/MapConfig.html#setBackupCount-int-" target="_blank">the backup count</a>. In our example with four nodes, you can increase the backup count to 2. Thus, when you lose two nodes, the remaining ones will still have the whole information. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The backup count can be changed per map or for all the maps. To change the backup count for all maps, you have to change the default map configuration as follows:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Config config = new Config();
+config.getMapConfig("default").setBackupCount(2);
+HazelcastInstance hazelcast = Hazelcast.newHazelcastInstance(config);</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>This is one of the many advanced features Hazelcast has which is worth being acquainted with.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In any case, don't forget that Hazelcast keeps its information in memory only and information loss is an accepted risk. That's why you should use Hazelcast only for recoverable information such as caching or anything else that you can easily regenerate. </p>
+<p><!-- /wp:paragraph --></p>

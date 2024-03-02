@@ -1,0 +1,63 @@
+---
+layout: post
+title: What are the Benefits of Lambdas in Java
+date: 2023-03-17 15:32:56.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/what-are-the-benefits-of-lambdas-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Lambda expressions were introduced in Java 8, and they provide several benefits over traditional anonymous inner classes. Some of the benefits of lambdas in Java include:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Concise code: Lambdas allow you to write shorter and more readable code. They eliminate the need for boilerplate code and make it easier to express simple operations.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Functional programming: Lambdas are a key feature of functional programming, which is a programming paradigm that emphasizes writing code in terms of mathematical functions. This allows for more declarative and concise code.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Improved code reuse: Lambdas promote code reuse by allowing you to pass behavior as an argument to a method. This is useful when you have several methods that perform similar operations, but with slightly different behavior.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Improved collection processing: Lambdas make it easier to process collections, allowing you to filter, map, and reduce collections in a concise and readable way.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Improved concurrency: Lambdas can be used in conjunction with the Java Streams API to perform parallel processing, which can improve the performance of your code.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Overall, the use of lambdas in Java can lead to more concise and readable code, improved code reuse, and improved performance.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here is an example. Let's say you have a List of Strings and you want to print out each one on a separate line. Traditionally, you might use a for loop:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>List&lt;String> list = Arrays.asList("foo", "bar", "baz");
+for (String s : list) {
+    System.out.println(s);
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>However, with a lambda expression, you can achieve the same result with just one line of code:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>List&lt;String> list = Arrays.asList("foo", "bar", "baz");
+list.forEach(s -> System.out.println(s));
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here, the lambda expression <code>s -&gt; System.out.println(s)</code> is used as an argument to the <code>forEach</code> method of the <code>List</code> interface. The lambda expression takes a single parameter <code>s</code>, representing each element of the list, and prints it to the console.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>This code is more concise than the traditional for loop and is also easier to read and understand, especially for developers who are familiar with functional programming concepts. Additionally, it allows for easy parallelization of the processing of the elements, since <code>forEach</code> is capable of leveraging multi-threading for efficient parallel processing of the list.</p>
+<p><!-- /wp:paragraph --></p>

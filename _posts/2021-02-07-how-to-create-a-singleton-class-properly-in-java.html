@@ -1,0 +1,106 @@
+---
+layout: post
+title: How to create a Singleton class properly in Java
+date: 2021-02-07 07:57:14.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- design patterns
+- singleton
+- synchronisation
+- volatile
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:2:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231339;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:339;}i:1;a:1:{s:2:"id";i:190;}i:2;a:1:{s:2:"id";i:210;}i:3;a:1:{s:2:"id";i:282;}i:4;a:1:{s:2:"id";i:180;}i:5;a:1:{s:2:"id";i:273;}}}s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613269091;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:339;}i:1;a:1:{s:2:"id";i:190;}i:2;a:1:{s:2:"id";i:210;}}}}
+  _last_editor_used_jetpack: block-editor
+  _wpas_done_all: '1'
+permalink: "/how-to-create-a-singleton-class-properly-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>A Singleton class is a class of which only one instance exists. There is a need for such a design pattern for loggers, database connections and other scenarios.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The main challenge comes when you want to implement a Singleton in a mutli-threaded environment and ensure that all the threads are synchronised when creating the Singleton instance. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here are the key points:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>We'll use the volatile keyword to mark the instance variable and ensure it's thread-safe. <a rel="noreferrer noopener" href="https://docs.oracle.com/javase/tutorial/essential/concurrency/atomic.html" target="_blank">Volatile</a> means that every thread should have consistent knowledge of the variable's value and read it from memory and not from the CPU cache. This is critical unless you run your program on a single processor which is very unlikely.</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>private static volatile SingletonTest instance = null;</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>To avoid multiple threads creating an instance at the same time, we'll use the synchronized keyword to synchronise the code for creating the instance. The key here is where exactly to put the synchronisation to ensure minimum performance penalty and maximum protection.</li>
+<li>Double-checking locking mechanism will be used for creating the initial instance and to avoid any chance of two instances created at the same time while again ensuring best possible performance.</li>
+<li>The getInstance method will be static and it will use lazy initialisation. This means that only when invoked, it will create a new instance in case there is none yet created (it's null) and not beforehand. </li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>public static SingletonTest getInstance() {
+	if (instance == null) {
+		synchronized (SingletonTest.class) {
+			if (instance == null) {
+				instance = new SingletonTest();
+			}
+		}
+	}
+	return instance;
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>The constructor will be marked as private and we'll also add protection against reflection being used to create a new instance like this:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>private SingletonTest() {
+	if (instance != null) {
+		throw new RuntimeException("Use getinstance() to create a new instance");
+	}
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>So the full code looks like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>public class SingletonTest {
+
+	private static volatile SingletonTest instance = null;
+
+	private SingletonTest() {
+		if (instance != null) {
+			throw new RuntimeException("Use getinstance() to create a new instance");
+		}
+	}
+
+	public static SingletonTest getInstance() {
+		if (instance == null) {
+			synchronized (SingletonTest.class) {
+				if (instance == null) {
+					instance = new SingletonTest();
+				}
+			}
+		}
+		return instance;
+	}
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Now to start using this SingletonTest you have to get an instance like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>SingletonTest test = SingletonTest.getInstance();</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>This is how you can create properly a Singleton class in Java following the best practices for maximum protection and minimal performance penalty using synchronisation and volatile keywords.</p>
+<p><!-- /wp:paragraph --></p>

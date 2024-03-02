@@ -1,0 +1,98 @@
+---
+layout: post
+title: Pass by Value Meaning in Java
+date: 2023-03-16 07:15:55.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/pass-by-value-meaning-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In Java, when you pass a parameter to a method, a copy of the value of that parameter is passed to the method, rather than the original object itself. This is what is meant by "Java is pass by value".</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>For example, suppose you have a method like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public void myMethod(int x) {
+   x = x + 1;
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>If you call this method like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>int a = 5;
+myMethod(a);
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>Then the value of <code>a</code> remains unchanged because <code>myMethod</code> only operates on a copy of <code>a</code>.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Similarly, if you have a method like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public void myMethod(MyObject obj) {
+   obj.setValue(10);
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>And you call this method like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>MyObject myObj = new MyObject();
+myObj.setValue(5);
+myMethod(myObj);
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>Then <code>myObj</code> still has a value of 5 because the <code>obj</code> parameter in <code>myMethod</code> only points to a copy of the reference to <code>myObj</code>, not to <code>myObj</code> itself. However, the state of the object pointed to by <code>myObj</code> has been changed to have a value of 10.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's a more detailed example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public class PassByValueExample {
+
+    public static void main(String[] args) {
+        int x = 5;
+        System.out.println("Before calling myMethod: x = " + x);
+        myMethod(x);
+        System.out.println("After calling myMethod: x = " + x);
+    }
+
+    public static void myMethod(int x) {
+        x = x + 1;
+        System.out.println("Inside myMethod: x = " + x);
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we define a method called <code>myMethod</code> that takes an integer parameter <code>x</code>. The method simply adds 1 to <code>x</code> and prints out its value.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the <code>main</code> method, we create an integer variable <code>x</code> and assign it a value of 5. We then print out the value of <code>x</code>, call the <code>myMethod</code> method, and print out the value of <code>x</code> again.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>When we run this code, we get the following output:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>Before calling myMethod: x = 5
+Inside myMethod: x = 6
+After calling myMethod: x = 5
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>As you can see, the value of <code>x</code> inside the <code>myMethod</code> method is 6, but the value of <code>x</code> outside of the method is still 5. This is because the <code>myMethod</code> method only operates on a copy of the value of <code>x</code>, not on the original <code>x</code> variable.</p>
+<p><!-- /wp:paragraph --></p>

@@ -1,0 +1,164 @@
+---
+layout: post
+title: How to Create a SuSE rpm Package From a Directory
+date: 2023-04-27 03:31:52.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+tags:
+- rpm
+- SuSE
+meta: {}
+permalink: "/how-to-create-a-suse-rpm-package-from-a-directory/"
+---
+<p><!-- wp:paragraph --></p>
+<p>To create an RPM package from a directory such as /opt/asd in SuSE, you can follow these general steps:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>First, you need to install the RPM build tools on your SuSE system. You can do this by running the following command as root:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>zypper install rpm-build
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:list {"ordered":true,"start":2} --></p>
+<ol start="2"><!-- wp:list-item --></p>
+<li>Next, create a directory for your RPM build environment. This can be done anywhere on your system, but it is recommended to create it in your home directory. For example, you could create a directory called <code>rpmbuild</code> by running the following command:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This will create a directory structure that is required for building RPM packages.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true,"start":3} --></p>
+<ol start="3"><!-- wp:list-item --></p>
+<li>Copy the contents of <code>/opt/asd</code> into a new directory under the <code>SOURCES</code> directory created in step 2. For example, you could create a directory called <code>asd</code> under <code>SOURCES</code> and copy the contents of <code>/opt/asd</code> into it:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted">m<code>kdir -p ~/rpmbuild/SOURCES/asd
+cp -r /opt/asd/* ~/rpmbuild/SOURCES/asd/
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:list {"ordered":true,"start":4} --></p>
+<ol start="4"><!-- wp:list-item --></p>
+<li>Create a new RPM spec file in the <code>SPECS</code> directory that describes your package. For example, you could create a file called <code>asd.spec</code> with the following contents:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>Name: asd
+Version: 1.0
+Release: 1
+Summary: Example RPM package for /opt/asd
+
+License: GPL
+Group: Applications/System
+Source0: %{name}-%{version}.tar.gz
+
+%description
+This is an example RPM package for /opt/asd.
+
+%prep
+%setup -q -n %{name}-%{version}
+
+%build
+
+%install
+rm -rf $RPM_BUILD_ROOT
+mkdir -p $RPM_BUILD_ROOT/opt/asd
+cp -r * $RPM_BUILD_ROOT/opt/asd/
+
+%files
+/opt/asd/*
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This spec file defines the name, version, summary, license, and files included in the package.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true,"start":5} --></p>
+<ol start="5"><!-- wp:list-item --></p>
+<li>Build the RPM package by running the following command in the <code>SPECS</code> directory:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>rpmbuild -bb asd.spec
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This will build the RPM package and place it in the <code>RPMS</code> directory.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true,"start":6} --></p>
+<ol start="6"><!-- wp:list-item --></p>
+<li>Your RPM package is now ready to be installed on other SuSE systems using the <code>rpm</code> command. For example, you could install the package by running the following command:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>rpm -ivh ~/rpmbuild/RPMS/x86_64/asd-1.0-1.x86_64.rpm
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>If you need to add a custom Bash command during the installation of an RPM package, you can include it in the <code>%post</code> section of your RPM spec file. This section is executed after the package has been installed on the system.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To add a custom Bash command, you would add the command(s) to the <code>%post</code> section of your RPM spec file, like so:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>%post
+echo "Running custom Bash command"
+my_command
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the Bash command <code>my_command</code> is being run after the package is installed.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>You can include any valid Bash commands in the <code>%post</code> section, as long as they do not depend on other packages that have not been installed yet.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Once you have added your custom Bash command to the <code>%post</code> section, you can rebuild the RPM package using the <code>rpmbuild</code> command and install the new package on your system. When the package is installed, the <code>%post</code> section will be executed, including your custom Bash command.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In an RPM spec file, the <code>%install</code> section is responsible for copying files into the final installation location, and it is executed during the installation process of the RPM package.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The <code>%post</code> section, on the other hand, is executed after the RPM package has been installed on the system. It is typically used to perform additional tasks or configuration that are required after the installation has completed, such as setting environment variables, creating directories, starting services, or running custom Bash commands.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>So, the <code>%post</code> section should come after the <code>%install</code> section in the RPM spec file. Here is an example of a spec file that includes both sections:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>Name: mypackage
+Version: 1.0
+Release: 1
+Summary: My package summary
+
+%description
+This is my package description.
+
+%prep
+%setup -q
+
+%build
+# Build commands go here
+
+%install
+# Installation commands go here
+
+%post
+# Post-installation commands go here
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the <code>%install</code> section includes commands that copy files to their final locations on the system. The <code>%post</code> section includes additional Bash commands that are executed after the installation has completed.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><!-- /wp:paragraph --></p>

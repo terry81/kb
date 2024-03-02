@@ -1,0 +1,64 @@
+---
+layout: post
+title: How to Remove Elements from Collections using the removeIf() Method
+date: 2023-03-26 16:27:29.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta: {}
+permalink: "/how-to-remove-elements-from-collections-using-the-removeif-method/"
+---
+<p><!-- wp:paragraph --></p>
+<p>The <code>removeIf()</code> method is a default method introduced in Java 8 for the <code>Collection</code> interface. It is used to remove all elements from the collection that satisfy a given condition.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The <code>removeIf()</code> method takes a <code>Predicate</code> as its argument, which is a functional interface that takes an element of the collection as its input and returns a boolean value indicating whether the element should be removed from the collection. If the <code>Predicate</code> returns <code>true</code> for an element, that element is removed from the collection.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example of how to use the <code>removeIf()</code> method to remove all even numbers from a list:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>List&lt;Integer> numbers = new ArrayList&lt;>();
+numbers.add(1);
+numbers.add(2);
+numbers.add(3);
+numbers.add(4);
+numbers.add(5);
+
+numbers.removeIf(n -> n % 2 == 0); // removes all even numbers
+
+System.out.println(numbers); // prints [1, 3, 5]
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the <code>removeIf()</code> method is used to remove all even numbers from the <code>numbers</code> list. The <code>Predicate</code> used is a lambda expression that checks whether the element is even by checking if it's divisible by 2 with no remainder.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Note that the <code>removeIf()</code> method modifies the original collection and returns a boolean value indicating whether any elements were removed.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's another example of how to use the <code>removeIf()</code> method with a custom <code>Predicate</code> to remove all elements from a list that contain a specific substring:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted">javaCopy code<code>List&lt;String&gt; strings = new ArrayList&lt;&gt;();
+strings.add("hello");
+strings.add("world");
+strings.add("goodbye");
+strings.add("moon");
+
+strings.removeIf(s -&gt; s.contains("oo"));
+
+System.out.println(strings); // prints [hello, goodbye]
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the <code>removeIf()</code> method is used to remove all elements from the <code>strings</code> list that contain the substring "oo". The <code>Predicate</code> used is a lambda expression that checks whether the element contains the substring by calling the <code>contains()</code> method of the <code>String</code> class.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>You can create your own <code>Predicate</code> by defining a class that implements the <code>Predicate</code> interface, or by using a lambda expression as shown in this example. By using a custom <code>Predicate</code>, you can define any condition that you want to use to filter the elements in the collection.</p>
+<p><!-- /wp:paragraph --></p>

@@ -1,0 +1,112 @@
+---
+layout: post
+title: AppArmor Php-Fpm Configuration with ChangeHat
+date: 2018-03-26 18:19:47.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+- Security
+tags: []
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613243716;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:138;}i:1;a:1:{s:2:"id";i:72;}i:2;a:1:{s:2:"id";i:69;}i:3;a:1:{s:2:"id";i:14;}i:4;a:1:{s:2:"id";i:135;}i:5;a:1:{s:2:"id";i:226;}}}}
+  _wpas_done_all: '1'
+permalink: "/apparmor-php-fpm-configuration-with-changehat/"
+---
+<p>AppArmor is the default Mandatory Access Control module on Ubuntu, SuSE and other Linux distributions. Thanks to it, you can limit the filesystem access of a  process. There are already some good howtos for getting a basic setup of Apparmor for Php-fpm. Though, in cases such as that of <a href="http://knowledgebasement.com/how-to-run-sites-securely-with-apache-and-php-fpm-on-ubuntu-16-04-lts/">running multiple sites securely with Php-fpm</a>, you will need more than a simple configuration.</p>
+<p>When you configure each of your sites to run in a different Php-fpm pool (as described in the link above) with its corresponding system user, naturally you will wish for each site to have a separate Apparmor profile also. This will allow you to accomplish much more than the simple user permissions in Linux give and also provide an additional layer of security.</p>
+<p>The challenge to accomplish the latter comes from the fact that Apparmor cannot differentiate the different Php-fpm pools because they all appear to be run by the binary with system path /usr/sbin/php-fpm7.0. If you didn't know, that's how Apparmor works - you define a profile based on the full system path of a process such as /usr/sbin/php-fpm7.0 in the case of Php-fpm.</p>
+<p>Luckily, there is an advanced Apparor functionality called ChangeHat. It allows you to further fine tune a process based on a so called hat. Not surprisingly, the sophisticated software Php-fpm is, it also supports ChangeHat for Apparmor. Thus, you can define a separate subprofile or ChangeHat for each Php-fpm pool<br />
+ with its own specific Apparmor settings.</p>
+<p><strong>Step one:</strong> Specify the Apparmor hat for the Php-fpm pool. Open the pool config file (e.g. /etc/php/7.0/fpm/pool.d/sitea.conf) and add an unique apparmor_hat value like this:</p>
+<pre><code>; pool name
+[sitea]
+...
+apparmor_hat = sitea
+...
+</code></pre>
+<p>In the above example, we are setting the Apparmor hat to 'sitea'. Restart Php-fpm for this change to take effect.</p>
+<p><strong>Step two:</strong> Create the Apparmor profile with the ChangeHat settings.</p>
+<p>You can begin with a simple, rather generic AppArmor profile. You should set the new profile to complain only mode, i.e. only logging without blocking actions so that you can better understand what your Php scripts are trying to access throughout your filesystem. Unless your site is already compromised, this could be used as the basis of the profile.</p>
+<p>Start by creating a file called /etc/apparmor.d/usr.sbin.php-fpm7.0 which contains:</p>
+<pre><code>#include &lt;tunables/global&gt;
+
+/usr/sbin/php-fpm7.0 flags=(complain) {
+#include &lt;abstractions/base&gt;
+#include &lt;abstractions/php5&gt;
+
+capability setgid,
+
+/etc/php/7.0/** r,
+/run/php/** rw,
+/tmp/** rw,
+/usr/sbin/php-fpm7.0 mr,
+/var/lib/php/sessionss/** rw,
+/var/www/html/** rw,
+
+^sitea flags=(complain) {
+#include &lt;abstractions/base&gt;
+capability setgid,
+
+deny /bin/dash r, #deny access to dash
+deny /var/www/html/sensitivesite/* rw, #deny access to a sensitive site
+
+/dev/null a,
+/etc/ld.so.cache r,
+/lib/x86_64-linux-gnu/ld-*.so r,
+/lib/x86_64-linux-gnu/libc-*.so r,
+/run/mysqld/mysqld.sock rw,
+/run/php/php7.0-fpm-sitea.sock rw,
+/tmp/** rwk,
+/usr/share/zoneinfo/** r,
+/var/www/html/sitea/** rw, #allow access to the sitea's own directory
+
+}
+}
+</code></pre>
+<p>Here are a few important points to note in the above configuration:</p>
+<ol>
+<li>The above configuration starts with a generic Php-fpm profile for all Php-fpm pools and contains one additional ChangeHat profile for sitea.
+        </li>
+<li>Both the generic profile for Php-fpm and that for sitea are set to complain mode (flags=(complain)).</li>
+<li>The ChangeHat configuration for sitea starts with ^sitea.</li>
+<li>We are denying access to /var/www/html/sensitivesite/ (presumably the web root of a site with sensitive information) to sitea.</li>
+</ol>
+<p>For the above setting to take effect you will have to reload Apparmor (systemctl reload apparmor.service).</p>
+<p>After reloading Apparmor and ensuring that you have changed the above settings to your own site's paths and names, you can check that the respective profiles and ChangeHats have been loaded by using the command aa_status. You should see a similar output:</p>
+<pre><code>apparmor module is loaded.
+...
+8 processes are in complain mode.
+...   
+/usr/sbin/php-fpm7.0 (129448) 
+/usr/sbin/php-fpm7.0//sitea (129455) 
+</code></pre>
+<p>Wait for some time for the new Apparmor to gather enough information about the normal behaviour of your site. After that use the command aa-logprof to see what changes are suggested based on the gathered logs in /var/log/syslog and approve the ones you think are safe. Example:</p>
+<pre><code>Reading log entries from /var/log/syslog.
+Updating AppArmor profiles in /etc/apparmor.d.
+Complain-mode changes:
+
+Profile:  /usr/sbin/php-fpm7.0^sitea
+Path:     /usr/share/zoneinfo/Zulu
+Mode:     r
+Severity: 2
+
+  1 - #include &lt;abstractions/base&gt; 
+  2 - #include &lt;abstractions/gnome&gt; 
+  3 - #include &lt;abstractions/kde&gt; 
+  4 - #include &lt;abstractions/ubuntu-browsers.d/chromium-browser&gt; 
+  5 - #include &lt;abstractions/ubuntu-browsers.d/kde&gt; 
+  6 - #include &lt;abstractions/ubuntu-browsers.d/mailto&gt; 
+  7 - #include &lt;abstractions/ubuntu-gnome-terminal&gt; 
+  8 - #include &lt;abstractions/ubuntu-konsole&gt; 
+  9 - #include &lt;abstractions/ubuntu-unity7-base&gt; 
+  10 - /usr/share/zoneinfo/Zulu 
+ [11 - /usr/share/zoneinfo/**]
+[(A)llow] / (D)eny / (I)gnore / (G)lob / Glob with (E)xtension / (N)ew / Abo(r)t / (F)inish / (M)ore
+</code></pre>
+<p>As you can see, the above changes are for the Php-fpm profile with ChageHat /usr/sbin/php-fpm7.0^sitea. Similarly you can fine tune the Apparmor settings for each of your sites creating a new, unique ChangeHat.</p>

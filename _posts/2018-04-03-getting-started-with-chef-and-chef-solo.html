@@ -1,0 +1,76 @@
+---
+layout: post
+title: Getting Started with Chef and Chef-solo
+date: 2018-04-03 07:22:27.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+tags: []
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '1'
+  _oembed_df6bbf04996a2cc7cae0f47d2e18f093: "{{unknown}}"
+  _wpas_done_all: '1'
+  _jetpack_related_posts_cache: a:2:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613243578;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:14;}i:1;a:1:{s:2:"id";i:43;}i:2;a:1:{s:2:"id";i:180;}i:3;a:1:{s:2:"id";i:317;}i:4;a:1:{s:2:"id";i:72;}i:5;a:1:{s:2:"id";i:138;}}}s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613259354;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:14;}i:1;a:1:{s:2:"id";i:43;}i:2;a:1:{s:2:"id";i:180;}}}}
+permalink: "/getting-started-with-chef-and-chef-solo/"
+---
+<p>Chef (the systems integration framework) provides a standalone tool called chef-solo. With chef-solo you can run locally chef recipes without the need for a centralised server (Chef master). This is great for getting started with chef, testing recipes or when you just don't want a centralised Chef master.</p>
+<p>In this article we'll go through a sample chef-solo use case.</p>
+<h2>Installing chef-solo</h2>
+<p>First, you need chef-solo which is part of the standard chef client package. For simplicity, let's assume we are using Ubuntu / Debian where you can you can install the chef package with the apt-get like this:</p>
+<pre><code>sudo-apt-get install chef
+</code></pre>
+<p>For other operating systems and distributions (such as SuSE), chef is not available in the default repos. Because of that, you will have to download and install chef client from the official download page. Note that there are also installation packages for Chef server and Chef DK which have more than just the chef client.</p>
+<h2>Creating a test recipe</h2>
+<p>Even though chef-solo is simple and straightforward, it still requires to a minimal configuration. It needs to know:</p>
+<p>The filesystem path to the cookbooks<br />
+The contents of a recipe<br />
+First, the cookbook path should be specified in a configuration file, for example solo.rb. Let's assume we are working in a directory called /home/myuser/chef. Then, the configuration file should be called /home/myuser/chef/solo.rb and it should contain:</p>
+<pre><code>cookbook_path '/home/myuser/chef/cookbooks'
+</code></pre>
+<p>Second, let's assume we want to start with a recipe called 'test'. It should be placed inside our cookbooks having the path '/home/myuser/chef/cookbooks/test/'. The simplest possible recipe would be having one file and printing 'Hello, Chef'. To accomplish this, create a file called '/home/myuser/chef/cookbooks/test/recipes/default.rb' and place inside of it the following Ruby code:</p>
+<pre><code>puts "Hello, Chef"
+</code></pre>
+<h2>Running the test recipe</h2>
+<p>To run the test recipe, go inside the '/home/myuser/chef/' directory and execute chef-solo specifying the path to the config file and the name of the test recipe like with these arguments:</p>
+<pre><code>chef-solo -c /home/myuser/chef/solo.rb -o 'recipe[test]'
+</code></pre>
+<p>Note: You can run the above recipe with a regular user because in our case we are just printing text. If you want to make system changes, you will have to run chef-solo with sudo / root privileges.</p>
+<p>If you have followed the instructions correctly, you should see something similar to:</p>
+<pre><code>Starting Chef Client, version 13.8.5
+
+[2018-04-03T10:14:14+03:00] WARN: Run List override has been provided.
+
+[2018-04-03T10:14:14+03:00] WARN: Original Run List: []
+
+[2018-04-03T10:14:14+03:00] WARN: Overridden Run List: [recipe[test]]
+
+resolving cookbooks for run list: ["test"]
+
+Synchronizing Cookbooks:
+
+- test (0.0.0)
+
+Installing Cookbook Gems:
+
+Compiling Cookbooks...
+
+Hello, Chef ### Our text is shown here. ###
+
+Converging 0 resources
+
+[2018-04-03T10:14:14+03:00] WARN: Skipping final node save because override_runlist was given
+
+Running handlers:
+
+Running handlers complete
+
+Chef Client finished, 0/0 resources updated in 05 seconds
+</code></pre>
+<p>As you could see, the above printed 'Hello, Chef' completing the recipe successfully.</p>
+<h2>Conclusion</h2>
+<p>This is how simple it is to get started with Chef with the help of chef-solo. With no configuration at all you can start writing and testing your Chef recipes.</p>

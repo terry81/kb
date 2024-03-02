@@ -1,0 +1,83 @@
+---
+layout: post
+title: What is a Provider in Java
+date: 2023-05-12 05:02:52.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- provider
+meta: {}
+permalink: "/what-is-a-provider-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>In Java, a Provider is a class or interface that provides a way to obtain or create instances of a specific type or service. It is a concept that is often used in the context of dependency injection frameworks or service-oriented architectures.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Unlike a <a href="https://knowledgebasement.com/what-is-a-supplier-in-java/" data-type="URL" data-id="https://knowledgebasement.com/what-is-a-supplier-in-java/">Supplier</a>, which is a functional interface that provides a single method to generate a value, a Provider is a more general concept that can provide additional functionality such as configuration and lifecycle management.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Java provides a few built-in providers, such as "java.util.ServiceLoader" which provides a way to locate and load implementations of a service interface defined in a module or JAR file. Additionally, third-party libraries and frameworks can provide their own providers for specific types or services.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here is an example of a Provider interface in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public interface Provider&lt;T> {
+    T get();
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This interface is similar to the Supplier interface, but can provide additional functionality such as configuration and lifecycle management.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example of how you might use a Provider in Java to create instances of a specific type:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>import javax.inject.Provider;
+
+public class Example {
+    private Provider&lt;MyObject> objectProvider;
+
+    public Example(Provider&lt;MyObject> objectProvider) {
+        this.objectProvider = objectProvider;
+    }
+
+    public void doSomething() {
+        MyObject object = objectProvider.get();
+        // use the object instance...
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the "Example" class depends on an instance of "MyObject", but instead of creating the instance directly, it accepts a "Provider&lt;MyObject>" as a constructor parameter. The "doSomething()" method then calls the "get()" method on the "objectProvider" to obtain an instance of "MyObject". By using a Provider instead of directly creating the instance, the Example class can delegate the responsibility of creating and managing the object to the Provider, which can provide additional functionality such as configuration and lifecycle management.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In Java, a Provider can be useful in a number of situations where you need to obtain or create instances of a specific type or service. Here are a few scenarios where you might want to use a Provider:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Dependency injection: Dependency injection frameworks such as Spring or Guice use Providers to inject dependencies into objects at runtime. Providers can be used to provide a flexible and configurable way to create and manage instances of objects that are needed by other components.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Lazy initialization: Providers can be used to lazily initialize objects or services on demand, only when they are actually needed. This can improve performance by avoiding the upfront cost of initializing all dependencies, especially in cases where some dependencies may not be needed during the lifetime of the application.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Dynamic service discovery: Providers can be used to dynamically discover and load services or implementations at runtime. This can be useful in modular or extensible architectures where new services or implementations may be added or removed dynamically.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Configurable factory: Providers can be used to create a configurable factory that generates instances of a specific type or service. By exposing configuration options as constructor or factory method parameters, a Provider can be used to create instances of objects with specific configurations.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Testing: Providers can be useful in testing scenarios where you need to create mock or test implementations of objects or services. By using a Provider to obtain instances of objects, you can easily swap out the real implementation for a mock or test implementation during testing.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Overall, Providers can be a powerful tool for managing and configuring objects and services in a flexible and dynamic way. By decoupling the creation and management of objects from their use, Providers can make code more modular, testable, and configurable.</p>
+<p><!-- /wp:paragraph --></p>

@@ -1,0 +1,75 @@
+---
+layout: post
+title: Period, Duration and Instant in Java
+date: 2021-01-24 07:56:55.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- Duration
+- Instant
+- LocalDate
+- LocalDateTime
+- Period
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:2:{s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613226483;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:328;}i:1;a:1:{s:2:"id";i:273;}i:2;a:1:{s:2:"id";i:190;}}}s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231661;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:328;}i:1;a:1:{s:2:"id";i:273;}i:2;a:1:{s:2:"id";i:190;}i:3;a:1:{s:2:"id";i:299;}i:4;a:1:{s:2:"id";i:262;}i:5;a:1:{s:2:"id";i:84;}}}}
+  _last_editor_used_jetpack: block-editor
+  _wpas_done_all: '1'
+permalink: "/period-duration-and-instant-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Period, Duration and Instant are three different classes introduced since Java 8 to help us deal better with time. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Period measures the time with days granularity. In other words, there are no hours, minutes, nor seconds. Example:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Period threeDaysPeriod = Period.ofDays(3);
+System.out.println(threeDaysPeriod.getDays()); // prints 3</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>There are also methods ofDays, ofMonths and so on. It's noteworthy to mention that you cannot convert automatically a period of 365 days to 12 months:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Period threeDaysPeriod = Period.ofDays(365);
+System.out.println(threeDaysPeriod.getMonths()); // prints 0</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Duration is similar to Period but with mcuh finer granularity of up to nanoseconds. Example:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Duration oneDay = Duration.ofDays(1);
+System.out.println(oneDay.getSeconds()); // prints 86400</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Note: you cannot mix Period and Duration so the following is not allowed:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Period oneDay = Period.ofDays(1);
+Duration twentyFourHours = Duration.ofDays(1);
+twentyFourHours.compareTo(oneDay); //Cannot compile</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Instant is for marking the current moment with granularity of up to nanoseconds. It is useful for various tasks such as measuring performance, e.g.:</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>Instant beginning = Instant.now();
+Thread.sleep(1000); // wait one second
+Instant end = Instant.now();
+Duration duration = Duration.between(beginning, end);
+System.out.printf("It took %d second(s).", duration.getSeconds()); // prints It took 1 second(s).</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>The above three classes make your life easier and the code cleaner. </p>
+<p><!-- /wp:paragraph --></p>

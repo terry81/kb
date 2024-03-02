@@ -1,0 +1,79 @@
+---
+layout: post
+title: How to Skip A Finally Statement in Java
+date: 2023-02-12 04:57:57.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- try catch finally
+meta:
+  _edit_last: '1'
+permalink: "/how-to-skip-a-finally-statement-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>A common interview question for Java developers is to write some code inside a <code>try / catch / finally</code> statement so that the finally statement is not reached. At first glance, this is not possible.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>A <code>finally</code> statement in Java is used in conjunction with a <code>try</code>/<code>catch</code> statement. The <code>finally</code> statement contains a block of code that is guaranteed to be executed, regardless of whether an exception is thrown or caught in the <code>try</code> block.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The <code>finally</code> statement is typically used to perform clean-up operations, such as releasing resources that were acquired in the <code>try</code> block, or logging any relevant information about the state of the program when an exception occurs.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here is a simple example of a <code>try</code>/<code>catch</code>/<code>finally</code> statement in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>try {
+  // code that may throw an exception
+} catch (Exception e) {
+  // code to handle the exception
+} finally {
+  // code that will always be executed, regardless of whether an exception is thrown
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the code in the <code>try</code> block may throw an exception. If an exception is thrown, it will be caught by the <code>catch</code> block and handled appropriately. Regardless of whether an exception is thrown or caught, the code in the <code>finally</code> block will always be executed.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>It's important to note that if the <code>finally</code> block itself throws an exception, this exception will overwrite the exception that was thrown in the <code>try</code> block, making it more difficult to determine the root cause of the problem.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>However, here is one way to avoid going through the finally statement:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>try {
+	System.exit(1);
+} catch (Exception e) {
+	System.out.println("Nothing is caught here.");
+} finally {
+	System.out.println("Finally block is never executed.");
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>This code creates a simple Java program that demonstrates how a <code>finally</code> block is not executed if the program exits using <code>System.exit(1)</code> before the <code>finally</code> block is reached.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's what happens when the code is executed:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>The <code>main</code> method is called, starting the program.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>The <code>try</code> block contains a single line of code, <code>System.exit(1)</code>, which immediately terminates the Java Virtual Machine (JVM) and the program.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Since the <code>System.exit(1)</code> call causes the JVM to exit, the rest of the <code>try</code>/<code>catch</code>/<code>finally</code> block is not executed, including the <code>finally</code> block.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>As a result, the output of the program is nothing, as the message "Finally block is never executed." is never printed.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>It's worth noting that when <code>System.exit(1)</code> is called, it terminates the entire JVM, including all threads and all other non-daemon threads. This means that no other code can be executed after <code>System.exit(1)</code>, including any code in a <code>finally</code> block.</p>
+<p><!-- /wp:paragraph --></p>

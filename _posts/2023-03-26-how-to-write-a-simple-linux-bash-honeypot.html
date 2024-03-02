@@ -1,0 +1,57 @@
+---
+layout: post
+title: How to Write a Simple Linux Bash Honeypot
+date: 2023-03-26 17:26:30.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+- Security
+tags: []
+meta: {}
+permalink: "/how-to-write-a-simple-linux-bash-honeypot/"
+---
+<p><!-- wp:paragraph --></p>
+<p>The first step in a malicious hacker attack is scanning. This means that an attacker will scan its target for open ports and vulnerabilities. So, the best approach is to block an attacker who tries to do such a scan in the very beginning. Here is a fast and easy way how to do this.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Pick up a port which is not used on your system. For example, TCP 8080. This port is usually used by default application servers and attackers are more than glad to find it open. If you already use port 8080, pick up a different one.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>So, once you decide to use port 8080 for your honeypot, write the following Bash script:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>#!/bin/bash
+
+# Start listening on port 8080
+nc -lk 8080 | while read ip; do
+    # Block the IP using iptables
+    iptables -A INPUT -s $ip -j DROP
+done</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted">This script uses the <code>nc</code> command to listen on port 8080 and read incoming connections. When a connection is made, the script reads the IP address of the connecting client and blocks it using the <code>iptables</code> command. The <code>iptables</code> command adds a rule to the firewall's input chain that drops all packets from the specified IP address.</pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>To run this script as root, you can use the <code>sudo</code> command:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>sudo ./script.sh
+</code>
+Again, please exercise caution when running scripts with root privileges, as they can have unintended consequences.</pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>To run this script in the background, you can use the following command:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>nohup ./script.sh &amp;
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>This will start the script in the background and redirect its output to <code>nohup.out</code>. You can close the terminal and the script will continue to run in the background.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><!-- /wp:paragraph --></p>

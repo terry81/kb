@@ -1,0 +1,125 @@
+---
+layout: post
+title: How To Launch a MEAN Site on Ubuntu 16.04 Server
+date: 2016-09-20 08:33:21.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+- Web
+tags:
+- mean
+- mongodb
+- node.js
+- security
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613268818;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:69;}i:1;a:1:{s:2:"id";i:30;}i:2;a:1:{s:2:"id";i:8;}}}}
+  _wpas_done_all: '1'
+  _jetpack_dont_email_post_to_subs: '1'
+  _wp_old_slug: how-to-launch-a-site-on-ubuntu-16-04-server
+permalink: "/how-to-launch-a-mean-site-on-ubuntu-16-04-server/"
+---
+<h3>Introduction</h3>
+<p>Getting a site running on a MEAN (MongoDB, Node.js, Express, and AngularJS) server can be a challenge for beginners. In this article we'll guide you through all the steps necessary for setting your MEAN site properly.</p>
+<p>This article is written for the latest Ubuntu 16.04 but the steps are similar for other Linux distributions too. Once you grasp the main concept, you should be able to set a MEAN site on another Ubuntu version or even a different Linux distribution.</p>
+<h2>Prerequisites</h2>
+<p>Before following this tutorial, you will need an Ubuntu 16.04 (x64) server with at least 1 GB of RAM because MEAN can be quite resource demanding at times. It's recommended also to have some (more than 2GB) swap enabled in case you doubt your RAM will be sufficient.</p>
+<p>Except otherwise noted, all of the commands that require root privileges in this tutorial should be run as a non-root user with sudo privileges. Check this article about more info on <a href="http://knowledgebasement.com/how-to-create-sudo-user-on-ubuntu/">sudo users in Ubuntu</a>.</p>
+<h3>Step One - Installing MongoDB</h3>
+<p>For installing all the necessary software in this article, including MongoDB, we'll use the official Ubuntu repository. This is preferable because it ensures easy setup, maintenance and compatibility of well-tested software. The only drawback is that the available versions may not always be the latest ones.</p>
+<p>Before installing the MEAN stack there are some prerequisites which we have to install first. Let's start with MongoDB which is the database used in MEAN. To install it run the <em>apt-get</em> command like this:</p>
+<pre><code>sudo apt-get install mongodb
+</code></pre>
+<p>The above command will give you a fresh MongoDB installation with no data in it.</p>
+<h3>Step Two - Installing NodeJS and the required packages for MEAN</h3>
+<p>Now, let's install the next component of the MEAN stack - NodeJS and its package manager - <em>npm</em>. We'll do it with the command:</p>
+<pre><code>sudo apt-get install nodejs npm
+</code></pre>
+<p>The latter command will also install any additional requirements and dependencies that are needed for NodeJS. There is one small compatibility issue because some applications, such as <em>npm</em> have the <em>nodejs</em> binary hardcoded as <em>/usr/bin/node</em>, while it's actually in <em>/usr/bin/nodejs</em>. To resolve this, the easiest way is to create a symbolic link like this:</p>
+<pre><code>sudo ln -s /usr/bin/nodejs /usr/bin/node
+</code></pre>
+<p>Once we have the <em>npm</em> tool we should install the additional packages <em>gulp</em> (build tool) and <em>bower</em> (frontend packages manager). We'll use the <em>npm</em> command like this:</p>
+<pre><code>sudo npm install -g gulp bower 
+</code></pre>
+<p>The <em>npm</em> tool will install the above packages globally and they will be available in the directory <em>/usr/local/lib/node_modules/</em>. To confirm their proper installation, go to this directory with the command:</p>
+<pre><code>cd /usr/local/lib/node_modules/
+</code></pre>
+<p>Then run the <em>npm</em> command with the <em>list</em> argument in order to get the available packages and their versions:</p>
+<pre><code>npm list
+</code></pre>
+<p>In a three view, you'll get a list of all the installed packages and their sub-packages like this:</p>
+<pre><code>├── bower@1.7.9
+├─┬ gulp@3.9.1
+...
+</code></pre>
+<p>You should see in the above output <em>bower</em>, <em>gulp</em>, and their corresponding versions.</p>
+<p>Now you are ready to continue with installing MEAN.</p>
+<h3>Step Three - Installing MEAN's command line interface</h3>
+<p>The most essential part of MEAN is its command line interface. It allows you to manage applications, including to isntall them. To download and install this tool, we'll use again <em>npm</em> like this:</p>
+<pre><code>sudo npm install -g mean-cli
+</code></pre>
+<h3>Step Four - Creating a new MEAN application</h3>
+<p>For simplicity, we'll create a new example MEAN application in our home directory and call it <em>example</em>. To get the files for the default MEAN web application, we'll use MEAN's cli like this:</p>
+<pre><code>mean init example
+</code></pre>
+<p>This command will start an installation process, during which you will have to answer a couple of questions:</p>
+<ul>
+<li>What would you name your mean app? - there answer <em>example</em> or any other name of your choice.</li>
+<li>Do you want to set up an admin user? - leave the default no (n) answer if you are not certain.</li>
+</ul>
+<p>This command will create a new directory called <em>example</em> in your home directory. Right after that we can go inside the <em>example</em> directory to start our application with the command:</p>
+<pre><code>cd example
+gulp
+</code></pre>
+<p>You will see a long list of debug output. The most important message is:</p>
+<pre><code>...
+Standard linter results: ✔ All OK!
+...
+
+</code></pre>
+<p>So far so good. Your new MEAN application has started successfully and you can access it via a browser at your server IP on port 3000 (<em>http://server_ip:3000</em>).</p>
+<h3>Step Five - Installing nginx in front of MEAN</h3>
+<p>It is recommended to install Nginx in front of MEAN because it will help you protect better your website, on one hand. On the other hand, it will allow your visitors to access the web service at the standard http and https ports in contrast to the default MEAN 3000 port.</p>
+<p>To get started with nginx, first follow the article on <a href="https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04">how to install nginx on Ubuntu 16.04</a>.</p>
+<p>Once you have an nginx server up and running, you have to configure it to proxy the connections to the backend MEAN server. To do this, open the default server block with the command:</p>
+<pre><code>sudo nano /etc/nginx/sites-enabled/default
+</code></pre>
+<p>Then, go to the <em>location</em> stanza, delete everything and as a minimal configuration add only the line <em>proxy_pass http://localhost:3000;</em>. At the end location configuration should look like this</p>
+<pre><code>[label  /etc/nginx/sites-enabled/default]
+...
+        location / {
+                proxy_pass       http://localhost:3000;
+        }
+...
+</code></pre>
+<p>Save the file and restart nginx for the change to take  effect with the command:</p>
+<pre><code>sudo service nginx restart
+</code></pre>
+<p>Now you can open your MEAN site at the default http port with a browser at the URL <em>http://server_ip</em>, which is much better than before. For additional security, you can also install SSL following the article on <a href="https://letsencrypt.org/">installing Let's encrypt</a>.</p>
+<h3>Step Six - Starting MEAN automatically</h3>
+<p>Starting <em>gulp</em> manually from the console is very useful for debugging and development. Though, it has drawbacks when it comes to moving your site into production mode. For one, the MEAN service will stop once you close your terminal session.</p>
+<p>To ensure that your MEAN site is available even after closing the terminal, instead of <em>gulp</em> you can run:</p>
+<pre><code>nohup node server &amp;
+</code></pre>
+<p>This command will start the production-ready nodejs server to run your MEAN site. Just make sure that, similarly to when running <em>gulp</em>, you are inside your MEAN site directory.</p>
+<p>Probably, you would also like to have this script started automatically with the server. For the beginning you can just add the start command to the <em>/etc/rc.local</em> file and the MEAN service will be automatically started during boot time. First, though, you will have to make sure that <em>/etc/rc.local</em> is executed during the server startup. In Ubuntu 16.04 it requires to be additionally enabled with the command:</p>
+<pre><code>sudo systemctl enable rc-local.service
+</code></pre>
+<p>Then open the file <em>/etc/rc.local</em> for editing:</p>
+<pre><code>sudo nano /etc/rc.local
+</code></pre>
+<p>There add the start command before the <em>exit</em> line like this:</p>
+<pre><code>[label  /etc/rc.local]
+...
+sudo -H -u YOUR_USER bash -c 'cd /home/YOUR_USER/example/ &amp;&amp; nohup node server &amp;'
+exit 0
+</code></pre>
+<p>Please make sure to replace <em>YOUR_USER</em> with your user in the above command. What this command does is to switch to your user, then to change to your MEAN site directory, and lastly to start the application server.</p>
+<p>After completing the this step you don't have to worry about starting your MEAN server manually after reboots.</p>
+<h2>Conclusion</h2>
+<p>As we have seen in this article, launching a MEAN site takes quite a few steps and could be challenging. The default installation does not always work as expected but with the help of this article you should be able to overcome most obstacles, and get your MEAN site online running smoothly.</p>

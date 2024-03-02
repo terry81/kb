@@ -1,0 +1,131 @@
+---
+layout: post
+title: What is Docker Compose
+date: 2023-04-11 13:38:39.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+- Virtualization
+tags:
+- docker
+meta: {}
+permalink: "/what-is-docker-compose/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Docker Compose is a tool that allows you to define, configure, and run multi-container Docker applications using a YAML file. It provides an easy way to define the services, networks, and volumes for your Docker containers in a single configuration file, which can be version-controlled and shared across teams. Docker Compose is particularly useful for managing complex applications that require multiple containers to work together, such as microservices architectures or applications with multiple interconnected services.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>With Docker Compose, you can define your application's services, networks, and volumes in a single <code>docker-compose.yml</code> file, and then use the <code>docker-compose</code> command-line tool to start, stop, and manage the containers defined in the YAML file. Docker Compose allows you to specify container configurations, such as image names, container names, container ports, environment variables, volumes, and networks, in the YAML file, which provides a declarative way to define your application's infrastructure as code.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Docker Compose provides several key features:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Easy Application Deployment: Docker Compose allows you to define your application's services, networks, and volumes in a single <code>docker-compose.yml</code> file, making it easy to define, configure, and deploy multi-container applications with a single command.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Service Scaling: Docker Compose allows you to define and manage multiple instances of a service in your application, enabling easy scaling of services based on the needs of your application.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Service Dependencies: Docker Compose allows you to define dependencies between services, such as linking a database service with a web service, ensuring that containers are started and stopped in the correct order.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Container Configuration: Docker Compose allows you to specify various container configurations, such as image names, container names, container ports, environment variables, volumes, and networks, in the <code>docker-compose.yml</code> file, providing a declarative way to define your application's infrastructure as code.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Environment Variables: Docker Compose allows you to define environment variables for services in the <code>docker-compose.yml</code> file or in separate <code>.env</code> files, providing a convenient way to manage configuration values for your application.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Network Management: Docker Compose allows you to define custom networks for your containers, enabling easy communication between containers and isolating container traffic.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Configuration Management: Docker Compose provides a single configuration file that can be version-controlled, shared, and used across different environments, making it easy to manage configuration for different deployment environments (e.g., development, staging, production) in a consistent way.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Overall, Docker Compose simplifies the management of multi-container Docker applications by providing a declarative way to define, configure, and run complex container deployments. It is a powerful tool for managing containerized applications and enables easy deployment of multi-container applications with reproducibility and consistency.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example of a <code>docker-compose.yml</code> file that defines a simple multi-container application with two services: a web service running an Nginx web server, and a database service running a MySQL database.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>version: '3'
+services:
+  web:
+    image: nginx
+    ports:
+      - "80:80"
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysecretpassword
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the <code>docker-compose.yml</code> file defines two services: <code>web</code> and <code>db</code>. The <code>web</code> service uses the official Nginx Docker image and maps port 80 on the host system to port 80 on the container, allowing access to the Nginx web server. The <code>db</code> service uses the official MySQL Docker image and sets the <code>MYSQL_ROOT_PASSWORD</code> environment variable to specify the password for the MySQL root user.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>You can use the following commands with Docker Compose to manage the containers defined in the <code>docker-compose.yml</code> file:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul><!-- wp:list-item --></p>
+<li><code>docker-compose up</code>: Start the containers defined in the <code>docker-compose.yml</code> file.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li><code>docker-compose down</code>: Stop and remove the containers, networks, and volumes defined in the <code>docker-compose.yml</code> file.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li><code>docker-compose ps</code>: List the containers started by Docker Compose.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li><code>docker-compose logs</code>: View the logs of the containers started by Docker Compose.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li><code>docker-compose exec</code>: Execute a command inside a running container.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li><code>docker-compose scale</code>: Scale the number of instances of a service.</li>
+<p><!-- /wp:list-item --></ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Docker Compose provides an easy way to define and manage multi-container Docker applications, making it convenient for development, testing, and deployment of complex applications with multiple interconnected services.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Docker compose files can be also used to run custom scripts or set entry points. You can use the <code>command</code> or <code>entrypoint</code> key in the <code>docker-compose.yml</code> file to specify a custom script or command to be executed when the container starts.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted">code<code>version: '3'
+services:
+  my_app:
+    image: my_app_image
+    command: /app/start.sh
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the <code>my_app</code> service is defined with an image named <code>my_app_image</code>. The <code>command</code> key specifies the script <code>/app/start.sh</code> to be executed when the container starts. This script will be executed inside the container as the main command when the container is launched.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>You can also use the <code>entrypoint</code> key to specify a custom script to be executed as the entry point of the container, which will be appended to the image's default entry point. For example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted">code<code>version: '3'
+services:
+  my_app:
+    image: my_app_image
+    entrypoint: /app/entrypoint.sh
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, the <code>my_app</code> service uses the <code>my_app_image</code> image and specifies the <code>entrypoint</code> key as <code>/app/entrypoint.sh</code>. This custom script will be executed as the entry point of the container, followed by the default entry point defined in the image.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Using custom scripts in a Docker Compose file allows you to define custom logic or configuration for your containers, such as initializing databases, setting environment variables, or running setup scripts. It provides flexibility and customization options for your containerized applications.</p>
+<p><!-- /wp:paragraph --></p>

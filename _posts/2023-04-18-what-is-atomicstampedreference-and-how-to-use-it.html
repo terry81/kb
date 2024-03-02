@@ -1,0 +1,106 @@
+---
+layout: post
+title: What is AtomicStampedReference and How to Use It
+date: 2023-04-18 08:46:49.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- concurrency
+meta: {}
+permalink: "/what-is-atomicstampedreference-and-how-to-use-it/"
+---
+<p><!-- wp:paragraph --></p>
+<p><code>AtomicStampedReference</code> is a class in Java that provides atomic operations on a reference object along with a stamp or version number. It is typically used in concurrent programming scenarios where multiple threads may need to perform operations on a shared reference object, and there is a need to ensure atomicity and consistency of operations across threads.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The <code>AtomicStampedReference</code> class maintains a pair of values - a reference and an integer stamp. The reference represents the main value being stored, and the stamp represents a version number or timestamp associated with the reference. The stamp is typically used to track updates or modifications to the reference value.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The key feature of <code>AtomicStampedReference</code> is that it provides atomic operations that combine both the reference and the stamp, ensuring that they are updated atomically without interference from other threads. These operations include <code>compareAndSet</code>, <code>get</code>, and <code>set</code>, among others.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The <code>compareAndSet</code> method allows you to atomically compare the current reference and stamp values with expected values, and if they match, update them to new values. This makes it useful in scenarios where you want to implement optimistic concurrency control, where multiple threads can attempt to update a shared value concurrently, but only one of them will succeed.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The <code>get</code> method allows you to retrieve the current reference and stamp values atomically, without the possibility of them being modified by other threads during the retrieval.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The <code>set</code> method allows you to atomically set a new reference and stamp value, replacing the existing values in one operation.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><code>AtomicStampedReference</code> is typically used in scenarios where you need to implement fine-grained concurrency control for a shared reference object, such as in concurrent data structures or caches, where multiple threads may need to update the same object concurrently. It helps to avoid race conditions and maintain consistency across threads by providing atomic operations on both the reference and the stamp values.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example that demonstrates the use of <code>AtomicStampedReference</code> in Java:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>import java.util.concurrent.atomic.AtomicStampedReference;
+
+public class AtomicStampedReferenceExample {
+    static AtomicStampedReference&lt;Integer> atomicStampedRef = new AtomicStampedReference&lt;>(0, 0);
+
+    public static void main(String[] args) {
+        // Initial reference and stamp
+        int initialRef = atomicStampedRef.getReference();
+        int initialStamp = atomicStampedRef.getStamp();
+
+        System.out.println("Initial Reference: " + initialRef);
+        System.out.println("Initial Stamp: " + initialStamp);
+
+        // Spawn two threads to concurrently update the reference
+        Thread t1 = new Thread(() -> {
+            int expectedRef = atomicStampedRef.getReference();
+            int expectedStamp = atomicStampedRef.getStamp();
+            int newRef = expectedRef + 1;
+            int newStamp = expectedStamp + 1;
+
+            // Attempt to update the reference and stamp atomically
+            boolean success = atomicStampedRef.compareAndSet(expectedRef, newRef, expectedStamp, newStamp);
+            System.out.println("Thread 1 Update Result: " + success);
+        });
+
+        Thread t2 = new Thread(() -> {
+            int expectedRef = atomicStampedRef.getReference();
+            int expectedStamp = atomicStampedRef.getStamp();
+            int newRef = expectedRef + 1;
+            int newStamp = expectedStamp + 1;
+
+            // Attempt to update the reference and stamp atomically
+            boolean success = atomicStampedRef.compareAndSet(expectedRef, newRef, expectedStamp, newStamp);
+            System.out.println("Thread 2 Update Result: " + success);
+        });
+
+        t1.start();
+        t2.start();
+
+        try {
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // After concurrent updates
+        int updatedRef = atomicStampedRef.getReference();
+        int updatedStamp = atomicStampedRef.getStamp();
+
+        System.out.println("Updated Reference: " + updatedRef);
+        System.out.println("Updated Stamp: " + updatedStamp);
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we create an <code>AtomicStampedReference</code> with an initial reference of 0 and an initial stamp of 0. We then spawn two threads (<code>t1</code> and <code>t2</code>) that concurrently attempt to update the reference and the stamp using the <code>compareAndSet</code> method. Finally, we retrieve the updated reference and stamp values after the concurrent updates.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The <code>compareAndSet</code> method is used to atomically compare the current reference and stamp values with expected values, and if they match, update them to new values. This ensures that only one thread can successfully update the reference and stamp at a time, avoiding race conditions.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Note that the stamp value is used to keep track of updates, and it is incremented by 1 in each update to maintain consistency. The stamp value can be used for various purposes, such as detecting concurrent modifications or versioning of objects.</p>
+<p><!-- /wp:paragraph --></p>

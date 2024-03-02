@@ -1,0 +1,63 @@
+---
+layout: post
+title: How to make Eclipse run with a custom JDK on Mac
+date: 2021-02-24 08:34:47.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta:
+  _oembed_de867faf393e9691d2044909e33698f3: "{{unknown}}"
+permalink: "/how-to-make-eclipse-run-with-a-custom-jdk-on-mac/"
+---
+<p><!-- wp:paragraph --></p>
+<p>You might want to have more than one JDK on your Mac and run different programs with different JDK versions as it is with me.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The easiest and safest way I've found is as follows.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>First, download the JDK archive (not the DMG installation file) from Oracle, for example version 11:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><a href="https://www.oracle.com/java/technologies/javase-jdk11-downloads.html">https://www.oracle.com/java/technologies/javase-jdk11-downloads.html</a></p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Note: you'll need an Oracle account to do that.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Look for the file "macOS Compressed Archive".</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Once downloaded, extract this file to a directory that you won't wipe off easily. I've chosen a directory "tools" in my home directory. You'll end up with a java binary such as:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>/Users/toli/tools/jdk-11.0.10.jdk/Contents/Home/bin/java -version
+java version "11.0.10" 2021-01-19 LTS
+Java(TM) SE Runtime Environment 18.9 (build 11.0.10+8-LTS-162)
+Java HotSpot(TM) 64-Bit Server VM 18.9 (build 11.0.10+8-LTS-162, mixed mode)</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p> Then open Applications/Eclipse.app/Contents/Info.plist and look for:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>  &lt;!-- to use a specific Java version (instead of the platform's default) uncomment one of the following options,
+                                    or add a VM found via $/usr/libexec/java_home -V
+                            &lt;string&gt;-vm&lt;/string&gt;&lt;string&gt;/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Commands/java&lt;/string&gt;
+                            &lt;string&gt;-vm&lt;/string&gt;&lt;string&gt;/Library/Java/JavaVirtualMachines/1.8.0.jdk/Contents/Home/bin/java&lt;/string&gt;
+                    --&gt;
+  &lt;string&gt;-vm&lt;/string&gt;&lt;string&gt;/Users/toli/tools/jdk-11.0.10.jdk/Contents/Home/bin/java&lt;/string&gt;</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Note that after the end of the commented out area I've added:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code> &lt;string&gt;-vm&lt;/string&gt;&lt;string&gt;/Users/toli/tools/jdk-11.0.10.jdk/Contents/Home/bin/java&lt;/string&gt;</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>That's all. Now you can easily change the Java version for your eclipse, maven or any other command easily on Mac without worrying that you can break irreversible something.</p>
+<p><!-- /wp:paragraph --></p>

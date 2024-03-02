@@ -1,0 +1,29 @@
+---
+layout: post
+title: How To Create SSH Tunnel With Putty
+date: 2017-07-02 13:53:35.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories: []
+tags: []
+meta:
+  _wpcom_is_markdown: '1'
+  _edit_last: '1'
+  _wpas_done_all: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613259369;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:69;}i:1;a:1:{s:2:"id";i:18;}i:2;a:1:{s:2:"id";i:65;}}}}
+permalink: "/how-to-create-ssh-tunnel-with-putty/"
+---
+<p>SSH tunneling is very useful when the network access to a remote network is restricted. Thus, to gain remote network access you can use a tunnel to a remote host which would act as an intermediary.</p>
+<p>Here's an example. Imagine, there's a remote host which runs a Tomcat app servlet on TCP port 8080. The only connectivity you have to this remote host is SSH, i.e. TCP 22. At the same time you wish to test the Tomcat and you need to connect to TCP 8080. This can be easily done with SSH tunneling.</p>
+<p>You should know that SSH tunneling does not depend on the local OS and in this example I'll use it with Windows and Putty.</p>
+<p>First, make sure tunneling is allowed on the remote server in the SSH daemon configuration. The setting is called PermitTunnel and by default, in most configurations such as in CentOS, tunneling is allowed.</p>
+<p>Once you make sure tunneling is not forbidden, you can configure Putty by going to Tunnels tab in Putty's configuration as seen below.</p>
+<p><img class="alignnone size-full wp-image-63" src="{{ site.baseurl }}/assets/2017/07/ssh_tunnel.png" alt="" width="458" height="438" /></p>
+<p>In the above example, the tunnel will be from the local TCP port 8080 to the remote TCP 8080 on localhost. If you need to connect to a different server through the remote host, you can specify it in place of localhost.</p>
+<p>Don't forget to click on the Add button before establishing the connection. Otherwise, the setting will be lost.</p>
+<p>Now you are ready to test your connection. Just open http://localhost:8080 in your local browser and you will be connected to the remote server on TCP port 8080 via the SSH tunnel.</p>
+<p>With a Linux local box you can use simimlarly tunneling. In the ssh console command simply specify ssh -L 8080:localhost:8080 when connecting to the remote host. This will have the same effect as in the Putty.</p>
+<p>Using tunneling is good for security because the connection is encrypted and you don't have to expose services to the outside. Thus it can replace the need for a VPN in a way.</p>

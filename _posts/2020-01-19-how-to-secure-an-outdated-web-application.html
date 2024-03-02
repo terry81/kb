@@ -1,0 +1,116 @@
+---
+layout: post
+title: How to Secure an Outdated Web Application in 5 Minutes
+date: 2020-01-19 19:42:01.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Security
+tags:
+- CloudFlare
+- Joomla
+- Outdated
+- Web Application Firewall
+- Web Security
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:1:{s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231855;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:217;}i:1;a:1:{s:2:"id";i:52;}i:2;a:1:{s:2:"id";i:65;}i:3;a:1:{s:2:"id";i:69;}i:4;a:1:{s:2:"id";i:158;}i:5;a:1:{s:2:"id";i:14;}}}}
+  _wpas_done_all: '1'
+  _last_editor_used_jetpack: block-editor
+permalink: "/how-to-secure-an-outdated-web-application/"
+---
+<p><!-- wp:paragraph --></p>
+<p>I've had the following challenge yesterday. A friend of mine had an old Joomla 2.5 with a bunch of customization - additional components installed, custom theme, etc. It was hosted somewhere and had to be transferred away for some reasons. But before being transferred to a hosting which I am responsible for, it had to be secured. The last thing I want is to have my account suspended.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>I haven't dealt with Joomla for the last 5-6 years, nor with PHP as a matter of fact. So I am very far from an expert in Joomla and I don't intend to become one (not again). </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>A fast check showed that Joomla 2.5 is quite old in fact. There were instructions for a straight forward upgrade to a newer version but as one might imagine, these instructions wouldn't work because of all the customizations.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>It happened so that my friend needed the site but not enough to hire a developer to update it and secure it. So he wanted me to find a fast and easy solution.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Now, this will sound like one of those paid articles in which someone finds by accident a great product, etc. I wish that was the case because I really like <a href="https://www.cloudflare.com">CloudFlare</a> and I also like being paid (but I am not for any of my articles) :)</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>So yes, I decided to use CloudFlare to protect my friend's totally outdated Joomla. It's free, or to be more precise - I use the free plan. It also takes just a few minutes to get started. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><em>Cloudflare is something like a security proxy that stops intruders in case you haven't heard of it.</em></p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>So I've come up with the following 5-minutes / $0 budget security strategy - to block as many potential threats as possible while minimizing possible harm.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the following I'll describe the exact settings I've applied in CloudFlare. To do something similar you'll need first to set up your site and you can <a href="https://www.cloudflare.com/welcome-free/">check these instructions</a> if you need help. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Step 1. Enable all security settings to the MAX:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"id":227,"sizeSlug":"large"} --></p>
+<figure class="wp-block-image size-large"><img src="{{ site.baseurl }}/assets/2020/01/cloudflare.jpg?fit=891%252C1024" alt="" class="wp-image-227" /></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>A simple check with my browser showed that the site still works after enabling all of these. In most cases that's enough. Though, if you use some kind of automation scripts and APIs it's quite possible that they'll be blocked or challenged. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here are the most important from above:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>Security Level - High -&nbsp;Challenges all visitors that have exhibited threatening behavior within the last 14 days</li>
+<li>Bot Fight Mode - Challenge requests matching patterns of known bots before they can access your site.</li>
+<li>Browser Integrity Check - Evaluate HTTP headers from your visitors browser for threats.</li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Step 2. Challenge bad countries</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>This may sound a bit drastic but I see no harm in it. My friends site is for a local business and I don't think he cares much about visitors from Ukraine, China, etc. After all, those visitors will just have to fill in a captcha correctly in order to continue to the site.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>So I searched Google for "top countries from where web attacks originate" and added a few of my favorite ones to the list. Then I've created the following rule:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"id":229,"sizeSlug":"large"} --></p>
+<figure class="wp-block-image size-large"><img src="{{ site.baseurl }}/assets/2020/01/cloudflare2.jpg?fit=1024%252C869" alt="" class="wp-image-229" /></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>If you want to use the expression listing all the countries here it is:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>(ip.geoip.country in {"UA" "AL" "BY" "BR" "BD" "MD" "TR" "RU" "IN" "CN" "RO" "PL" "NG" "VN" "ID" "KR"})</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>For SEO reasons I've skipped adding the United States to the list above because most probably the Google crawler won't be able to fill in the captcha.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>So what does that accomplish? All web attacks nowadays are run by bots and the above countries are known for hosting such bots for various reasons. These bots won't be able to pass the captcha and will be blocked.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>It's important to note that if any hacker with any experience decides to compromise my 5 minutes / $0 defense, the above 2 steps won't be able to stop him. Though, I doubt my friend and his peaceful site for photography will attract any such interest. Bots on the contrary have no feelings and must be stopped. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>I must say though that if any world class hacker decides to hack my friends site, I might be willing to dedicate some more that 5 minutes and we'll see then :)</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Also, in case you have more than 5 minutes you could also:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol>
+<li>Sacrifice any additional extensions, themes, etc on your Joomla. Remove them and make your Joomla as standard / clean as possible. Then attempt a upgrade to the latest version again. That's the best way to security but I understand people prefer good looks and additional functionality to security.</li>
+<li>Hire a professional to secure the site or look for some readily available extensions. Long ago there was <a href="https://www.siteground.com/joomla-hosting/joomla-extensions/ver1.5/jhack.htm">such an extension</a> for Joomla 1.5. Don't ask me how I know about it.  </li>
+<li>Go 'cowboy' security. I can think of a few funny things (and we've done them back in the wild days of security) such as making your files immutable, removing any other privileges than READ for your Joomla database user, restricting the access to your administration login page with .htaccess, etc... Needless to say, this will have a lot of drawbacks for your Joomla and make it hardly usable.</li>
+<li>Extend my <a href="http://knowledgebasement.com/how-to-create-a-simple-honeypot-with-spring-boot">Honeypot blocker</a> to make 301 redirects to CIA's site for anyone who tries visiting a few popular urls for scanners such as phpmyadmin, admin or even the administrator page. Let's see how much fun they'll have then :) </li>
+</ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>The above instructions could be applied not only to an outdated Joomla but also to any other outdated web platform which you want to secure fast, easy and without paying anything. Good luck!</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><!-- /wp:paragraph --></p>

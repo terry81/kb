@@ -1,0 +1,134 @@
+---
+layout: post
+title: What is Polymorphism in Java
+date: 2023-03-26 16:35:46.000000000 +03:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta: {}
+permalink: "/what-is-polymorphism-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Polymorphism in Java is a concept that allows objects of different classes to be treated as if they were of the same type. It allows you to write code that can work with objects of multiple classes, without knowing the specific type of each object at compile time.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Polymorphism is implemented in Java through inheritance and interfaces. Inheritance is the process by which one class inherits the properties and methods of another class, and interfaces define a set of methods that a class must implement. By using these features, you can create classes that share common properties and behaviors, and then use those classes interchangeably.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's an example of polymorphism in Java using inheritance:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public class Animal {
+    public void makeSound() {
+        System.out.println("The animal makes a sound");
+    }
+}
+
+public class Dog extends Animal {
+    public void makeSound() {
+        System.out.println("The dog barks");
+    }
+}
+
+public class Cat extends Animal {
+    public void makeSound() {
+        System.out.println("The cat meows");
+    }
+}
+
+public class PolymorphismExample {
+    public static void main(String[] args) {
+        Animal animal1 = new Dog();
+        Animal animal2 = new Cat();
+        
+        animal1.makeSound(); // prints "The dog barks"
+        animal2.makeSound(); // prints "The cat meows"
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we have an <code>Animal</code> class with a <code>makeSound()</code> method, and two subclasses <code>Dog</code> and <code>Cat</code> that override the <code>makeSound()</code> method. In the <code>main()</code> method, we create instances of the <code>Dog</code> and <code>Cat</code> classes, but we declare them as <code>Animal</code> objects. When we call the <code>makeSound()</code> method on these objects, the version of the method that is called depends on the actual type of the object at runtime. This is an example of dynamic binding, which is a key feature of polymorphism.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Polymorphism can also be implemented using interfaces. Here's an example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public interface Shape {
+    public void draw();
+}
+
+public class Circle implements Shape {
+    public void draw() {
+        System.out.println("Drawing a circle");
+    }
+}
+
+public class Square implements Shape {
+    public void draw() {
+        System.out.println("Drawing a square");
+    }
+}
+
+public class PolymorphismExample {
+    public static void main(String[] args) {
+        Shape shape1 = new Circle();
+        Shape shape2 = new Square();
+        
+        shape1.draw(); // prints "Drawing a circle"
+        shape2.draw(); // prints "Drawing a square"
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we have a <code>Shape</code> interface with a <code>draw()</code> method, and two classes <code>Circle</code> and <code>Square</code> that implement the <code>Shape</code> interface. In the <code>main()</code> method, we create instances of the <code>Circle</code> and <code>Square</code> classes, but we declare them as <code>Shape</code> objects. When we call the <code>draw()</code> method on these objects, the version of the method that is called depends on the actual type of the object at runtime. This is another example of dynamic binding and polymorphism.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's another example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:preformatted --></p>
+<pre class="wp-block-preformatted"><code>public interface Movable {
+    void move();
+}
+
+public class Car implements Movable {
+    @Override
+    public void move() {
+        System.out.println("Car moves on four wheels.");
+    }
+}
+
+public class Bicycle implements Movable {
+    @Override
+    public void move() {
+        System.out.println("Bicycle moves on two wheels.");
+    }
+}
+
+public class PolymorphismExample {
+    public static void main(String[] args) {
+        Movable[] movables = new Movable[2];
+        movables[0] = new Car();
+        movables[1] = new Bicycle();
+
+        for (Movable movable : movables) {
+            movable.move();
+        }
+    }
+}
+</code></pre>
+<p><!-- /wp:preformatted --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this example, we have an interface <code>Movable</code> with a method <code>move()</code>, and two classes <code>Car</code> and <code>Bicycle</code> that implement the <code>Movable</code> interface. We create an array of <code>Movable</code> objects that can hold objects of type <code>Car</code> or <code>Bicycle</code>. Then, we create instances of <code>Car</code> and <code>Bicycle</code> and store them in the array.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the <code>main()</code> method, we loop through the array of <code>Movable</code> objects and call the <code>move()</code> method on each object. Because both <code>Car</code> and <code>Bicycle</code> classes implement the <code>Movable</code> interface, we can call the <code>move()</code> method on both objects, even though they are of different types. This is an example of polymorphism using interfaces.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><!-- /wp:paragraph --></p>

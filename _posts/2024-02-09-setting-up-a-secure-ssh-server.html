@@ -1,0 +1,43 @@
+---
+layout: post
+title: Setting up a secure SSH server
+date: 2024-02-09 15:08:00.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Linux
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/setting-up-a-secure-ssh-server/"
+---
+<p>A Beginner's Guide to Setting Up a Secure SSH Server</p>
+<p>Introduction</p>
+<p>Secure Shell (SSH) is a cryptographic network protocol that allows secure remote login from one computer to another. It provides a secure channel over an unsecured network in a client-server architecture. This blog post will guide beginners through the process of setting up a secure SSH server.</p>
+<p>Understanding SSH</p>
+<p>SSH is a protocol that provides a secure method to remotely access a server. It uses encryption to ensure that hackers cannot interpret the data being transferred. SSH operates on port 22, but this can be changed for security reasons.</p>
+<p>Installing SSH</p>
+<p>To set up an SSH server, you first need to install the SSH package. For Linux users, this can be done using the terminal. Type the following command:</p>
+<p><code>sudo apt-get install openssh-server</code></p>
+<p>For Windows users, you can install OpenSSH server feature using PowerShell as an administrator:</p>
+<p><code>Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0</code></p>
+<p>Setting Up SSH</p>
+<p>After installing SSH, the next step is to configure it. The main configuration file for SSH is located at /etc/ssh/sshd_config. To edit this file, use the following command:</p>
+<p><code>sudo nano /etc/ssh/sshd_config</code></p>
+<p>In this file, you can change various settings. For instance, you can change the port number, limit user logins, and disable root logins for enhanced security.</p>
+<p>Securing SSH</p>
+<p>To secure your SSH server, follow these steps:</p>
+<ol>
+<li>Change the Default SSH Port: Changing the default port (22) can prevent automated attacks. In the configuration file, find the line that says <code>#Port 22</code>, remove the '#' and change 22 to any number between 1024 and 65536.</li>
+<li>Disable Root Logins: It's a good practice to disable root logins as it prevents anyone from logging in as root. In the configuration file, find the line that says <code>#PermitRootLogin prohibit-password</code> and change it to <code>PermitRootLogin no</code>.</li>
+<li>Limit User Logins: Limiting user logins to specific users who need remote access can enhance security. Add an <code>AllowUsers</code> line at the end of the configuration file, followed by the usernames of those allowed to login.</li>
+<li>Use Public/Private Keys for Authentication: Using SSH keys is more secure than using passwords. To generate a new key pair, use the following command: <code>ssh-keygen -t rsa</code>. Then, copy the public key to the server using the command: <code>ssh-copy-id username@hostname</code>.</li>
+<li>Enable Two-Factor Authentication: This adds an extra layer of security. Install the Google Authenticator app on your smartphone, then install the Google Authenticator PAM module on your server. Edit the PAM configuration and the SSHD configuration file to enable two-factor authentication.</li>
+</ol>
+<p>After making these changes, save and close the file. Restart the SSH server to apply the changes using the command: <code>sudo systemctl restart ssh</code>.</p>
+<p>Conclusion</p>
+<p>Setting up a secure SSH server might seem daunting at first, but with a clear understanding and step-by-step approach, it becomes manageable. Remember, the key to a secure SSH server lies in its configuration. By changing the default SSH port, disabling root logins, limiting user logins, using SSH keys for authentication, and enabling two-factor authentication, you can significantly enhance the security of your SSH server.</p>
+<p>Remember, the world of cybersecurity is always evolving, and so should your security measures. Stay informed about the latest security practices and ensure your SSH server remains secure.</p>

@@ -1,0 +1,62 @@
+---
+layout: post
+title: How to make Java 8 Code Compatible With Java 11
+date: 2023-03-03 10:17:37.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags: []
+meta:
+  _edit_last: '1'
+permalink: "/how-to-make-java-8-code-compatible-with-java-11/"
+---
+<p><!-- wp:paragraph --></p>
+<p>If you still run your Java code with JVM 8, it's probably high time to move on and starting using a newer JVM version such as 11. For this reasons, you have to ensure your Java code is Java 11 compatible.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To make Java 8 code compatible with Java 11, you can follow these steps:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Make sure you have the latest version of the JDK (Java Development Kit) installed on your machine.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Update your build system to use the latest version of the JDK.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Check your code for any deprecated methods or classes that have been removed in Java 11. Replace them with the recommended alternative methods or classes.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Check your code for any APIs that have been removed or changed in Java 11. Update your code to use the new APIs or alternative methods.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Update your code to use the new features and enhancements introduced in Java 11.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Test your code thoroughly on a Java 11 environment to ensure that it works as expected.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here are some specific tips and considerations for updating your code from Java 8 to Java 11:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul><!-- wp:list-item --></p>
+<li>Update your imports to use the new package names. For example, some packages have been renamed or moved in Java 11, such as <code>java.xml.bind</code> and <code>java.xml.ws</code> which are no longer part of the standard JDK, so you need to include them as dependencies.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Replace the use of deprecated APIs with their recommended alternatives. For example, the <code>Thread.stop()</code> method has been deprecated and should be replaced with <code>Thread.interrupt()</code>.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Take advantage of new APIs and language features introduced in Java 11. For example, Java 11 introduced the <code>HttpClient</code> API, which simplifies the process of sending HTTP requests and receiving responses.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Use the <code>--release</code> flag when compiling your code to ensure compatibility with Java 11. For example, if you are using the <code>javac</code> command to compile your code, you can use the <code>--release 11</code> flag to compile your code for Java 11.</li>
+<p><!-- /wp:list-item --></ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Overall, the process of updating Java 8 code to Java 11 is similar to updating code from any previous version of Java. The key is to be aware of the changes and new features introduced in Java 11, and to make the necessary updates to your code to ensure compatibility.</p>
+<p><!-- /wp:paragraph --></p>

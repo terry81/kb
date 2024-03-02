@@ -1,0 +1,73 @@
+---
+layout: post
+title: How to Get Rid of the Lombok Dependency and Its Annotations
+date: 2023-03-03 09:53:03.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- boilerplate code
+- clean code
+- delombok
+- lombok
+meta:
+  _edit_last: '1'
+permalink: "/how-to-get-rid-of-the-lombok-dependency-and-its-annotations/"
+---
+<p><!-- wp:paragraph --></p>
+<p>If for some reasons you have decided that you don't like Lombok any longer, you can follow these steps to remove it:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Remove Lombok annotations from your code: Replace any Lombok annotations in your code with their equivalent Java code. For example, if you have used the <code>@Getter</code> annotation on a field, you can remove the annotation and add a public getter method for that field. You can refer to the Lombok documentation for a list of annotations and their equivalent Java code.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Remove the Lombok dependency from your project: Remove the Lombok dependency from your build configuration or dependency management system, such as Maven or Gradle. You can also remove any references to the Lombok JAR file from your project's classpath.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Compile and test your code: Once you have removed the Lombok annotations and the Lombok dependency, compile and test your code to make sure everything is working as expected.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Consider using an IDE plugin: If you find that removing Lombok annotations has made your code more verbose, you may want to consider using an IDE plugin that can generate the equivalent Java code for you. For example, IntelliJ IDEA has a plugin called "Lombok Plugin" that can generate Java code from Lombok annotations.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>There is also an automatic tool called Delombok to help do automate the removing of Lombok. Delombok is a command-line tool provided by the Project Lombok library that can be used to remove Lombok annotations from your Java code and generate equivalent Java code that does not use Lombok annotations. Here's how you can use Delombok:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol><!-- wp:list-item --></p>
+<li>Install Project Lombok: To use Delombok, you must first install Project Lombok. You can download the latest version of Lombok from the Lombok website (<a href="https://projectlombok.org/">https://projectlombok.org/</a>). Follow the installation instructions for your IDE or build system.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Run Delombok: Once you have installed Lombok, you can run Delombok to generate Java code without Lombok annotations. To do this, navigate to your project directory in the command line and run the Delombok command:</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>codejava -jar lombok.jar delombok &#91;options] &#91;source files]</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here, <code>lombok.jar</code> is the path to the Lombok JAR file, <code>delombok</code> is the Delombok command, <code>[options]</code> are any command-line options you want to pass to Delombok (see the Lombok documentation for a list of options), and <code>[source files]</code> are the Java files you want to remove Lombok annotations from.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>For example, to remove Lombok annotations from a Java file named <code>MyClass.java</code>, you would run:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>java -jar lombok.jar delombok MyClass.java</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:list {"ordered":true,"start":3} --></p>
+<ol start="3"><!-- wp:list-item --></p>
+<li>Review the generated code: Delombok will generate new Java files that do not use Lombok annotations. You can review these files to see how the code looks without the Lombok annotations. The new files will have the same name as the original files, but with a <code>.java</code> extension.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Use the generated code: Once you have reviewed the generated code, you can use it in your project in place of the original code with Lombok annotations.</li>
+<p><!-- /wp:list-item --></ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Note that removing Lombok annotations can make your code longer and more verbose, as you will need to write the equivalent code by hand. However, this can also make your code more understandable and easier to maintain, as it removes the magic that Lombok can introduce into your code.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><!-- /wp:paragraph --></p>

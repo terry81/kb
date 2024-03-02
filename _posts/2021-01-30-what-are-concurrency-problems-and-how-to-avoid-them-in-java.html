@@ -1,0 +1,110 @@
+---
+layout: post
+title: What are concurrency problems and how to avoid them in Java
+date: 2021-01-30 17:21:54.000000000 +02:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Java
+tags:
+- AtomicInteger
+- concurrency
+- ExecutorService
+- threads
+meta:
+  _wpcom_is_markdown: '1'
+  _jetpack_related_posts_cache: a:2:{s:32:"8f6677c9d6b0f903e98ad32ec61f8deb";a:2:{s:7:"expires";i:1613200847;s:7:"payload";a:3:{i:0;a:1:{s:2:"id";i:352;}i:1;a:1:{s:2:"id";i:248;}i:2;a:1:{s:2:"id";i:273;}}}s:32:"37550b67d263a3ce789993dc25046c5f";a:2:{s:7:"expires";i:1613231019;s:7:"payload";a:6:{i:0;a:1:{s:2:"id";i:352;}i:1;a:1:{s:2:"id";i:248;}i:2;a:1:{s:2:"id";i:273;}i:3;a:1:{s:2:"id";i:233;}i:4;a:1:{s:2:"id";i:311;}i:5;a:1:{s:2:"id";i:190;}}}}
+  _last_editor_used_jetpack: block-editor
+  _wpas_done_all: '1'
+permalink: "/what-are-concurrency-problems-and-how-to-avoid-them-in-java/"
+---
+<p><!-- wp:paragraph --></p>
+<p>Concurrency problems appear when your code is executed by more than one thread. Then, in contrast to a single-threaded execution, your code might behave differently depending on when and which thread accesses a variable. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here is an example:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class Test {
+	static int counter = 0;
+	
+	public static void main(String&#91;] args) throws InterruptedException {
+		
+		ExecutorService service = Executors.newFixedThreadPool(10);
+		for (int i = 0; i &lt; 1000; i++)
+			service.submit(() -&gt; ++counter);
+		service.shutdown();
+		service.awaitTermination(10, TimeUnit.SECONDS);
+		if (service.isShutdown())
+			System.out.printf("Total count: %d", counter);
+	}
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the above code:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<li>There is a static variable counter starting from 0.</li>
+<li>A fixed thread pool executor (service) with 10 threads is created. It is needed for executing the code in multiple threads.</li>
+<li>An iteration with 1000 repetitions is created to increment the counter variable. </li>
+<li>The service is shutdown with 10 seconds period graceful waiting time. </li>
+<li>Once we confirm the service is shutdown, the total count is printed. </li>
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>This same code executed in a single thread will render counter to be 1000. You can verify it by instantiating the service with Executors.newFixedThreadPool(1). </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>However, with multiple threads (10 in our case), when you execute the above code, the counter value varies - it could be 600, 900 or anywhere around depending on random factors.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The reason for this randomness is that the increment operation ++ is not thread safe. This means that one thread gets the value of counter, begins to increment it and in the same time one or more threads also get the same value for counter and also increment it. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>When the first thread finishes incrementing the counter, it returns the old value +1. The same happens with the rest of the thread(s). Thus, if the counter value was 111 when the two or more threads simultaneously tried to increment it, the value will be 112 when all of the concurrent threads finish.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>To overcome this problem, there are Atomic classes. Atomic means that an operation will be executed without interference by other threads. In our example, instead of primitive int, we'll have to use AtomicInteger like this:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:code --></p>
+<pre class="wp-block-code"><code>import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
+public class Test {
+
+	static AtomicInteger counter = new AtomicInteger(0);
+
+	public static void main(String&#91;] args) throws InterruptedException {
+
+		ExecutorService service = Executors.newFixedThreadPool(10);
+		for (int i = 0; i &lt; 1000; i++)
+			service.submit(() -&gt; counter.incrementAndGet());
+		service.shutdown();
+		service.awaitTermination(10, TimeUnit.SECONDS);
+		if (service.isShutdown())
+			System.out.printf("Total count: %d", counter.get());
+	}
+}</code></pre>
+<p><!-- /wp:code --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the above code, the AtomicInteger method incrementAndGet() equal to ++ for primitive type integer, ensures that each thread gets, increments and sets the value atomically, i.e. without interfering with the other threads. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Similarly to AtomicInteger, there is also an AtomicBoolean class for boolean values, AtomicLong for longs, etc. For collections there is ConcurrentHashMap for hashmaps, CopyOnWriteArrayList for lists and so on. The idea is similar - ensuring thread safety when working with shared objects. Respectively, each class has different methods to help you execute the available atomic operations. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The use of atomic classes seems a pretty straight-forward routine and one might wonder why there are non-atomic classes in the first place. One of the reasons is that there is a cost for running atomic operations in terms of time. Each thread will have to be synchronised with the rest of the threads and wait for them when necessary. Have this in mind when designing your code and ensure your program doesn't get slower with multiple threads, in comparison with a single thread execution, because threads are waiting for shared resources. </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><!-- /wp:paragraph --></p>
