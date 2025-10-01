@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.title %}{{ page.title | escape }} | {% endif %}{{ site.title | escape }}</title>
+  <meta name="description" content="{{ page.excerpt | default: site.description | strip_html | normalize_whitespace | truncate: 160 | escape }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9036157436023559" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="site-wrapper">
+    <header class="site-header">
+      <div class="container">
+        <div class="header-content">
+          <div class="site-branding">
+            <a href="{{ '/' | relative_url }}" class="site-title">{{ site.title }}</a>
+            <p class="site-tagline">{{ site.description }}</p>
+          </div>
+          <nav class="main-nav">
+            <a href="{{ '/' | relative_url }}" class="nav-link {% if page.url == '/' %}active{% endif %}">Home</a>
+            <a href="{{ '/about-us/' | relative_url }}" class="nav-link {% if page.url == '/about-us/' %}active{% endif %}">About</a>
+            <button class="search-toggle" id="searchToggle" aria-label="Search">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM18 18l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <div class="search-overlay" id="searchOverlay">
+      <div class="search-container">
+        <div class="search-header">
+          <input type="text" id="searchInput" placeholder="Search articles..." class="search-input" autocomplete="off">
+          <button class="search-close" id="searchClose" aria-label="Close search">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <div id="searchResults" class="search-results"></div>
+      </div>
+    </div>
+
+    <main class="site-content">
+      {{ content }}
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>{{ site.title }}</h3>
+            <p>{{ site.description }}</p>
+          </div>
+          <div class="footer-section">
+            <h3>Connect</h3>
+            <div class="social-links">
+              {% if site.twitter_username %}
+              <a href="https://twitter.com/{{ site.twitter_username }}" target="_blank" rel="noopener">Twitter</a>
+              {% endif %}
+              {% if site.email %}
+              <a href="mailto:{{ site.email }}">Email</a>
+              {% endif %}
+            </div>
+          </div>
+          <div class="footer-section">
+            <h3>Quick Links</h3>
+            <a href="{{ '/' | relative_url }}">Home</a>
+            <a href="{{ '/about-us/' | relative_url }}">About</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; {{ 'now' | date: "%Y" }} {{ site.title }}. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+</body>
+</html>

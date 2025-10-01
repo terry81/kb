@@ -1,0 +1,100 @@
+---
+layout: default
+---
+
+<div class="home-hero">
+  <div class="container">
+    <h1 class="hero-title">Welcome to the Basement of Knowledge</h1>
+    <p class="hero-subtitle">Exploring Linux, Java, and Open Source technologies through practical guides and tutorials</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="home-content">
+    {% assign featured_posts = site.posts | slice: 0, 3 %}
+    {% if featured_posts.size > 0 %}
+    <section class="featured-posts">
+      <h2 class="section-title">Featured Articles</h2>
+      <div class="posts-grid">
+        {% for post in featured_posts %}
+        <article class="post-card featured">
+          <div class="post-card-content">
+            {% if post.categories %}
+            <div class="post-categories">
+              {% for category in post.categories limit:2 %}
+              <span class="category-badge">{{ category }}</span>
+              {% endfor %}
+            </div>
+            {% endif %}
+            <h3 class="post-title">
+              <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+            </h3>
+            <p class="post-excerpt">{{ post.excerpt | strip_html | truncate: 150 }}</p>
+            <div class="post-meta">
+              <time datetime="{{ post.date | date_to_xmlschema }}">
+                {{ post.date | date: "%B %d, %Y" }}
+              </time>
+              <span class="post-reading-time" data-slug="{{ post.url | replace: '/', '' | replace: '.html', '' }}">
+                <span class="reading-time-spinner">⏱</span>
+              </span>
+              <span class="post-views" data-slug="{{ post.url | replace: '/', '' | replace: '.html', '' }}">
+                <span class="views-spinner">👁</span>
+              </span>
+            </div>
+            <a href="{{ post.url | relative_url }}" class="read-more">Read Article →</a>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    <section class="recent-posts">
+      <div class="section-header">
+        <h2 class="section-title">All Articles</h2>
+        <div class="category-filter">
+          <button class="filter-btn active" data-category="all">All</button>
+          {% assign all_categories = site.posts | map: 'categories' | join: ',' | split: ',' | uniq | sort %}
+          {% for category in all_categories limit:5 %}
+          {% if category != "" %}
+          <button class="filter-btn" data-category="{{ category }}">{{ category }}</button>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="posts-list">
+        {% for post in site.posts %}
+        <article class="post-item" data-categories="{{ post.categories | join: ',' }}">
+          <div class="post-item-content">
+            <div class="post-item-header">
+              {% if post.categories %}
+              <div class="post-categories">
+                {% for category in post.categories limit:2 %}
+                <span class="category-badge">{{ category }}</span>
+                {% endfor %}
+              </div>
+              {% endif %}
+              <h3 class="post-title">
+                <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+              </h3>
+            </div>
+            <p class="post-excerpt">{{ post.excerpt | strip_html | truncate: 200 }}</p>
+            <div class="post-meta">
+              <time datetime="{{ post.date | date_to_xmlschema }}">
+                {{ post.date | date: "%B %d, %Y" }}
+              </time>
+              <span class="post-reading-time" data-slug="{{ post.url | replace: '/', '' | replace: '.html', '' }}">
+                <span class="reading-time-spinner">⏱</span>
+              </span>
+              <span class="post-views" data-slug="{{ post.url | replace: '/', '' | replace: '.html', '' }}">
+                <span class="views-spinner">👁</span>
+              </span>
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</div>

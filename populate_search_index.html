@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Populate Search Index</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #2563eb;
+    }
+    .instruction {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 4px solid #2563eb;
+    }
+    .code {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      margin: 10px 0;
+    }
+    .note {
+      background: #fef3c7;
+      padding: 15px;
+      border-radius: 6px;
+      border-left: 4px solid #f59e0b;
+      margin: 20px 0;
+    }
+    .success {
+      background: #d1fae5;
+      padding: 15px;
+      border-radius: 6px;
+      border-left: 4px solid #10b981;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Search Index Population Guide</h1>
+
+    <div class="instruction">
+      <h2>Step 1: Install Supabase CLI</h2>
+      <p>To populate the search index with your existing posts, you'll need to use the Supabase CLI.</p>
+      <p>Install it with:</p>
+      <div class="code">npm install -g supabase</div>
+    </div>
+
+    <div class="instruction">
+      <h2>Step 2: Create a Script to Index Posts</h2>
+      <p>Here's a Node.js script that will read your Jekyll posts and populate the search index:</p>
+      <div class="code">
+// index-posts.js
+const fs = require('fs');
+const path = require('path');
+const { createClient } = require('@supabase/supabase-js');
+
+const supabaseUrl = 'https://zseqmxgvusdlsllbanzi.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpzZXFteGd2dXNkbHNsbGJhbnppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzMzMzNzcsImV4cCI6MjA3NDkwOTM3N30.xqnuGg59uno4XYjQO3k6nwrF24ozuK1p-krJVVE_0Qc';
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+const postsDir = path.join(__dirname, '_posts');
+
+async function indexPosts() {
+  const files = fs.readdirSync(postsDir);
+
+  for (const file of files) {
+    if (!file.endsWith('.html') && !file.endsWith('.md')) continue;
+
+    const filePath = path.join(postsDir, file);
+    const content = fs.readFileSync(filePath, 'utf-8');
+
+    const titleMatch = content.match(/title:\s*['"](.+?)['"]/);
+    const categoriesMatch = content.match(/categories:\s*\n([\s\S]*?)(?=\n[a-z_]+:|---)/);
+    const permalinkMatch = content.match(/permalink:\s*["'](.+?)["']/);
+
+    if (!titleMatch || !permalinkMatch) continue;
+
+    const title = titleMatch[1];
+    const permalink = permalinkMatch[1].replace(/^\/|\/$/g, '');
+
+    let categories = '';
+    if (categoriesMatch) {
+      categories = categoriesMatch[1]
+        .split('\n')
+        .map(line => line.replace(/^-\s*/, '').trim())
+        .filter(Boolean)
+        .join(', ');
+    }
+
+    const textContent = content
+      .replace(/---[\s\S]*?---/, '')
+      .replace(/<[^>]*>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .substring(0, 5000);
+
+    const { error } = await supabase
+      .from('search_index')
+      .upsert({
+        post_slug: permalink,
+        title: title,
+        content: textContent,
+        categories: categories
+      }, {
+        onConflict: 'post_slug'
+      });
+
+    if (error) {
+      console.error(`Error indexing ${file}:`, error);
+    } else {
+      console.log(`Indexed: ${title}`);
+    }
+  }
+
+  console.log('Indexing complete!');
+}
+
+indexPosts();
+      </div>
+    </div>
+
+    <div class="instruction">
+      <h2>Step 3: Run the Script</h2>
+      <p>Save the script as <code>index-posts.js</code> in your project root and run:</p>
+      <div class="code">
+npm install @supabase/supabase-js
+node index-posts.js
+      </div>
+    </div>
+
+    <div class="note">
+      <h3>Note About Jekyll Build</h3>
+      <p>Your Jekyll site uses custom layouts and styles that override the Minima theme. To build and preview locally, you'll need:</p>
+      <ol>
+        <li>Ruby installed on your system</li>
+        <li>Run: <code>gem install bundler jekyll</code></li>
+        <li>Run: <code>bundle install</code></li>
+        <li>Run: <code>bundle exec jekyll serve</code></li>
+      </ol>
+      <p>The site will be available at <code>http://localhost:4000</code></p>
+    </div>
+
+    <div class="success">
+      <h3>What's Been Improved</h3>
+      <ul>
+        <li><strong>Modern Design:</strong> Professional gradient header, clean typography, and card-based layouts</li>
+        <li><strong>Search:</strong> Real-time search powered by Supabase (press Ctrl/Cmd+K)</li>
+        <li><strong>Post Views:</strong> Automatic view counting for each article</li>
+        <li><strong>Comments:</strong> Visitor comments with moderation (stored in Supabase)</li>
+        <li><strong>Reading Time:</strong> Calculated automatically for each post</li>
+        <li><strong>Related Posts:</strong> AI-powered related article suggestions</li>
+        <li><strong>Category Filter:</strong> Filter posts by category on homepage</li>
+        <li><strong>Responsive Design:</strong> Mobile-optimized layouts</li>
+        <li><strong>Social Sharing:</strong> Twitter and LinkedIn share buttons</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
