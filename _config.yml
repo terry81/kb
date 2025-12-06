@@ -21,17 +21,51 @@
 title: Knowledge Basement
 email: tollodim@ 
 description: >- # this means to ignore newlines until "baseurl:"
-  Linux, Java, Open Source related how-to articles
-baseurl: "/" # the subpath of your site, e.g. /blog
-url: "https://terry81.github.io/kb/"
+  Linux, Java, Open Source related how-to articles. Expert tutorials on system administration, 
+  programming, security, and DevOps best practices.
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "https://www.knowledgebasement.com" # CHANGE THIS to your actual production URL
 twitter_username: web_security1
+author: Knowledge Basement Team
+lang: en_US
+
+# Social/SEO
+social:
+  name: Knowledge Basement
+  links:
+    - https://twitter.com/web_security1
 
 # Build settings
 theme: minima
+#theme: just-the-docs
 plugins:
   - jekyll-feed
   - jekyll-paginate
-# paginate: 50
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-github-metadata
+paginate: 100
+
+# Asset versioning for cache busting (increment when assets change)
+asset_version: v1.0.0
+
+# SEO settings
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "Knowledge Basement Team"
+      image: /kb.jpeg
+  - scope:
+      path: ""
+    values:
+      image: /kb.jpeg
+# Include files to be processed
+include:
+  - robots.txt
+
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to

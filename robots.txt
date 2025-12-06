@@ -1,0 +1,8 @@
+---
+---
+User-agent: *
+Allow: /
+Disallow: /assets/
+Disallow: /_site/
+Disallow: /supabase/
+Sitemap: {{ site.url }}/sitemap.xml

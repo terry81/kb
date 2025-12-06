@@ -37,7 +37,8 @@
     <div class="search-overlay" id="searchOverlay">
       <div class="search-container">
         <div class="search-header">
-          <input type="text" id="searchInput" placeholder="Search articles..." class="search-input" autocomplete="off">
+          <label for="searchInput" class="sr-only">Search articles</label>
+          <input type="text" id="searchInput" placeholder="Search articles..." class="search-input" autocomplete="off" aria-label="Search articles">
           <button class="search-close" id="searchClose" aria-label="Close search">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -83,6 +84,6 @@
     </footer>
   </div>
 
-  <script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/main.js' | relative_url }}?v={{ site.asset_version | default: '1.0.0' }}"></script>
 </body>
 </html>
