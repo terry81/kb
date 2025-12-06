@@ -1,0 +1,47 @@
+---
+layout: default
+title: Home - Technical Tutorials and How-To Guides
+description: Comprehensive guides on Linux, Java, DevOps, security, and open source technologies. Learn system administration and programming best practices.
+---
+
+<!-- This loops through the paginated posts -->
+{% for post in paginator.posts %}
+
+<article class="post-preview">
+  <h2 class="post-preview-title"><a href="{{ post.url }}" rel="bookmark">{{ post.title }}</a></h2>
+  <div class="post-preview-meta">
+    <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%B %d, %Y" }}</time>
+    {% if post.categories %}
+    <span class="meta-separator">•</span>
+    <span class="categories">
+      {% for category in post.categories limit:2 %}
+        <span class="category-tag">{{ category }}</span>{% unless forloop.last %}, {% endunless %}
+      {% endfor %}
+    </span>
+    {% endif %}
+  </div>
+  <div class="content post-excerpt">
+    {{ post.content | strip_html | truncatewords: 30 }}
+  </div>
+  <a href="{{ post.url }}" class="read-more-link" aria-label="Read more about {{ post.title }}">Read more →</a>
+</article>
+{% endfor %}
+
+<!-- Pagination links -->
+<div class="pagination">
+    {% if paginator.previous_page %}
+    <a href="{{ paginator.previous_page_path }}" class="previous">
+        Previous
+    </a>
+    {% else %}
+    <span class="previous">Previous</span>
+    {% endif %}
+    <span class="page_number ">
+    Page: {{ paginator.page }} of {{ paginator.total_pages }}
+  </span>
+    {% if paginator.next_page %}
+    <a href="{{ paginator.next_page_path }}" class="next">Next</a>
+    {% else %}
+    <span class="next ">Next</span>
+    {% endif %}
+</div>

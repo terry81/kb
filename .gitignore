@@ -1,6 +1,129 @@
-_site
-.sass-cache
-.jekyll-cache
+# Jekyll build outputs
+_site/
+.sass-cache/
+.jekyll-cache/
 .jekyll-metadata
-vendor
+
+# Ruby/Bundler
+.bundle/
+vendor/
+Gemfile.lock
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.classpath
+*.sublime-project
+*.sublime-workspace
+*.tmproj
+*.tmproject
+.nova/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
 .env
+.env.local
+.env.*.local
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+*.tmp
+*~
+
+# Image optimization backups
+image_backups_*/
+
+# Node modules (if using npm/yarn)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Temporary files
+*.temp
+.temp/
+tmp/
+temp/
+
+# Build tools
+.grunt/
+dist/
+build/
+
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# Coverage reports
+coverage/
+.nyc_output/
+
+# Cache
+.cache/
+*.cache
+
+# Jekyll specific
+.ruby-version
+.ruby-gemset
+

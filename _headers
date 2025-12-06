@@ -1,0 +1,46 @@
+# GitHub Pages Custom Headers
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-XSS-Protection: 1; mode=block
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+/*
+# Security headers (may not work on GitHub Pages)
+
+  Cache-Control: public, max-age=3600, must-revalidate
+/*.html
+# HTML files - shorter cache, must revalidate
+
+  Cache-Control: public, max-age=31536000, immutable
+/*.svg
+
+  Cache-Control: public, max-age=31536000, immutable
+/*.webp
+
+  Cache-Control: public, max-age=31536000, immutable
+/*.gif
+
+  Cache-Control: public, max-age=31536000, immutable
+/*.png
+
+  Cache-Control: public, max-age=31536000, immutable
+/*.jpeg
+
+  Cache-Control: public, max-age=31536000, immutable
+/*.jpg
+# Cache images for 1 year
+
+  Cache-Control: public, max-age=2592000
+/*.js
+
+  Cache-Control: public, max-age=2592000
+/*.css
+
+  Cache-Control: public, max-age=31536000, immutable
+/assets/*
+# Cache static assets aggressively
+
+# For GitHub Pages, these are recommendations that GitHub may or may not honor
+# This file format works with Netlify/Cloudflare Pages
+# Note: GitHub Pages has limited support for custom headers
+

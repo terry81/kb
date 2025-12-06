@@ -1,11 +1,14 @@
+// Move sensitive keys to environment variables or server-side
 const SUPABASE_URL = 'https://zseqmxgvusdlsllbanzi.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpzZXFteGd2dXNkbHNsbGJhbnppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTkzMzMzNzcsImV4cCI6MjA3NDkwOTM3N30.xqnuGg59uno4XYjQO3k6nwrF24ozuK1p-krJVVE_0Qc';
 
 const API_BASE = `${SUPABASE_URL}/functions/v1`;
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Initialize features
   initSearch();
   initCategoryFilter();
+  initLazyLoading();
 
   if (window.currentPostSlug) {
     initPostPage();
@@ -14,6 +17,34 @@ document.addEventListener('DOMContentLoaded', () => {
   loadPostViews();
   calculateReadingTimes();
 });
+
+// Lazy load images for better performance
+function initLazyLoading() {
+  if ('loading' in HTMLImageElement.prototype) {
+    // Browser supports native lazy loading
+    const images = document.querySelectorAll('img[loading="lazy"]');
+    images.forEach(img => {
+      img.addEventListener('load', () => {
+        img.classList.add('loaded');
+      });
+    });
+  } else {
+    // Fallback to Intersection Observer
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.dataset.src;
+          img.classList.add('loaded');
+          observer.unobserve(img);
+        }
+      });
+    });
+
+    const images = document.querySelectorAll('img[data-src]');
+    images.forEach(img => imageObserver.observe(img));
+  }
+}
 
 function initSearch() {
   const searchToggle = document.getElementById('searchToggle');
