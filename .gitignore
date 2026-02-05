@@ -86,7 +86,6 @@ image_backups_*/
 
 # Node modules (if using npm/yarn)
 node_modules/
-package-lock.json
 yarn.lock
 
 # Temporary files
