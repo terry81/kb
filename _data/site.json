@@ -1,0 +1,17 @@
+{
+  "title": "Knowledge Basement",
+  "email": "tollodim@gmail.com",
+  "description": "Linux, Java, Open Source related how-to articles. Expert tutorials on system administration, programming, security, and DevOps best practices.",
+  "url": "https://www.knowledgebasement.com",
+  "baseurl": "",
+  "twitter_username": "web_security1",
+  "author": "Knowledge Basement Team",
+  "lang": "en_US",
+  "asset_version": "v1.0.0",
+  "social": {
+    "name": "Knowledge Basement",
+    "links": [
+      "https://twitter.com/web_security1"
+    ]
+  }
+}

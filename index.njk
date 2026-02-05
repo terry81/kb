@@ -1,0 +1,74 @@
+---
+layout: default.njk
+title: Home - Technical Tutorials and How-To Guides
+description: Comprehensive guides on Linux, Java, DevOps, security, and open source technologies. Learn system administration and programming best practices.
+permalink: /
+---
+
+<!-- Hero Section -->
+<div class="hero-section">
+  <div class="hero-content">
+    <h1 class="hero-title">{{ site.title }}</h1>
+    <p class="hero-description">{{ site.description }}</p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-number">{{ collections.posts | length }}</span>
+        <span class="stat-label">Articles</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">{{ collections.posts | getCategories | length }}+</span>
+        <span class="stat-label">Topics</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="container-narrow main-container">
+
+  <!-- Latest Posts -->
+  <section class="posts-section">
+    <h2 class="section-heading">Latest Articles</h2>
+
+    <div class="posts-grid">
+      {% for post in collections.posts %}
+      <article class="post-card">
+        <div class="post-card-header">
+          {% if post.data.categories %}
+          <div class="post-categories">
+            {% if post.data.categories.length %}
+              {% for category in post.data.categories | limit(1) %}
+              <span class="category-badge">{{ category }}</span>
+              {% endfor %}
+            {% else %}
+              <span class="category-badge">{{ post.data.categories }}</span>
+            {% endif %}
+          </div>
+          {% endif %}
+          <time class="post-date" datetime="{{ post.date | dateToRfc3339 }}">
+            {{ post.date | shortDate }}
+          </time>
+        </div>
+
+        <h3 class="post-card-title">
+          <a href="{{ post.url }}" rel="bookmark">{{ post.data.title }}</a>
+        </h3>
+
+        <p class="post-card-excerpt">
+          {{ post.templateContent | stripHtml | truncate(150) }}
+        </p>
+
+        <div class="post-card-footer">
+          <span class="post-reading-time" data-slug="{{ post.url | slugFromUrl }}">
+            <span class="reading-time-spinner">⏱</span>
+          </span>
+          <span class="post-views" data-slug="{{ post.url | slugFromUrl }}">
+            <span class="views-spinner">👁</span>
+          </span>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+
+</div>
