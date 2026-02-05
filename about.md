@@ -51,7 +51,7 @@ hideTitle: true
     <div class="author-info">
       <h3>Toli</h3>
       <p class="author-title">Software Developer & Technical Writer</p>
-      <p>With over a decade of experience in software development, I've compiled this knowledge base to share practical solutions and best practices with the developer community.</p>
+      <p>With over a decade+ of experience in software development, I've compiled this knowledge base to share practical solutions and best practices with the developer community.</p>
       <p>As the book <em>Refactoring: Improving the Design of Existing Code</em> wisely notes:</p>
       <blockquote>
         "There's nothing wrong with a quick and dirty simple program."
