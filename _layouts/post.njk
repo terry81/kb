@@ -1,0 +1,71 @@
+---
+layout: default.njk
+---
+
+<article class="post" itemscope itemtype="https://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="container-narrow">
+      {% if categories %}
+      <div class="post-categories">
+        {% if categories.length %}
+          {% for category in categories %}
+          <span class="category-badge" itemprop="articleSection">{{ category }}</span>
+          {% endfor %}
+        {% else %}
+          <span class="category-badge" itemprop="articleSection">{{ categories }}</span>
+        {% endif %}
+      </div>
+      {% endif %}
+      <h1 class="post-title" itemprop="headline">{{ title }}</h1>
+      <div class="post-meta-detailed">
+        <time datetime="{{ date | dateToRfc3339 }}" itemprop="datePublished">
+          {{ date | readableDate }}
+        </time>
+        <meta itemprop="dateModified" content="{{ date | dateToRfc3339 }}">
+        <span class="meta-separator">•</span>
+        <span class="post-reading-time" data-slug="{{ page.url | slugFromUrl }}">
+          <span class="reading-time-spinner">⏱</span> Reading...
+        </span>
+        <span class="meta-separator">•</span>
+        <span class="post-views" data-slug="{{ page.url | slugFromUrl }}">
+          <span class="views-spinner">👁</span> views
+        </span>
+      </div>
+      <meta itemprop="author" content="{{ author or site.author }}">
+      <meta itemprop="publisher" content="{{ site.title }}">
+    </div>
+  </header>
+
+  <div class="post-content container-narrow" itemprop="articleBody">
+    {{ content | safe }}
+  </div>
+
+  <footer class="post-footer container-narrow">
+    <div class="post-share">
+      <h3>Share this article</h3>
+      <div class="share-buttons">
+        <a href="https://twitter.com/intent/tweet?text={{ title | urlencode }}&url={{ site.url }}{{ page.url | urlencode }}"
+           target="_blank" rel="noopener" class="share-btn twitter">
+          Twitter
+        </a>
+        <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ site.url }}{{ page.url | urlencode }}"
+           target="_blank" rel="noopener" class="share-btn linkedin">
+          LinkedIn
+        </a>
+      </div>
+    </div>
+
+    <div class="related-posts" id="relatedPosts">
+      <h3>Related Articles</h3>
+      <div class="related-posts-grid" id="relatedPostsGrid">
+        <div class="loading-spinner">Loading related articles...</div>
+      </div>
+    </div>
+  </footer>
+</article>
+
+<script>
+  window.currentPostSlug = '{{ page.url | slugFromUrl }}';
+  window.currentPostTitle = '{{ title }}';
+  window.currentPostCategories = '{% if categories %}{% if categories.length %}{{ categories | join(",") }}{% else %}{{ categories }}{% endif %}{% endif %}';
+</script>

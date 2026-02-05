@@ -10,6 +10,7 @@ status: publish
 categories:
 - Web Development
 permalink: "/migrate-from-jekyll-to-eleventy/"
+templateEngineOverride: md
 ---
 
 # How to Migrate a Site from Jekyll to Eleventy (11ty)
@@ -259,12 +260,12 @@ Some Jekyll Liquid tags don't exist in Eleventy and need to be replaced:
 ### post_url Tag
 
 **Jekyll:**
-```liquid
-{% post_url 2026-02-05-my-post %}
+```
+{% raw %}{% post_url 2026-02-05-my-post %}{% endraw %}
 ```
 
 **Eleventy:**
-```liquid
+```
 /my-post/
 ```
 Or use a collection filter to find the URL dynamically.
@@ -272,10 +273,10 @@ Or use a collection filter to find the URL dynamically.
 ### highlight Tag
 
 **Jekyll:**
-```liquid
-{% highlight javascript %}
+```
+{% raw %}{% highlight javascript %}
 const x = 1;
-{% endhighlight %}
+{% endhighlight %}{% endraw %}
 ```
 
 **Eleventy (use fenced code blocks):**
@@ -310,13 +311,13 @@ In Jekyll, posts in `_posts/` are automatically available. In Eleventy, use tags
 
 Add `tags: posts` to your post front matter, then access with:
 
-```liquid
-{% for post in collections.posts reversed %}
+```
+{% raw %}{% for post in collections.posts reversed %}
   <article>
     <h2><a href="{{ post.url }}">{{ post.data.title }}</a></h2>
     <time>{{ post.date | date: "%Y-%m-%d" }}</time>
   </article>
-{% endfor %}
+{% endfor %}{% endraw %}
 ```
 
 ### Custom Collection

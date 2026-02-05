@@ -1,13 +1,10 @@
-# Jekyll build outputs
+# Eleventy build outputs
 _site/
-.sass-cache/
-.jekyll-cache/
-.jekyll-metadata
+.cache/
 
-# Ruby/Bundler
-.bundle/
-vendor/
-Gemfile.lock
+# Node.js
+node_modules/
+npm-debug.log*
 
 # macOS
 .DS_Store

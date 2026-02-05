@@ -1,0 +1,26 @@
+{
+  "name": "knowledge-basement",
+  "version": "1.0.0",
+  "description": "Knowledge Basement - Linux, Java, Open Source related how-to articles",
+  "scripts": {
+    "build": "eleventy",
+    "start": "eleventy --serve",
+    "debug": "DEBUG=Eleventy* eleventy"
+  },
+  "keywords": [
+    "eleventy",
+    "blog",
+    "technical",
+    "tutorials"
+  ],
+  "author": "Knowledge Basement Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.1",
+    "@11ty/eleventy-plugin-rss": "^1.2.0",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0"
+  },
+  "dependencies": {
+    "luxon": "^3.7.2"
+  }
+}
