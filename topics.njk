@@ -1,0 +1,34 @@
+---
+layout: default.njk
+title: Technical Topics
+description: Browse Knowledge Basement tutorials by topic, including Java, Linux, DevOps, Docker, security, and open source tools.
+permalink: /topics/
+---
+
+<section class="page-hero topics-hero" aria-labelledby="topicsTitle">
+  <div class="container-narrow">
+    <p class="eyebrow">Browse by subject</p>
+    <h1 id="topicsTitle" class="page-title">Technical topics</h1>
+    <p class="page-description">Explore practical tutorials grouped by the technologies and problems they help you solve.</p>
+  </div>
+</section>
+
+<div class="container main-container">
+  <section class="topics-archive" aria-label="All topics">
+    <div class="topic-archive-grid">
+      {% for category in collections.categories %}
+      {% set topicPosts = collections.posts | postsByCategory(category) %}
+      <a class="topic-archive-card" href="{{ category | categoryUrl }}">
+        <span class="topic-archive-count">{{ category.count }} guide{% if category.count != 1 %}s{% endif %}</span>
+        <h2>{{ category.name }}</h2>
+        {% if topicPosts.length %}
+        <p>Latest: {{ topicPosts[0].data.title }}</p>
+        {% else %}
+        <p>Browse articles in this topic.</p>
+        {% endif %}
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+

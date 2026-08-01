@@ -21,13 +21,14 @@ eleventyExcludeFromCollections: true
     <published>{{ post.date | dateToRfc3339 }}</published>
     <updated>{{ post.date | dateToRfc3339 }}</updated>
     <id>{{ site.url }}{{ post.url }}</id>
+    <summary>{{ post.data.description or post.templateContent | excerpt(155) | escape }}</summary>
     <content type="html">{{ post.templateContent | escape }}</content>
     <author>
       <name>{{ post.data.author or site.author }}</name>
     </author>
-    {%- if post.data.categories %}
-    <category term="{{ post.data.categories }}"/>
-    {%- endif %}
+    {%- for category in post.data.categories | toArray %}
+    <category term="{{ category | escape }}"/>
+    {%- endfor %}
   </entry>
   {%- endfor %}
 </feed>

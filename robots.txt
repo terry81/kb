@@ -1,8 +1,7 @@
----
----
 User-agent: *
 Allow: /
-Disallow: /assets/
 Disallow: /_site/
 Disallow: /supabase/
-Sitemap: {{ site.url }}/sitemap.xml
+Disallow: /populate_search_index/
+
+Sitemap: https://www.knowledgebasement.com/sitemap.xml

@@ -1,73 +1,106 @@
 ---
 layout: default.njk
-title: Home - Technical Tutorials and How-To Guides
-description: Comprehensive guides on Linux, Java, DevOps, security, and open source technologies. Learn system administration and programming best practices.
+title: Technical Tutorials and How-To Guides
+description: Practical Linux, Java, DevOps, security, and open source guides for developers and system administrators.
 permalink: /
 ---
 
-<!-- Hero Section -->
-<div class="hero-section">
-  <div class="hero-content">
-    <h1 class="hero-title">{{ site.title }}</h1>
-    <p class="hero-description">{{ site.description }}</p>
-    <div class="hero-stats">
-      <div class="stat-item">
-        <span class="stat-number">{{ collections.posts | length }}</span>
-        <span class="stat-label">Articles</span>
+{% set latestPosts = collections.posts | limit(12) %}
+{% set featuredTopics = collections.categories | limit(8) %}
+
+<section class="hero-section" aria-labelledby="homeHeroTitle">
+  <div class="container hero-grid">
+    <div class="hero-content">
+      <p class="eyebrow">Developer knowledge base</p>
+      <h1 id="homeHeroTitle" class="hero-title">Practical tutorials for Java, Linux, DevOps, and security.</h1>
+      <p class="hero-description">Build, debug, secure, and operate real systems with concise guides written for working developers and system administrators.</p>
+      <div class="hero-actions">
+        <a class="cta-button primary" href="#latest-articles">Read latest guides</a>
+        <a class="cta-button secondary" href="/topics/">Browse topics</a>
       </div>
-      <div class="stat-item">
-        <span class="stat-number">{{ collections.posts | getCategories | length }}+</span>
-        <span class="stat-label">Topics</span>
+      <div class="hero-stats" aria-label="Site statistics">
+        <div class="stat-item">
+          <span class="stat-number">{{ collections.posts | length }}</span>
+          <span class="stat-label">Articles</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ collections.categories | length }}</span>
+          <span class="stat-label">Topics</span>
+        </div>
       </div>
     </div>
+
+    <aside class="hero-card" aria-labelledby="heroTopicsTitle">
+      <h2 id="heroTopicsTitle">Start with a topic</h2>
+      <div class="topic-chip-list">
+        {% for category in featuredTopics %}
+        <a class="topic-chip" href="{{ category | categoryUrl }}">{{ category.name }} <span>{{ category.count }}</span></a>
+        {% endfor %}
+      </div>
+    </aside>
   </div>
-</div>
+</section>
+
+<section class="topic-strip" aria-label="Popular technical topics">
+  <div class="container">
+    <div class="topic-strip-inner">
+      <span>Popular guides:</span>
+      {% for category in featuredTopics | limit(6) %}
+      <a href="{{ category | categoryUrl }}">{{ category.name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 
 <!-- Main Content -->
-<div class="container-narrow main-container">
+<div class="container main-container">
 
   <!-- Latest Posts -->
-  <section class="posts-section">
-    <h2 class="section-heading">Latest Articles</h2>
+  <section id="latest-articles" class="posts-section" aria-labelledby="latestArticlesTitle">
+    <div class="section-header">
+      <p class="eyebrow">Recently published</p>
+      <h2 id="latestArticlesTitle" class="section-heading">Latest technical tutorials</h2>
+      <p class="section-description">Fresh, practical walkthroughs for programming, infrastructure, and secure operations.</p>
+    </div>
 
     <div class="posts-grid">
-      {% for post in collections.posts %}
-      <article class="post-card">
+      {% for post in latestPosts %}
+      {% set cardCategories = post.data.categories | toArray %}
+      <article class="post-card" itemscope itemtype="https://schema.org/BlogPosting">
         <div class="post-card-header">
-          {% if post.data.categories %}
+          {% if cardCategories.length %}
           <div class="post-categories">
-            {% if post.data.categories.length %}
-              {% for category in post.data.categories | limit(1) %}
-              <span class="category-badge">{{ category }}</span>
-              {% endfor %}
-            {% else %}
-              <span class="category-badge">{{ post.data.categories }}</span>
-            {% endif %}
+            {% for category in cardCategories | limit(1) %}
+            <a class="category-badge" href="{{ category | categoryUrl }}">{{ category }}</a>
+            {% endfor %}
           </div>
           {% endif %}
-          <time class="post-date" datetime="{{ post.date | dateToRfc3339 }}">
+          <time class="post-date" datetime="{{ post.date | dateToRfc3339 }}" itemprop="datePublished">
             {{ post.date | shortDate }}
           </time>
         </div>
 
-        <h3 class="post-card-title">
-          <a href="{{ post.url }}" rel="bookmark">{{ post.data.title }}</a>
+        <h3 class="post-card-title" itemprop="headline">
+          <a href="{{ post.url }}" rel="bookmark" itemprop="url">{{ post.data.title }}</a>
         </h3>
 
-        <p class="post-card-excerpt">
-          {{ post.templateContent | stripHtml | truncate(150) }}
+        <p class="post-card-excerpt" itemprop="description">
+          {{ post.data.description or post.templateContent | excerpt(150) }}
         </p>
 
         <div class="post-card-footer">
-          <span class="post-reading-time" data-slug="{{ post.url | slugFromUrl }}">
-            <span class="reading-time-spinner">⏱</span>
-          </span>
+          <span class="post-reading-time" data-slug="{{ post.url | slugFromUrl }}" data-static="true">{{ post.templateContent | readingTime }} min read</span>
           <span class="post-views" data-slug="{{ post.url | slugFromUrl }}">
             <span class="views-spinner">👁</span>
           </span>
+          <span class="read-more">Read guide →</span>
         </div>
       </article>
       {% endfor %}
+    </div>
+
+    <div class="section-cta">
+      <a class="cta-button secondary" href="/topics/">Explore all topics</a>
     </div>
   </section>
 
