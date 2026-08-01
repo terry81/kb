@@ -54,22 +54,32 @@ function initSearch() {
 
   if (!searchToggle || !searchOverlay || !searchClose || !searchInput) return;
 
-  searchToggle.addEventListener('click', () => {
+  const searchResults = document.getElementById('searchResults');
+
+  function openSearch() {
     searchOverlay.classList.add('active');
+    searchToggle.setAttribute('aria-expanded', 'true');
     searchInput.focus();
+  }
+
+  function closeSearch() {
+    searchOverlay.classList.remove('active');
+    searchToggle.setAttribute('aria-expanded', 'false');
+    searchInput.value = '';
+    if (searchResults) searchResults.innerHTML = '';
+  }
+
+  searchToggle.addEventListener('click', () => {
+    openSearch();
   });
 
   searchClose.addEventListener('click', () => {
-    searchOverlay.classList.remove('active');
-    searchInput.value = '';
-    document.getElementById('searchResults').innerHTML = '';
+    closeSearch();
   });
 
   searchOverlay.addEventListener('click', (e) => {
     if (e.target === searchOverlay) {
-      searchOverlay.classList.remove('active');
-      searchInput.value = '';
-      document.getElementById('searchResults').innerHTML = '';
+      closeSearch();
     }
   });
 
@@ -89,11 +99,10 @@ function initSearch() {
   document.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
       e.preventDefault();
-      searchOverlay.classList.add('active');
-      searchInput.focus();
+      openSearch();
     }
     if (e.key === 'Escape') {
-      searchOverlay.classList.remove('active');
+      closeSearch();
     }
   });
 }
@@ -223,6 +232,8 @@ function calculateReadingTimes() {
   const readingTimeElements = document.querySelectorAll('.post-reading-time');
 
   readingTimeElements.forEach(element => {
+    if (element.dataset.static === 'true') return;
+
     const postContent = document.querySelector('.post-content');
 
     if (postContent) {

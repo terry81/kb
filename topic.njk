@@ -1,0 +1,67 @@
+---
+layout: default.njk
+pagination:
+  data: collections.categories
+  size: 1
+  alias: category
+permalink: "/topics/{{ category.slug }}/"
+eleventyComputed:
+  title: "{{ category.name }} Tutorials"
+  description: "Browse practical {{ category.name }} tutorials and how-to guides from Knowledge Basement."
+---
+
+{% set topicPosts = collections.posts | postsByCategory(category) %}
+
+<section class="page-hero topics-hero" aria-labelledby="topicTitle">
+  <div class="container-narrow">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span aria-hidden="true">/</span>
+      <a href="/topics/">Topics</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{{ category.name }}</span>
+    </nav>
+    <p class="eyebrow">{{ category.count }} guide{% if category.count != 1 %}s{% endif %}</p>
+    <h1 id="topicTitle" class="page-title">{{ category.name }} tutorials</h1>
+    <p class="page-description">Practical {{ category.name }} walkthroughs, troubleshooting notes, and best practices.</p>
+  </div>
+</section>
+
+<div class="container main-container">
+  <section class="posts-section" aria-labelledby="topicArticlesTitle">
+    <div class="section-header">
+      <p class="eyebrow">Topic archive</p>
+      <h2 id="topicArticlesTitle" class="section-heading">All {{ category.name }} guides</h2>
+      <p class="section-description">Browse every Knowledge Basement article filed under {{ category.name }}.</p>
+    </div>
+
+    <div class="posts-grid">
+      {% for post in topicPosts %}
+      {% set cardCategories = post.data.categories | toArray %}
+      <article class="post-card" itemscope itemtype="https://schema.org/BlogPosting">
+        <div class="post-card-header">
+          {% if cardCategories.length %}
+          <div class="post-categories">
+            {% for postCategory in cardCategories | limit(1) %}
+            <span class="category-badge">{{ postCategory }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
+          <time class="post-date" datetime="{{ post.date | dateToRfc3339 }}" itemprop="datePublished">{{ post.date | shortDate }}</time>
+        </div>
+        <h3 class="post-card-title" itemprop="headline">
+          <a href="{{ post.url }}" rel="bookmark" itemprop="url">{{ post.data.title }}</a>
+        </h3>
+        <p class="post-card-excerpt" itemprop="description">{{ post.data.description or post.templateContent | excerpt(150) }}</p>
+        <div class="post-card-footer">
+          <span class="post-reading-time" data-slug="{{ post.url | slugFromUrl }}" data-static="true">{{ post.templateContent | readingTime }} min read</span>
+          <span class="post-views" data-slug="{{ post.url | slugFromUrl }}"><span class="views-spinner">👁</span></span>
+          <span class="read-more">Read guide →</span>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+
+

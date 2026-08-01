@@ -2,21 +2,34 @@
 layout: default.njk
 ---
 
+{% set postCategories = categories | toArray %}
+{% set postTags = tags | toArray %}
+{% set related = collections.posts | relatedPosts(page.url, categories, 3) %}
+
 <article class="post" itemscope itemtype="https://schema.org/BlogPosting">
   <header class="post-header">
     <div class="container-narrow">
-      {% if categories %}
-      <div class="post-categories">
-        {% if categories.length %}
-          {% for category in categories %}
-          <span class="category-badge" itemprop="articleSection">{{ category }}</span>
-          {% endfor %}
-        {% else %}
-          <span class="category-badge" itemprop="articleSection">{{ categories }}</span>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span aria-hidden="true">/</span>
+        {% if postCategories.length %}
+        <a href="{{ postCategories[0] | categoryUrl }}">{{ postCategories[0] }}</a>
+        <span aria-hidden="true">/</span>
         {% endif %}
+        <span aria-current="page">{{ title }}</span>
+      </nav>
+
+      {% if postCategories.length %}
+      <div class="post-categories">
+        {% for category in postCategories %}
+        <a class="category-badge" href="{{ category | categoryUrl }}" itemprop="articleSection">{{ category }}</a>
+        {% endfor %}
       </div>
       {% endif %}
+
       <h1 class="post-title" itemprop="headline">{{ title }}</h1>
+      <p class="post-description">{{ description or content | excerpt(180) }}</p>
+
       <div class="post-meta-detailed">
         <time datetime="{{ date | dateToRfc3339 }}" itemprop="datePublished">
           {{ date | readableDate }}
@@ -24,7 +37,7 @@ layout: default.njk
         <meta itemprop="dateModified" content="{{ date | dateToRfc3339 }}">
         <span class="meta-separator">•</span>
         <span class="post-reading-time" data-slug="{{ page.url | slugFromUrl }}">
-          <span class="reading-time-spinner">⏱</span> Reading...
+          {{ content | readingTime }} min read
         </span>
         <span class="meta-separator">•</span>
         <span class="post-views" data-slug="{{ page.url | slugFromUrl }}">
@@ -33,6 +46,11 @@ layout: default.njk
       </div>
       <meta itemprop="author" content="{{ author or site.author }}">
       <meta itemprop="publisher" content="{{ site.title }}">
+      {% if postTags.length %}
+      <div class="post-tags" aria-label="Article tags">
+        {% for tag in postTags %}<span>#{{ tag }}</span>{% endfor %}
+      </div>
+      {% endif %}
     </div>
   </header>
 
@@ -42,30 +60,37 @@ layout: default.njk
 
   <footer class="post-footer container-narrow">
     <div class="post-share">
-      <h3>Share this article</h3>
+      <h2>Share this article</h2>
       <div class="share-buttons">
         <a href="https://twitter.com/intent/tweet?text={{ title | urlencode }}&url={{ site.url }}{{ page.url | urlencode }}"
-           target="_blank" rel="noopener" class="share-btn twitter">
+           target="_blank" rel="noopener noreferrer" class="share-btn twitter" aria-label="Share {{ title }} on X">
           Twitter
         </a>
         <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ site.url }}{{ page.url | urlencode }}"
-           target="_blank" rel="noopener" class="share-btn linkedin">
+           target="_blank" rel="noopener noreferrer" class="share-btn linkedin" aria-label="Share {{ title }} on LinkedIn">
           LinkedIn
         </a>
       </div>
     </div>
 
-    <div class="related-posts" id="relatedPosts">
-      <h3>Related Articles</h3>
-      <div class="related-posts-grid" id="relatedPostsGrid">
-        <div class="loading-spinner">Loading related articles...</div>
+    {% if related.length %}
+    <section class="related-posts" aria-labelledby="relatedPostsTitle">
+      <h2 id="relatedPostsTitle">Related tutorials</h2>
+      <div class="related-posts-grid">
+        {% for post in related %}
+        <a href="{{ post.url }}" class="related-post-card">
+          <span class="related-post-title">{{ post.data.title }}</span>
+          <span class="related-post-date">{{ post.date | shortDate }}</span>
+        </a>
+        {% endfor %}
       </div>
-    </div>
+    </section>
+    {% endif %}
   </footer>
 </article>
 
 <script>
   window.currentPostSlug = '{{ page.url | slugFromUrl }}';
   window.currentPostTitle = '{{ title }}';
-  window.currentPostCategories = '{% if categories %}{% if categories.length %}{{ categories | join(",") }}{% else %}{{ categories }}{% endif %}{% endif %}';
+  window.currentPostCategories = '{{ postCategories | join(",") }}';
 </script>

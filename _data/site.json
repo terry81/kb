@@ -1,13 +1,25 @@
 {
   "title": "Knowledge Basement",
   "email": "tollodim@gmail.com",
-  "description": "Linux, Java, Open Source related how-to articles. Expert tutorials on system administration, programming, security, and DevOps best practices.",
+  "description": "Practical Linux, Java, DevOps, security, and open source tutorials for developers and system administrators.",
   "url": "https://www.knowledgebasement.com",
   "baseurl": "",
   "twitter_username": "web_security1",
   "author": "Knowledge Basement Team",
-  "lang": "en_US",
-  "asset_version": "v1.0.0",
+  "lang": "en",
+  "locale": "en_US",
+  "theme_color": "#1d4ed8",
+  "image": "/kb.jpeg",
+  "logo": "/kb.jpeg",
+  "keywords": [
+    "Linux tutorials",
+    "Java tutorials",
+    "DevOps guides",
+    "open source",
+    "security best practices",
+    "system administration"
+  ],
+  "asset_version": "v1.1.0",
   "social": {
     "name": "Knowledge Basement",
     "links": [

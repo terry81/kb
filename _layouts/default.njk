@@ -1,9 +1,75 @@
+{% set isPost = layout == 'post' or layout == 'post.njk' %}
+{% set contentDescription = content | excerpt(155) %}
+{% set seoDescription = description or contentDescription or site.description %}
+{% set rawImage = image or site.image or '/kb.jpeg' %}
+{% set seoImage = rawImage | absoluteUrl(site.url) %}
+{% set canonicalUrl = page.url | absoluteUrl(site.url) %}
+{% set seoTitle %}{% if title and title != site.title %}{{ title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}{% endset %}
+{% set displayTitle = title or site.title %}
+{% set modifiedDate = modified or updated or date %}
+{% set pageAuthor = author or site.author %}
+{% set pageLanguage = site.lang or 'en' %}
+{% set postCategories = categories | toArray %}
+{% set postTags = tags | toArray %}
+{% set pageKeywords = keywords or tags or site.keywords %}
 <!DOCTYPE html>
-<html lang="{{ site.lang or 'en' }}">
+<html lang="{{ pageLanguage }}">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- SEO Meta Tags -->
+  <title>{{ seoTitle | stripHtml | escape }}</title>
+  <meta name="description" content="{{ seoDescription | escape }}">
+  <meta name="author" content="{{ pageAuthor | escape }}">
+  <meta name="robots" content="{% if noindex %}noindex, nofollow{% else %}index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1{% endif %}">
+  <meta name="theme-color" content="{{ site.theme_color or '#1d4ed8' }}">
+  {% if pageKeywords %}<meta name="keywords" content="{{ pageKeywords | toArray | join(', ') | escape }}">{% endif %}
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{ displayTitle | escape }}">
+  <meta property="og:description" content="{{ seoDescription | escape }}">
+  <meta property="og:url" content="{{ canonicalUrl }}">
+  <meta property="og:site_name" content="{{ site.title | escape }}">
+  <meta property="og:type" content="{% if isPost %}article{% else %}website{% endif %}">
+  <meta property="og:locale" content="{{ site.locale or 'en_US' }}">
+  <meta property="og:image" content="{{ seoImage }}">
+  <meta property="og:image:alt" content="{{ displayTitle | escape }}">
+  {% if isPost %}
+  <meta property="article:published_time" content="{{ date | dateToRfc3339 }}">
+  <meta property="article:modified_time" content="{{ modifiedDate | dateToRfc3339 }}">
+  {% for category in postCategories %}<meta property="article:section" content="{{ category | escape }}">
+  {% endfor %}{% for tag in postTags %}<meta property="article:tag" content="{{ tag | escape }}">
+  {% endfor %}{% endif %}
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  {% if site.twitter_username %}<meta name="twitter:site" content="@{{ site.twitter_username }}">{% endif %}
+  <meta name="twitter:title" content="{{ displayTitle | escape }}">
+  <meta name="twitter:description" content="{{ seoDescription | escape }}">
+  <meta name="twitter:image" content="{{ seoImage }}">
+
+  <!-- Canonical and discovery -->
+  <link rel="canonical" href="{{ canonicalUrl }}">
+  <link rel="alternate" type="application/atom+xml" title="{{ site.title | escape }}" href="{{ '/feed.xml' | absoluteUrl(site.url) }}">
+  <link rel="sitemap" type="application/xml" href="{{ '/sitemap.xml' | absoluteUrl(site.url) }}">
+
+  <!-- Preconnect to external domains -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://pagead2.googlesyndication.com">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
+
+  <!-- Styles with cache busting -->
+  <link rel="stylesheet" href="/assets/css/style.css?v={{ site.asset_version or '1.0.0' }}">
+  <link rel="stylesheet" href="/assets/css/refresh.css?v={{ site.asset_version or '1.0.0' }}">
+
+  <!-- Fonts with display=swap for better performance -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-3HMXMPYCNQ"></script>
@@ -11,51 +77,8 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-3HMXMPYCNQ');
   </script>
-
-  <!-- SEO Meta Tags -->
-  <title>{% if title %}{{ title }} | {% endif %}{{ site.title }}</title>
-  <meta name="description" content="{{ description or site.description | stripHtml | truncate(160) }}">
-  <meta name="author" content="{{ author or site.author }}">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="{{ title or site.title }}">
-  <meta property="og:description" content="{{ description or site.description | stripHtml | truncate(160) }}">
-  <meta property="og:url" content="{{ site.url }}{{ page.url }}">
-  <meta property="og:site_name" content="{{ site.title }}">
-  <meta property="og:type" content="{% if layout == 'post' %}article{% else %}website{% endif %}">
-  <meta property="og:image" content="{{ site.url }}/kb.jpeg">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@{{ site.twitter_username }}">
-  <meta name="twitter:title" content="{{ title or site.title }}">
-  <meta name="twitter:description" content="{{ description or site.description | stripHtml | truncate(160) }}">
-  <meta name="twitter:image" content="{{ site.url }}/kb.jpeg">
-
-  <!-- Preconnect to external domains -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://pagead2.googlesyndication.com">
-
-  <!-- DNS prefetch for external resources -->
-  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-  <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com">
-
-  <!-- Styles with cache busting -->
-  <link rel="stylesheet" href="/assets/css/style.css?v={{ site.asset_version or '1.0.0' }}">
-
-  <!-- Fonts with display=swap for better performance -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"></noscript>
-
-  <!-- Canonical URL -->
-  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
-
-  <!-- Feed -->
-  <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ site.url }}/feed.xml">
 
   <!-- AdSense - async and deferred -->
   <script async defer src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9036157436023559" crossorigin="anonymous"></script>
@@ -64,113 +87,161 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "{% if layout == 'post' %}Article{% else %}WebSite{% endif %}",
-    {% if layout == 'post' %}
-    "headline": "{{ title }}",
-    "datePublished": "{{ date | dateToRfc3339 }}",
-    "dateModified": "{{ date | dateToRfc3339 }}",
-    "author": {
-      "@type": "Person",
-      "name": "{{ author or site.author }}"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "{{ site.title }}",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "{{ site.url }}/kb.jpeg"
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "{{ site.url }}/#organization",
+        "name": {{ site.title | json | safe }},
+        "url": {{ site.url | json | safe }},
+        "logo": {
+          "@type": "ImageObject",
+          "url": {{ (site.logo or site.image or '/kb.jpeg') | absoluteUrl(site.url) | json | safe }}
+        }{% if site.social.links %},
+        "sameAs": [{% for link in site.social.links %}{{ link | json | safe }}{% if not loop.last %},{% endif %}{% endfor %}]
+        {% endif %}
+      },
+      {
+        "@type": "WebSite",
+        "@id": "{{ site.url }}/#website",
+        "url": {{ site.url | json | safe }},
+        "name": {{ site.title | json | safe }},
+        "description": {{ site.description | json | safe }},
+        "publisher": { "@id": "{{ site.url }}/#organization" },
+        "inLanguage": {{ pageLanguage | json | safe }},
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "{{ site.url }}/?s={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "{% if isPost %}BlogPosting{% else %}WebPage{% endif %}",
+        "@id": "{{ canonicalUrl }}#primary",
+        "url": {{ canonicalUrl | json | safe }},
+        "name": {{ displayTitle | json | safe }},
+        "headline": {{ displayTitle | json | safe }},
+        "description": {{ seoDescription | json | safe }},
+        "image": {{ seoImage | json | safe }},
+        "inLanguage": {{ pageLanguage | json | safe }},
+        "isPartOf": { "@id": "{{ site.url }}/#website" },
+        "about": { "@id": "{{ site.url }}/#organization" }{% if isPost %},
+        "datePublished": "{{ date | dateToRfc3339 }}",
+        "dateModified": "{{ modifiedDate | dateToRfc3339 }}",
+        "author": {
+          "@type": "Person",
+          "name": {{ pageAuthor | json | safe }}
+        },
+        "publisher": { "@id": "{{ site.url }}/#organization" },
+        "mainEntityOfPage": { "@id": {{ canonicalUrl | json | safe }} }{% if postCategories.length %},
+        "articleSection": [{% for category in postCategories %}{{ category | json | safe }}{% if not loop.last %},{% endif %}{% endfor %}]
+        {% endif %}{% if pageKeywords %},
+        "keywords": {{ pageKeywords | toArray | join(', ') | json | safe }}
+        {% endif %}
+        {% endif %}
+      }{% if isPost %},
+      {
+        "@type": "BreadcrumbList",
+        "@id": "{{ canonicalUrl }}#breadcrumb",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ site.url }}/" }{% if postCategories.length %},
+          { "@type": "ListItem", "position": 2, "name": {{ postCategories[0] | json | safe }}, "item": "{{ postCategories[0] | categoryUrl | absoluteUrl(site.url) }}" },
+          { "@type": "ListItem", "position": 3, "name": {{ displayTitle | json | safe }}, "item": {{ canonicalUrl | json | safe }} }
+          {% else %},
+          { "@type": "ListItem", "position": 2, "name": {{ displayTitle | json | safe }}, "item": {{ canonicalUrl | json | safe }} }
+          {% endif %}
+        ]
       }
-    },
-    "description": "{{ description or site.description | stripHtml | truncate(160) }}",
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": "{{ site.url }}{{ page.url }}"
-    }
-    {% else %}
-    "name": "{{ site.title }}",
-    "url": "{{ site.url }}",
-    "description": "{{ site.description }}",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "{{ site.url }}/?s={search_term_string}",
-      "query-input": "required name=search_term_string"
-    }
-    {% endif %}
+      {% endif %}
+    ]
   }
   </script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="site-wrapper">
-    <header class="site-header">
+    <header class="site-header" role="banner">
       <div class="container">
         <div class="header-content">
           <div class="site-branding">
-            <a href="/" class="site-title">{{ site.title }}</a>
-            <p class="site-tagline">{{ site.description }}</p>
+            <a href="/" class="site-title" aria-label="{{ site.title }} home">
+              <span class="brand-mark" aria-hidden="true">KB</span>
+              <span class="site-title-text">{{ site.title }}</span>
+            </a>
+            <p class="site-tagline">Practical tutorials for developers and sysadmins</p>
           </div>
-          <nav class="main-nav">
-            <a href="/" class="nav-link {% if page.url == '/' %}active{% endif %}">Home</a>
-            <a href="/about-us/" class="nav-link {% if page.url == '/about-us/' %}active{% endif %}">About</a>
-            <button class="search-toggle" id="searchToggle" aria-label="Search">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <nav class="main-nav" aria-label="Primary navigation">
+            <a href="/" class="nav-link {% if page.url == '/' %}active{% endif %}" {% if page.url == '/' %}aria-current="page"{% endif %}>Home</a>
+            <a href="/topics/" class="nav-link {% if page.url | startsWith('/topics/') %}active{% endif %}" {% if page.url | startsWith('/topics/') %}aria-current="page"{% endif %}>Topics</a>
+            <a href="/about-us/" class="nav-link {% if page.url == '/about-us/' %}active{% endif %}" {% if page.url == '/about-us/' %}aria-current="page"{% endif %}>About</a>
+            <button type="button" class="search-toggle" id="searchToggle" aria-label="Search articles" aria-controls="searchOverlay" aria-expanded="false">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
                 <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM18 18l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
               </svg>
+              <span class="search-toggle-label">Search</span>
+              <kbd class="kbd-hint">⌘K</kbd>
             </button>
           </nav>
         </div>
       </div>
     </header>
 
-    <div class="search-overlay" id="searchOverlay">
+    <div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-labelledby="searchTitle">
       <div class="search-container">
         <div class="search-header">
-          <label for="searchInput" class="sr-only">Search articles</label>
-          <input type="text" id="searchInput" placeholder="Search articles..." class="search-input" autocomplete="off" aria-label="Search articles">
-          <button class="search-close" id="searchClose" aria-label="Close search">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <div class="search-heading">
+            <h2 id="searchTitle">Search articles</h2>
+            <p>Find tutorials on Java, Linux, DevOps, security, and open source tools.</p>
+          </div>
+          <button type="button" class="search-close" id="searchClose" aria-label="Close search">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
             </svg>
           </button>
         </div>
-        <div id="searchResults" class="search-results"></div>
+        <label for="searchInput" class="sr-only">Search articles</label>
+        <input type="search" id="searchInput" placeholder="Search articles..." class="search-input" autocomplete="off" aria-label="Search articles">
+        <div id="searchResults" class="search-results" aria-live="polite"></div>
       </div>
     </div>
 
-    <main class="site-content">
+    <main id="main-content" class="site-content" tabindex="-1">
       {{ content | safe }}
     </main>
 
-    <footer class="site-footer">
+    <footer class="site-footer" role="contentinfo">
       <div class="container">
         <div class="footer-content">
-          <div class="footer-section">
-            <h3>{{ site.title }}</h3>
+          <div class="footer-section footer-brand">
+            <a href="/" class="footer-title">{{ site.title }}</a>
             <p>{{ site.description }}</p>
           </div>
           <div class="footer-section">
-            <h3>Connect</h3>
-            <div class="social-links">
-              {% if site.twitter_username %}
-              <a href="https://twitter.com/{{ site.twitter_username }}" target="_blank" rel="noopener">Twitter</a>
-              {% endif %}
-              {% if site.email %}
-              <a href="mailto:{{ site.email }}">Email</a>
-              {% endif %}
-            </div>
+            <h3>Explore</h3>
+            <a href="/">Latest articles</a>
+            <a href="/topics/">Topics</a>
+            <a href="/about-us/">About</a>
+            <a href="/feed.xml">Atom feed</a>
           </div>
           <div class="footer-section">
-            <h3>Quick Links</h3>
-            <a href="/">Home</a>
-            <a href="/about-us/">About</a>
+            <h3>Popular topics</h3>
+            {% for category in collections.categories | limit(6) %}
+            <a href="{{ category | categoryUrl }}">{{ category.name }} <span>({{ category.count }})</span></a>
+            {% endfor %}
+          </div>
+          <div class="footer-section">
+            <h3>Connect</h3>
+            {% if site.twitter_username %}<a href="https://twitter.com/{{ site.twitter_username }}" target="_blank" rel="noopener noreferrer">X / Twitter</a>{% endif %}
+            {% if site.email %}<a href="mailto:{{ site.email }}">Email</a>{% endif %}
+            <a href="/sitemap.xml">Sitemap</a>
           </div>
         </div>
         <div class="footer-bottom">
-          <p>&copy; 2026 {{ site.title }}. All rights reserved.</p>
+          <p>&copy; {{ '' | year }} {{ site.title }}. Practical technical guides for real-world problem solving.</p>
         </div>
       </div>
     </footer>
   </div>
 
-  <script src="/assets/js/main.js?v={{ site.asset_version or '1.0.0' }}"></script>
+  <script src="/assets/js/main.js?v={{ site.asset_version or '1.0.0' }}" defer></script>
 </body>
 </html>
